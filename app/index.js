@@ -5,8 +5,10 @@ import { Router } from 'react-router';
 import routes from './routes';
 import configureStore from './store/configureStore';
 import './app.css';
+import { appSetup } from './utils/applicationSetup';
 
 const store = configureStore();
+const app = new appSetup();
 
 render(
   <Provider store={store}>
