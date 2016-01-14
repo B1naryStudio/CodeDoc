@@ -12,3 +12,14 @@
 .container a {
   font-size: 1.4rem;
 }
+
+.btn-huge{
+	padding-top:20px;
+	padding-bottom:20px;
+}
+
+.list-group {
+	color: white !important;
+	background: rgba(54, 25, 25, .2) !important;
+	border: 10px !important;
+}
