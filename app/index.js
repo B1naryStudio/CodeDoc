@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { Router } from 'react-router';
 import routes from './routes';
 import configureStore from './store/configureStore';
+import 'bootstrap/dist/css/bootstrap.css';
 import './app.css';
 import { appSetup } from './utils/applicationSetup';
 import { EvtListeners } from './utils/eventListeners';
