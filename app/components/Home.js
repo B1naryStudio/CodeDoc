@@ -13,7 +13,8 @@ export default class Home extends Component {
 						<br></br>
 						<div className="row">
 							<div className="col-md-4">
-							<a href="#" className="btn btn-primary btn-lg btn-block btn-huge">Create new file</a>
+							<a href="#/md-file-mode" className="btn btn-primary btn-lg btn-block btn-huge">Create new markdown file</a>
+							<br></br>
 							<span>Last files...</span>
 							<div className="list-group last-files">
 								<a href="#" className="list-group-item">File1.md</a>
@@ -25,7 +26,8 @@ export default class Home extends Component {
 							</div>
 
 							<div className="col-md-4">
-							<a href="#" className="btn btn-primary btn-lg btn-block btn-huge">Create new project</a>
+							<a href="#" className="btn btn-primary btn-lg btn-block btn-huge">Create new project documentation</a>
+							<br></br>
 							<span>Last projects...</span>
 							<div className="list-group last-files">
 								<a href="#" className="list-group-item">Project1</a>
@@ -37,7 +39,8 @@ export default class Home extends Component {
 							</div>
 
 							<div className="col-md-4">
-							<a href="#/counter" className="btn btn-primary btn-lg btn-block btn-huge">Create new file</a>
+							<a href="#/counter" className="btn btn-primary btn-lg btn-block btn-huge">Create new none by line doc</a>
+							<br></br>
 							<span>Last files...</span>
 							<div className="list-group last-files">
 								<a href="#" className="list-group-item">File1.md</a>

@@ -1,4 +1,4 @@
-.container {
+/*.container {
   position: absolute;
   top: 30%;
   left: 10px;
@@ -18,8 +18,8 @@
 	padding-bottom:20px;
 }
 
-.list-group {
+a.list-group {
 	color: white !important;
 	background: rgba(54, 25, 25, .2) !important;
 	border: 10px !important;
-}
+}*/
