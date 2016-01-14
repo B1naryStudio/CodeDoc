@@ -1,19 +1,18 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
-import styles from './Home.module.css';
-
+import './Home.module.css';
 
 export default class Home extends Component {
 	render() {
 		return (
-			<div>
-				<div className={styles.container}>
+			<div className="homeBody">
+				<div className="container">
 					<h2>CodeDoc</h2>
-					<div className="container">
+					<div>
 						<br></br>
 						<div className="row">
 							<div className="col-md-4">
-							<a href="#/md-file-mode" className="btn btn-primary btn-lg btn-block btn-huge">Create new markdown file</a>
+							<a href="#/md-file-mode" className="btn btn-primary btn-lg btn-block">Create new markdown file</a>
 							<br></br>
 							<span>Last files...</span>
 							<div className="list-group last-files">
