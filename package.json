@@ -119,6 +119,7 @@
   },
   "dependencies": {
     "electron-debug": "^0.5.1",
+    "electron-prebuilt": "^0.36.3",
     "font-awesome": "^4.4.0",
     "history": "^1.17.0",
     "postal": "^1.0.7",
