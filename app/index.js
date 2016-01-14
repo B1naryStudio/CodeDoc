@@ -6,9 +6,11 @@ import routes from './routes';
 import configureStore from './store/configureStore';
 import './app.css';
 import { appSetup } from './utils/applicationSetup';
+import { EvtListeners } from './utils/eventListeners';
 
 const store = configureStore();
 const app = new appSetup();
+const listeners = new EvtListeners();
 
 render(
   <Provider store={store}>

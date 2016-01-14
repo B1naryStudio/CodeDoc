@@ -3,10 +3,19 @@ const electron =  remote.require('electron');
 const fs = require('fs');
 const dialog = electron.dialog;
 const app = electron.app;
+const postal = require('postal');
 
 export class ActionsHandler {
 
 	onOpen(fileNames) {
+		postal.publish({
+			channel: "files",
+			topic: "newFile",
+			data: {
+				sku: "AZDTF4346",
+				qty: 21
+			}
+		});
 		console.log('ELECTRON', electron);
 		dialog.showOpenDialog({ 
 			filters: [{ 
