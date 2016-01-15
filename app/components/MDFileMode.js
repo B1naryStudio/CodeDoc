@@ -23,7 +23,7 @@ export default class MDFileMode extends Component {
 						<Sidebar />
 					</div>
 
-					<SplitPane split="vertical">
+					<SplitPane split="vertical" minSize="300">
 						<div className='main-window-container'>
 							<MainWindow />
 						</div>
