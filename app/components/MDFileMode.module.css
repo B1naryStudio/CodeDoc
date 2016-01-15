@@ -2,22 +2,42 @@
 	height: 100%;
 }
 
+.md-mode-container > .SplitPane {
+	position: fixed !important;
+	width: 100%;
+	bottom: 0;
+	top: 56px;
+	background: white;
+}
+
 .toolbar-container {
 	margin: 10px;
 }
 
 .main-window-container {
-	height: 550px;
+	height: 100%;
+	position: absolute;
+	width: 100%;
 	background-color: white;
 }
 
+.main-window-container textarea {
+	border: none;
+	border-radius: 0;
+	box-shadow: none;
+}
+
 .sidebar-container {
-	height: 550px;
+	height: 100%;
+	position: absolute;
+	width: 100%;
 	background-color: white;
 }
 
 .res-window-container {
-	height: 550px;
+	height: 100%;
+	position: absolute;
+	width: 100%;
 	background-color: white;
 }
 
@@ -28,6 +48,10 @@
 
 textarea.form-control {
 	height: 100% !important;
+}
+
+textarea.form-control:focus {
+	box-shadow: none;
 }
 
 .Resizer {
