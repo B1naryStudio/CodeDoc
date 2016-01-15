@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
-import counter from './counter';
+import modemanager from './modemanager';
 
 const rootReducer = combineReducers({
-  counter
+  modemanager
 });
 
 export default rootReducer;

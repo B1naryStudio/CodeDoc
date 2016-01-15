@@ -1,8 +1,24 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import './Home.module.css';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import * as ChangeModeActions from '../actions/modemanager';
 
 export default class Home extends Component {
+	
+	createNewFile(evt, obj) {
+		this.props.createNewFile('#/');
+	}
+
+	openDocumenting() {
+		this.props.createNewFile('#/counter');
+	}
+
+	openLineCommenting() {
+		this.props.createNewFile('#/');
+	}
+
 	render() {
 		return (
 			<div className="homeBody">
@@ -12,7 +28,7 @@ export default class Home extends Component {
 						<br></br>
 						<div className="row">
 							<div className="col-md-4">
-							<a href="#/md-file-mode" className="btn btn-primary btn-lg btn-block">Create new markdown file</a>
+							<a ref='#/md-file-mode' onClick={this.createNewFile} className="btn btn-primary btn-lg btn-block">Create new markdown file</a>
 							<br></br>
 							<span>Last files...</span>
 							<div className="list-group last-files">
@@ -25,7 +41,7 @@ export default class Home extends Component {
 							</div>
 
 							<div className="col-md-4">
-							<a href="#" className="btn btn-primary btn-lg btn-block btn-huge">Create new project documentation</a>
+							<a onClick={this.openDocumenting} className="btn btn-primary btn-lg btn-block btn-huge">Create new project documentation</a>
 							<br></br>
 							<span>Last projects...</span>
 							<div className="list-group last-files">
@@ -38,7 +54,7 @@ export default class Home extends Component {
 							</div>
 
 							<div className="col-md-4">
-							<a href="#/counter" className="btn btn-primary btn-lg btn-block btn-huge">Create new none by line doc</a>
+							<a onClick={this.openLineCommenting} className="btn btn-primary btn-lg btn-block btn-huge">Create new none by line doc</a>
 							<br></br>
 							<span>Last files...</span>
 							<div className="list-group last-files">
@@ -56,3 +72,15 @@ export default class Home extends Component {
 		);
 	}
 }
+
+function mapStateToProps(state) {
+	return {
+		location: state.counter
+	}
+}
+
+function mapDispatchToProps(dispatch) {
+	return bindActionCreators(ChangeModeActions, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home)

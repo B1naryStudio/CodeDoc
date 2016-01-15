@@ -3,6 +3,7 @@ import { persistState } from 'redux-devtools';
 import thunk from 'redux-thunk';
 import rootReducer from '../reducers';
 import DevTools from '../containers/DevTools';
+import ActionsMapping from '../menu/actionsMapping';
 
 const finalCreateStore = compose(
   applyMiddleware(thunk),
@@ -16,6 +17,7 @@ const finalCreateStore = compose(
 
 export default function configureStore(initialState) {
   const store = finalCreateStore(rootReducer, initialState);
+  ActionsMapping(store);
 
   if (module.hot) {
     module.hot.accept('../reducers', () =>

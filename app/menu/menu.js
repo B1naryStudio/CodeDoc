@@ -9,7 +9,7 @@ export const menuConfig = [{
 		submenu:[{
 			label: '&File',
 			accelerator: 'CmdOrCtrl+O',
-			id: 'Open'
+			id: 'OpenNew'
 		},{
 			label: '&For documenting',
 			accelerator: 'CmdOrCtrl+D',

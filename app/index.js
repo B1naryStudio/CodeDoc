@@ -8,6 +8,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import './app.css';
 import { appSetup } from './utils/applicationSetup';
 import { EvtListeners } from './utils/eventListeners';
+// import { ActionsMapping } from './menu/actionsMapping';
 
 const store = configureStore();
 const app = new appSetup();
