@@ -7,6 +7,7 @@ import MainWindow from '../components/MainWindow';
 import ResultWindow from '../components/ResultWindow';
 import SourceCodWindow from '../components/SourceCodWindow';
 import SplitPane from 'react-split-pane';
+import Markdown from'react-remarkable';
 
 
 export default class MDFileMode extends Component {

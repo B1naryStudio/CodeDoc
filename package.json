@@ -130,6 +130,7 @@
     "react-bootstrap": "^0.28.2",
     "react-dom": "^0.14.2",
     "react-redux": "^4.0.5",
+    "react-remarkable": "^1.1.1",
     "react-router": "^1.0.3",
     "react-split-pane": "^0.1.22",
     "redux": "^3.0.5",

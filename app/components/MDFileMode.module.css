@@ -39,6 +39,7 @@
 	position: absolute;
 	width: 100%;
 	background-color: white;
+	padding: 0 10px 0 10px;
 }
 
 .source-window-container {
