@@ -14,7 +14,7 @@ export default function ActionsMapping(store) {
 			channel: "filesOpen",
 			topic: "openNew",
 			callback: function(data, envelope) {
-				store.dispatch(createNewFile());
+				store.dispatch(openFile());
 			}
 		});
 
@@ -31,6 +31,14 @@ export default function ActionsMapping(store) {
 			topic: "openForDocumenting",
 			callback: function(data, envelope) {
 				store.dispatch(openLineCommenting());
+			}
+		});
+
+		postal.subscribe({
+			channel: "filesOpen",
+			topic: "createNew",
+			callback: function(data, envelope) {
+				store.dispatch(createNewFile());
 			}
 		});
 }

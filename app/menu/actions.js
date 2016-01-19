@@ -27,6 +27,26 @@ export class ActionsHandler {
 		// });
 	};
 
+	onCreateNew(fileNames) {
+		postal.publish({
+			channel: "filesOpen",
+			topic: "createNew"
+		});
+		// console.log('ELECTRON', electron);
+		// dialog.showOpenDialog({ 
+		// 	filters: [{ 
+		// 		name: 'Markdown', 
+		// 		extensions: ['md'] 
+		// 	}]
+		// }, function (fileNames) {
+		// 	if (fileNames === undefined) return;
+		// 	var fileName = fileNames[0];
+		// 	fs.readFile(fileName, 'utf-8', function (err, data) {
+		// 		console.log('Get data from file');
+		// 	});
+		// });
+	};
+
 	onOpenCommenting(){
 		postal.publish({
 			channel: "filesOpen",

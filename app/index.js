@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import { Router } from 'react-router';
+import { Router, hashHistory } from 'react-router';
 import routes from './routes';
 import configureStore from './store/configureStore';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -16,7 +16,7 @@ const listeners = new EvtListeners();
 
 render(
   <Provider store={store}>
-    <Router>
+    <Router history={hashHistory}>
       {routes}
     </Router>
   </Provider>,
