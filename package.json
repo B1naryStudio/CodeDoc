@@ -131,6 +131,7 @@
     "react-dom": "^0.14.2",
     "react-redux": "^4.0.5",
     "react-router": "^2.0.0-rc5",
+    "react-remarkable": "^1.1.1",
     "react-split-pane": "^0.1.22",
     "redux": "^3.0.5",
     "redux-promise": "^0.5.0",

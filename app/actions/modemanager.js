@@ -15,6 +15,7 @@ export  function createNewFile(calledFromHomeScreen){
 		if (calledFromHomeScreen) {
 			dispatch(routeActions.push('/md-file-mode'));
 		} else {
+			dispatch(routeActions.push('/md-file-mode'));
 			console.log('Create new file call from top menu');
 		}
 		return dispatch({
@@ -35,7 +36,7 @@ export function openFile(calledFromHomeScreen){
 				if (fileNames === undefined) return;
 				var fileName = fileNames[0];
 				fs.readFile(fileName, 'utf-8', function (err, data) {
-					dispatch({ type: OPEN_NEW_FILE, text: data });
+					dispatch({ type: 'CHANGE_TEXT', text: data });
 					dispatch(routeActions.push('/md-file-mode'));
 				});
 			});

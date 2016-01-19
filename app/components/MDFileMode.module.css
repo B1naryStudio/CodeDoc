@@ -8,6 +8,9 @@
 	bottom: 0;
 	top: 56px;
 	background: white;
+	-webkit-box-shadow: 4px 5px 35px 8px rgba(0,0,0,0.63);
+	-moz-box-shadow: 4px 5px 35px 8px rgba(0,0,0,0.63);
+	box-shadow: 4px 5px 35px 8px rgba(0,0,0,0.63);
 }
 
 .toolbar-container {
@@ -39,6 +42,7 @@
 	position: absolute;
 	width: 100%;
 	background-color: white;
+	padding: 0 10px 0 10px;
 }
 
 .source-window-container {

@@ -4,7 +4,7 @@ const fs = require('fs');
 const dialog = electron.dialog;
 const app = electron.app;
 const postal = require('postal');
-import { createNewFile, openDocumenting, openLineCommenting } from '../actions/modemanager';
+import { createNewFile, openDocumenting, openLineCommenting, openFile } from '../actions/modemanager';
 
 export default function ActionsMapping(store) {
 

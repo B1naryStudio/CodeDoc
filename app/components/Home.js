@@ -24,6 +24,10 @@ export default class Home extends Component {
 		this.props.openLineCommenting(true);
 	}
 
+	newFile(evt){
+		this.props.createNewFile(true);
+	}
+
 	render() {
 		return (
 			<div className="homeBody">
@@ -32,8 +36,17 @@ export default class Home extends Component {
 					<div>
 						<br></br>
 						<div className="row">
-							<div className="col-md-4">
-							<a ref='#/md-file-mode' onClick={ this.openFile.bind(this) } className="btn btn-primary btn-lg btn-block">Create new markdown file</a>
+							
+							<div className="col-md-3 col-sm-6 col-xs-12">
+							<a ref='#/md-file-mode' onClick={ this.newFile.bind(this) } className="btn btn-primary btn-lg btn-block">Create new markdown file</a>
+							<br></br>
+
+							<div className="list-group last-files">
+							</div>
+							</div>
+
+							<div className="col-md-3 col-sm-6 col-xs-12">
+							<a ref='#/md-file-mode' onClick={ this.openFile.bind(this) } className="btn btn-primary btn-lg btn-block">Open new markdown file</a>
 							<br></br>
 							<span>Last files...</span>
 							<div className="list-group last-files">
@@ -45,7 +58,7 @@ export default class Home extends Component {
 							</div>
 							</div>
 
-							<div className="col-md-4">
+							<div className="col-md-3 col-sm-6 col-xs-12">
 							<a onClick={ this.openDocumenting.bind(this) } className="btn btn-primary btn-lg btn-block btn-huge">Create new project documentation</a>
 							<br></br>
 							<span>Last projects...</span>
@@ -58,7 +71,7 @@ export default class Home extends Component {
 							</div>
 							</div>
 
-							<div className="col-md-4">
+							<div className="col-md-3 col-sm-6 col-xs-12">
 							<a onClick={ this.openLineCommenting.bind(this) } className="btn btn-primary btn-lg btn-block btn-huge">Create new none by line doc</a>
 							<br></br>
 							<span>Last files...</span>
