@@ -10,16 +10,29 @@ export default class MainWindow extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {value: props.initialValue};
+		this.cursorPosition = 0;
 	}
 
 	tick(e) {
-		this.setState({value: e.target.value});
-		this.props.changeText(e.target.value);
+		let cursorPosition = this.getSelectedText(e);
+		this.props.changeText(e.target.value, cursorPosition);
+	}
+
+	selectText(e){
+		let cursorPosition = this.getSelectedText(e);
+		this.props.selectText(e.target.value, cursorPosition);
+	}
+
+	getSelectedText(e){
+		this.cursorPosition = {};
+		this.cursorPosition.start = e.target.selectionStart;
+		this.cursorPosition.end = e.target.selectionEnd;
+		return this.cursorPosition;
 	}
 
 	render() {
 		return (
-			<textarea className="form-control" value={this.state.value} onChange={this.tick.bind(this)}></textarea>
+			<textarea className="form-control" value={this.props.mainWindow.mainWindowText} onChange={this.tick.bind(this)} onBlur={this.selectText.bind(this)}></textarea>
 		);
 	}
 }

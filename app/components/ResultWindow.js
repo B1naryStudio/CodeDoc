@@ -7,7 +7,6 @@ export default class ResultWindow extends Component {
 	render() {
 		return (
 			<div>
-				<div>{this.props.toolbarState}</div>
 				<Markdown> 
 					{this.props.mainWindow.mainWindowText}
 				</Markdown>
@@ -18,7 +17,6 @@ export default class ResultWindow extends Component {
 
 function mapStateToProps(state) {
 	return {
-		toolbarState: state.toolbar,
 		mainWindow: state.mainWindow
 	}
 }
