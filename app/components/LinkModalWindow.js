@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { Modal, Button, Input } from 'react-bootstrap';
-import * as modalWindowActions from '../actions/modal-window'
+import * as modalWindowActions from '../actions/modalWindow'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
@@ -23,6 +23,9 @@ export default class LinkModalWindow extends Component {
 
 	addSomeLinkToText(e){
 		this.props.addLink(this.state.value, this.props.modalProperties.modalType);
+		this.setState({
+			value: ''
+		})
 		this.props.hideModalWindow();
 	}
 

@@ -1,5 +1,5 @@
-import { HIDE_MODAL } from '../actions/modal-window';
-import { SHOW_MODAL } from '../actions/main-window';
+import { HIDE_MODAL } from '../actions/modalWindow';
+import { SHOW_MODAL } from '../actions/mainWindow';
 
 let initialState = {
 	showModal: false,

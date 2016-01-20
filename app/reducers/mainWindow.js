@@ -1,10 +1,13 @@
 import { CHANGE_TEXT, SELECT_TEXT, ADD_BOLD_TEXT, ADD_ITALIC_TEXT, ADD_HEADER,
-		ADD_CODE_STYLE, ADD_BLOCK_QUOTE, ADD_NUM_LIST, ADD_SIMPLE_LIST, ADD_HORIZ_RULE } from '../actions/main-window';
-import { ADD_LINK, ADD_IMAGE_LINK} from '../actions/modal-window';
+		ADD_CODE_STYLE, ADD_BLOCK_QUOTE, ADD_NUM_LIST, ADD_SIMPLE_LIST, ADD_HORIZ_RULE } from '../actions/mainWindow';
+import { ADD_LINK, ADD_IMAGE_LINK} from '../actions/modalWindow';
 
 import {ToolbarService} from '../services/toolbarService';
 
-let initialState = {}
+let initialState = {
+	mainWindowText: '',
+	cursorPosition: 0
+}
 
 export default function mainWindow(state = initialState, action) {
   switch (action.type) {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
-import * as mainWindowActions from '../actions/main-window'
+import * as mainWindowActions from '../actions/mainWindow'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
