@@ -8,12 +8,14 @@ import ResultWindow from '../components/ResultWindow';
 import SourceCodWindow from '../components/SourceCodWindow';
 import SplitPane from 'react-split-pane';
 import Markdown from'react-remarkable';
+import LinkModalWindow from '../components/LinkModalWindow';
 
 
 export default class MDFileMode extends Component {
 	render() {
 		return (
 			<div className='md-mode-container'>
+				<LinkModalWindow />
 				<div className='toolbar-container'>
 					<Toolbar />
 				</div>

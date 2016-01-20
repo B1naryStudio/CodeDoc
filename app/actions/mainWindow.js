@@ -8,11 +8,10 @@ export const ADD_BLOCK_QUOTE = 'ADD_BLOCK_QUOTE';
 export const ADD_NUM_LIST = 'ADD_NUM_LIST';
 export const ADD_SIMPLE_LIST = 'ADD_SIMPLE_LIST';
 export const ADD_HORIZ_RULE = 'ADD_HORIZ_RULE';
-export const ADD_LINK = 'ADD_LINK';
-export const ADD_IMAGE_LINK = 'ADD_IMAGE_LINK';
 export const LOAD_FILE = 'LOAD_FILE';
 export const CLEAR_CURRENT_FILE = 'CLEAR_CURRENT_FILE';
 export const UPDATE_CURRENT_LINK = 'UPDATE_CURRENT_LINK';
+export const SHOW_MODAL = 'SHOW_MODAL';
 
 export function changeText(text, cursorPosition) {
 	return {
@@ -79,16 +78,9 @@ export function addHorizRule() {
 	};
 }
 
-export function addLink(link) {
+export function showModalWindow(modalType) {
 	return {
-		type: ADD_LINK,
-		link: link
-	};
-}
-
-export function addImageLink(link) {
-	return {
-		type: ADD_IMAGE_LINK,
-		link: link
+		type: SHOW_MODAL,
+		modalType: modalType
 	};
 }

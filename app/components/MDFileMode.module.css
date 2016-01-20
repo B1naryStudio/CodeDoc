@@ -45,6 +45,11 @@
 	padding: 0 10px 0 10px;
 }
 
+.res-window-container img{
+	width: 100%;
+	height: auto;
+}
+
 .source-window-container {
 	height: 300px;
 	background-color: white;

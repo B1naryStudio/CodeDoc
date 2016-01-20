@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
-import * as mainWindowActions from '../actions/main-window'
+import * as mainWindowActions from '../actions/mainWindow'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
@@ -9,8 +9,6 @@ export default class MainWindow extends Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {value: props.initialValue};
-		this.cursorPosition = 0;
 	}
 
 	tick(e) {

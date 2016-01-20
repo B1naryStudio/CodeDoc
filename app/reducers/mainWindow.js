@@ -1,10 +1,14 @@
 import { CHANGE_TEXT, SELECT_TEXT, ADD_BOLD_TEXT, ADD_ITALIC_TEXT, ADD_HEADER,
 		ADD_CODE_STYLE, ADD_BLOCK_QUOTE, ADD_NUM_LIST, ADD_SIMPLE_LIST, ADD_HORIZ_RULE,
-		ADD_LINK, ADD_IMAGE_LINK, LOAD_FILE, CLEAR_CURRENT_FILE, UPDATE_CURRENT_LINK} from '../actions/main-window';
+		LOAD_FILE, CLEAR_CURRENT_FILE, UPDATE_CURRENT_LINK } from '../actions/mainWindow';
+
+import { ADD_LINK, ADD_IMAGE_LINK} from '../actions/modalWindow';
 
 import {ToolbarService} from '../services/toolbarService';
 
 let initialState = {
+	mainWindowText: '',
+	cursorPosition: 0
 
 }
 
