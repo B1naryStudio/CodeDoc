@@ -22,7 +22,7 @@ export const menuConfig = [{
 	},{
 		label: '&Save',
 		accelerator: 'CmdOrCtrl+S', 
-		id: 'Save'
+		id: 'SaveFile'
 	},{
 		label: '&Quit',
 		accelerator: 'CmdOrCtrl+Q',

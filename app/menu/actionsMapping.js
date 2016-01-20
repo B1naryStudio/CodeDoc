@@ -4,7 +4,7 @@ const fs = require('fs');
 const dialog = electron.dialog;
 const app = electron.app;
 const postal = require('postal');
-import { createNewFile, openDocumenting, openLineCommenting, openFile } from '../actions/modemanager';
+import { createNewFile, openDocumenting, openLineCommenting, openFile, saveFile } from '../actions/modemanager';
 
 export default function ActionsMapping(store) {
 
@@ -31,6 +31,14 @@ export default function ActionsMapping(store) {
 			topic: "openForDocumenting",
 			callback: function(data, envelope) {
 				store.dispatch(openLineCommenting());
+			}
+		});
+
+		postal.subscribe({
+			channel: "filesOpen",
+			topic: "saveFile",
+			callback: function(data, envelope) {
+				store.dispatch(saveFile());
 			}
 		});
 
