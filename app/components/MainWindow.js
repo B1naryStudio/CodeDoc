@@ -9,8 +9,6 @@ export default class MainWindow extends Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {value: props.initialValue};
-		this.cursorPosition = 0;
 	}
 
 	tick(e) {

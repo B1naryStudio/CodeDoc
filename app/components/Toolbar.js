@@ -7,11 +7,18 @@ import { connect } from 'react-redux'
 export default class Toolbar extends Component {
 	constructor(props) {
 		super(props);
-		this.state = {value: props.initialValue};
 	}
 
-	addHeader(e, count) {
+	addHeaderToText(count) {
 		this.props.addHeader(count);
+	}
+
+	addLinkToText() {
+		this.props.showModalWindow('simpleLink');
+	}
+
+	addTheImageLinkToText() {
+		this.props.showModalWindow('imageLink');
 	}
 
 	render() {
@@ -20,14 +27,14 @@ export default class Toolbar extends Component {
 				<div className="btn-group" role="group" aria-label="...">
 					<button className="btn btn-default" onClick={this.props.addBoldText}><i className="fa fa-bold"></i></button>
 					<button className="btn btn-default" onClick={this.props.addItalicText}><i className="fa fa-italic"></i></button>
-					<button className="btn btn-default" onClick={this.props.addHeader.bind(this, 1)}><i className="fa fa-header">1</i></button>
-					<button className="btn btn-default" onClick={this.props.addHeader.bind(this, 2)}><i className="fa fa-header">2</i></button>
-					<button className="btn btn-default" onClick={this.props.addHeader.bind(this, 3)}><i className="fa fa-header">3</i></button>
+					<button className="btn btn-default" onClick={this.addHeaderToText.bind(this, 1)}><i className="fa fa-header">1</i></button>
+					<button className="btn btn-default" onClick={this.addHeaderToText.bind(this, 2)}><i className="fa fa-header">2</i></button>
+					<button className="btn btn-default" onClick={this.addHeaderToText.bind(this, 3)}><i className="fa fa-header">3</i></button>
 				</div>
 
 				<div className="btn-group" role="group" aria-label="...">
-					<button className="btn btn-default" onClick={this.props.addLink}><i className="fa fa-link"></i></button>
-					<button className="btn btn-default" onClick={this.props.addImageLink}><i className="fa fa-image"></i></button>
+					<button className="btn btn-default" onClick={this.addLinkToText.bind(this)}><i className="fa fa-link"></i></button>
+					<button className="btn btn-default" onClick={this.addTheImageLinkToText.bind(this)}><i className="fa fa-image"></i></button>
 					<button className="btn btn-default" onClick={this.props.addBlockQuote}><i className="fa fa-quote-left"></i></button>
 					<button className="btn btn-default" onClick={this.props.addCodeStyle}><i className="fa fa-code"></i></button>
 				</div>
