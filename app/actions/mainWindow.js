@@ -4,6 +4,7 @@ export const ADD_BOLD_TEXT = 'ADD_BOLD_TEXT';
 export const ADD_ITALIC_TEXT = 'ADD_ITALIC_TEXT';
 export const ADD_HEADER = 'ADD_HEADER';
 export const ADD_CODE_STYLE = 'ADD_CODE_STYLE';
+export const ADD_COMMENT = 'ADD_COMMENT';
 export const ADD_BLOCK_QUOTE = 'ADD_BLOCK_QUOTE';
 export const ADD_NUM_LIST = 'ADD_NUM_LIST';
 export const ADD_SIMPLE_LIST = 'ADD_SIMPLE_LIST';
@@ -29,10 +30,9 @@ export function selectText(text, cursorPosition) {
 	};
 }
 
-export function addBoldText(cursorPosition) {
+export function addBoldText() {
 	return {
-		type: ADD_BOLD_TEXT,
-		cursorPosition: cursorPosition
+		type: ADD_BOLD_TEXT
 	};
 }
 
@@ -42,16 +42,23 @@ export function addItalicText() {
 	};
 }
 
-export function addHeader(number) {
+export function addHeader(number, cursorPosition) {
 	return {
 		type: ADD_HEADER,
-		number: number
+		number: number,
+		cursorPosition: cursorPosition
 	};
 }
 
 export function addCodeStyle() {
 	return {
 		type: ADD_CODE_STYLE
+	};
+}
+
+export function addComment() {
+	return {
+		type: ADD_COMMENT
 	};
 }
 

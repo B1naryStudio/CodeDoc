@@ -1,5 +1,5 @@
 import { CHANGE_TEXT, SELECT_TEXT, ADD_BOLD_TEXT, ADD_ITALIC_TEXT, ADD_HEADER,
-		ADD_CODE_STYLE, ADD_BLOCK_QUOTE, ADD_NUM_LIST, ADD_SIMPLE_LIST, ADD_HORIZ_RULE,
+		ADD_CODE_STYLE, ADD_COMMENT, ADD_BLOCK_QUOTE, ADD_NUM_LIST, ADD_SIMPLE_LIST, ADD_HORIZ_RULE,
 		LOAD_FILE, CLEAR_CURRENT_FILE, UPDATE_CURRENT_LINK } from '../actions/mainWindow';
 
 import { ADD_LINK, ADD_IMAGE_LINK} from '../actions/modalWindow';
@@ -45,48 +45,73 @@ export default function mainWindow(state = initialState, action) {
 		})
 	case ADD_ITALIC_TEXT:
 		var textChangedObject = onTextChanged();
+		var result = ToolbarService.addItalic(state);
 		return Object.assign({}, textChangedObject, state, {
-			mainWindowText: ToolbarService.addItalic(state)
+			mainWindowText: result.value,
+			cursorPosition: result.cursorPosition
 		})
 	case ADD_HEADER:
 		var textChangedObject = onTextChanged();
+		var result = ToolbarService.addHeader(state, action.number);
 		return Object.assign({}, textChangedObject, state, {
-			mainWindowText: ToolbarService.addHeader(state, action.number)
+			mainWindowText: result.value,
+			cursorPosition: result.cursorPosition
 		})
 	case ADD_CODE_STYLE:
 		var textChangedObject = onTextChanged();
+		var result = ToolbarService.addCodeStyle(state);
 		return Object.assign({}, textChangedObject, state, {
-			mainWindowText: ToolbarService.addCodeStyle(state)
+			mainWindowText: result.value,
+			cursorPosition: result.cursorPosition
+		})
+	case ADD_COMMENT:
+		var textChangedObject = onTextChanged();
+		var result = ToolbarService.addComment(state);
+		return Object.assign({}, textChangedObject, state, {
+			mainWindowText: result.value,
+			cursorPosition: result.cursorPosition
 		})
 	case ADD_BLOCK_QUOTE:
 		var textChangedObject = onTextChanged();
+		var result = ToolbarService.addBlockQuote(state);
 		return Object.assign({}, textChangedObject, state, {
-			mainWindowText: ToolbarService.addBlockQuote(state)
+			mainWindowText: result.value,
+			cursorPosition: result.cursorPosition
 		})
 	case ADD_NUM_LIST:
 		var textChangedObject = onTextChanged();
+		var result = ToolbarService.addNumList(state);
 		return Object.assign({}, textChangedObject, state, {
-			mainWindowText: ToolbarService.addNumList(state)
+			mainWindowText: result.value,
+			cursorPosition: result.cursorPosition
 		})
 	case ADD_SIMPLE_LIST:
 		var textChangedObject = onTextChanged();
+		var result = ToolbarService.addSimpleList(state);
 		return Object.assign({}, textChangedObject, state, {
-			mainWindowText: ToolbarService.addSimpleList(state)
+			mainWindowText: result.value,
+			cursorPosition: result.cursorPosition
 		})
 	case ADD_HORIZ_RULE:
 		var textChangedObject = onTextChanged();
+		var result = ToolbarService.addHorizRule(state);
 		return Object.assign({}, textChangedObject, state, {
-			mainWindowText: ToolbarService.addHorizRule(state)
+			mainWindowText: result.value,
+			cursorPosition: result.cursorPosition
 		})
 	case ADD_LINK:
 		var textChangedObject = onTextChanged();
+		var result = ToolbarService.addLink(state, action.link);
 		return Object.assign({}, textChangedObject, state, {
-			mainWindowText: ToolbarService.addLink(state, action.link)
+			mainWindowText: result.value,
+			cursorPosition: result.cursorPosition
 		})
 	case ADD_IMAGE_LINK:
 		var textChangedObject = onTextChanged();
+		var result = ToolbarService.addImageLink(state, action.link)
 		return Object.assign({}, textChangedObject, state, {
-			mainWindowText: ToolbarService.addImageLink(state, action.link)
+			mainWindowText: result.value,
+			cursorPosition: result.cursorPosition
 		})
 	case CLEAR_CURRENT_FILE:
 		return Object.assign({}, state, {

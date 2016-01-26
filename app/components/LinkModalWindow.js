@@ -27,6 +27,8 @@ export default class LinkModalWindow extends Component {
 			value: ''
 		})
 		this.props.hideModalWindow();
+		var textarea = document.getElementsByTagName('textarea')[0];
+		setTimeout(function(){textarea.focus()}, 500);
 	}
 
 	handleChange(e){
@@ -40,7 +42,7 @@ export default class LinkModalWindow extends Component {
 			<div>
 				<Modal show={this.props.modalProperties.showModal} onHide={this.close.bind(this)}>
 					<Modal.Header closeButton>
-						<Modal.Title>Modal heading</Modal.Title>
+						<Modal.Title>{this.props.modalProperties.modalType === 'imageLink' ? 'Image' : 'Link'}</Modal.Title>
 					</Modal.Header>
 						<Modal.Body>
 							<h4>Enter a URL address</h4>
@@ -55,7 +57,7 @@ export default class LinkModalWindow extends Component {
 						</Modal.Body>
 					<Modal.Footer>
 						<Button onClick={this.close.bind(this)}>Close</Button>
-						<Button bsStyle="primary" onClick={this.addSomeLinkToText.bind(this)}>Add Link</Button>
+						<Button bsStyle="primary" onClick={this.addSomeLinkToText.bind(this)}>Add</Button>
 					</Modal.Footer>
 				</Modal>
 			</div>

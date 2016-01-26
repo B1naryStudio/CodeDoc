@@ -4,21 +4,65 @@ import * as mainWindowActions from '../actions/mainWindow'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
+
+
 export default class Toolbar extends Component {
 	constructor(props) {
 		super(props);
 	}
 
-	addBoldText(e) {
-		let textarea = document.getElementsByTagName('textarea')[0];
-		let cursorPosition = {};
-		cursorPosition.start = textarea.selectionStart;
-		cursorPosition.end = textarea.selectionEnd;
-		this.props.addBoldText(cursorPosition);
+	addBoldText() {
+		var textarea = document.getElementsByTagName('textarea')[0];
+		this.props.addBoldText();
+		setTimeout(function(){textarea.focus()}, 0);
+	}
+
+	addItalicText() {
+		var textarea = document.getElementsByTagName('textarea')[0];
+		this.props.addItalicText();
+		setTimeout(function(){textarea.focus()}, 0);
+	}
+
+	addBlockQuote() {
+		var textarea = document.getElementsByTagName('textarea')[0];
+		this.props.addBlockQuote();
+		setTimeout(function(){textarea.focus()}, 0);
+	}
+
+	addComment() {
+		var textarea = document.getElementsByTagName('textarea')[0];
+		this.props.addComment();
+		setTimeout(function(){textarea.focus()}, 0);
+	}
+
+	addCodeStyle() {
+		var textarea = document.getElementsByTagName('textarea')[0];
+		this.props.addCodeStyle();
+		setTimeout(function(){textarea.focus()}, 0);
+	}
+
+	addSimpleList() {
+		var textarea = document.getElementsByTagName('textarea')[0];
+		this.props.addSimpleList();
+		setTimeout(function(){textarea.focus()}, 0);
+	}
+
+	addNumList() {
+		var textarea = document.getElementsByTagName('textarea')[0];
+		this.props.addNumList();
+		setTimeout(function(){textarea.focus()}, 0);
+	}
+
+	addHorizRule() {
+		var textarea = document.getElementsByTagName('textarea')[0];
+		this.props.addHorizRule();
+		setTimeout(function(){textarea.focus()}, 0);
 	}
 
 	addHeaderToText(count) {
+		var textarea = document.getElementsByTagName('textarea')[0];
 		this.props.addHeader(count);
+		setTimeout(function(){textarea.focus()}, 0);
 	}
 
 	addLinkToText() {
@@ -34,7 +78,7 @@ export default class Toolbar extends Component {
 			<div className="btn-toolbar">
 				<div className="btn-group" role="group" aria-label="...">
 					<button className="btn btn-default" onClick={this.addBoldText.bind(this)}><i className="fa fa-bold"></i></button>
-					<button className="btn btn-default" onClick={this.props.addItalicText}><i className="fa fa-italic"></i></button>
+					<button className="btn btn-default" onClick={this.addItalicText.bind(this)}><i className="fa fa-italic"></i></button>
 					<button className="btn btn-default" onClick={this.addHeaderToText.bind(this, 1)}><i className="fa fa-header">1</i></button>
 					<button className="btn btn-default" onClick={this.addHeaderToText.bind(this, 2)}><i className="fa fa-header">2</i></button>
 					<button className="btn btn-default" onClick={this.addHeaderToText.bind(this, 3)}><i className="fa fa-header">3</i></button>
@@ -43,14 +87,15 @@ export default class Toolbar extends Component {
 				<div className="btn-group" role="group" aria-label="...">
 					<button className="btn btn-default" onClick={this.addLinkToText.bind(this)}><i className="fa fa-link"></i></button>
 					<button className="btn btn-default" onClick={this.addTheImageLinkToText.bind(this)}><i className="fa fa-image"></i></button>
-					<button className="btn btn-default" onClick={this.props.addBlockQuote}><i className="fa fa-quote-left"></i></button>
-					<button className="btn btn-default" onClick={this.props.addCodeStyle}><i className="fa fa-code"></i></button>
+					<button className="btn btn-default" onClick={this.addBlockQuote.bind(this)}><i className="fa fa-quote-left"></i></button>
+					<button className="btn btn-default" onClick={this.addComment.bind(this)}><i className="fa fa-comment"></i></button>
+					<button className="btn btn-default" onClick={this.addCodeStyle.bind(this)}><i className="fa fa-code"></i></button>
 				</div>
 
 				<div className="btn-group" role="group" aria-label="...">
-					<button className="btn btn-default" onClick={this.props.addSimpleList}><i className="fa fa-list"></i></button>
-					<button className="btn btn-default" onClick={this.props.addNumList}><i className="fa fa-list-ol"></i></button>
-					<button className="btn btn-default" onClick={this.props.addHorizRule}><i className="fa fa-ellipsis-h"></i></button>
+					<button className="btn btn-default" onClick={this.addSimpleList.bind(this)}><i className="fa fa-list"></i></button>
+					<button className="btn btn-default" onClick={this.addNumList.bind(this)}><i className="fa fa-list-ol"></i></button>
+					<button className="btn btn-default" onClick={this.addHorizRule.bind(this)}><i className="fa fa-ellipsis-h"></i></button>
 				</div>
 			</div>
 		);
