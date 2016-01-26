@@ -29,9 +29,10 @@ export function selectText(text, cursorPosition) {
 	};
 }
 
-export function addBoldText() {
+export function addBoldText(cursorPosition) {
 	return {
-		type: ADD_BOLD_TEXT
+		type: ADD_BOLD_TEXT,
+		cursorPosition: cursorPosition
 	};
 }
 

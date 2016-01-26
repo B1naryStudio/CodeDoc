@@ -8,17 +8,19 @@ export var ToolbarService = {
 		};
 		res.selectedText = res.value.substring(res.startSelection, res.endSelection)
 		return res;
-	}, 
+	},
  
 	addBold(state){
 		let data = this.prepareData(state);
-		let result;
+		let selection = data.selectedText || 'Bold text';
+		let result = {};
 
-		if(data.selectedText){
-			result = data.value.substring(0, data.startSelection) + '**' + data.selectedText + '**' + data.value.substring(data.endSelection, data.value.length);
-		} else {
-			result = data.value.substring(0, data.startSelection) + '**Bold text**' + data.value.substring(data.endSelection, data.value.length);
-		}
+		result.value = data.value.substring(0, data.startSelection) + '**' + selection + '**' + data.value.substring(data.endSelection, data.value.length);
+
+		result.cursorPosition = {
+			start: data.startSelection + 2,
+			end: data.startSelection + 2 + selection.length
+		};
 
 		return result;
 	},

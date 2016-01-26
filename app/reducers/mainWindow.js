@@ -8,8 +8,10 @@ import {ToolbarService} from '../services/toolbarService';
 
 let initialState = {
 	mainWindowText: '',
-	cursorPosition: 0
-
+	cursorPosition: {
+		start: 0,
+		end: 0
+	}
 }
 
 export default function mainWindow(state = initialState, action) {
@@ -36,12 +38,14 @@ export default function mainWindow(state = initialState, action) {
 		})
 	case ADD_BOLD_TEXT:
 		var textChangedObject = onTextChanged();
-		return Object.assign({}, textChangedObject,  state, {
-			mainWindowText: ToolbarService.addBold(state)
+		var result = ToolbarService.addBold(state);
+		return Object.assign({}, textChangedObject, state, {
+			mainWindowText: result.value,
+			cursorPosition: result.cursorPosition
 		})
 	case ADD_ITALIC_TEXT:
 		var textChangedObject = onTextChanged();
-		return Object.assign({}, textChangedObject,  state, {
+		return Object.assign({}, textChangedObject, state, {
 			mainWindowText: ToolbarService.addItalic(state)
 		})
 	case ADD_HEADER:

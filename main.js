@@ -23,7 +23,7 @@ app.on('window-all-closed', () => {
 
 app.on('ready', () => {
   mainWindow = new BrowserWindow({ width: 1024, height: 728, minWidth: 800, minHeight: 600  });
-
+  mainWindow.openDevTools();
   if (process.env.HOT) {
     mainWindow.loadURL(`file://${__dirname}/app/hot-dev-app.html`);
   } else {

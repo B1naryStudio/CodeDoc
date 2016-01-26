@@ -9,6 +9,14 @@ export default class Toolbar extends Component {
 		super(props);
 	}
 
+	addBoldText(e) {
+		let textarea = document.getElementsByTagName('textarea')[0];
+		let cursorPosition = {};
+		cursorPosition.start = textarea.selectionStart;
+		cursorPosition.end = textarea.selectionEnd;
+		this.props.addBoldText(cursorPosition);
+	}
+
 	addHeaderToText(count) {
 		this.props.addHeader(count);
 	}
@@ -25,7 +33,7 @@ export default class Toolbar extends Component {
 		return (
 			<div className="btn-toolbar">
 				<div className="btn-group" role="group" aria-label="...">
-					<button className="btn btn-default" onClick={this.props.addBoldText}><i className="fa fa-bold"></i></button>
+					<button className="btn btn-default" onClick={this.addBoldText.bind(this)}><i className="fa fa-bold"></i></button>
 					<button className="btn btn-default" onClick={this.props.addItalicText}><i className="fa fa-italic"></i></button>
 					<button className="btn btn-default" onClick={this.addHeaderToText.bind(this, 1)}><i className="fa fa-header">1</i></button>
 					<button className="btn btn-default" onClick={this.addHeaderToText.bind(this, 2)}><i className="fa fa-header">2</i></button>

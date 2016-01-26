@@ -28,9 +28,17 @@ export default class MainWindow extends Component {
 		return this.cursorPosition;
 	}
 
+	updateSelection() {
+		this._textarea.setSelectionRange(this.props.mainWindow.cursorPosition.start, this.props.mainWindow.cursorPosition.end);
+	}
+
+	componentDidMount() {
+		this._textarea.focus();
+	}
+
 	render() {
 		return (
-			<textarea className="form-control" value={this.props.mainWindow.mainWindowText} onChange={this.tick.bind(this)} onBlur={this.selectText.bind(this)}></textarea>
+			<textarea ref={(textarea) => this._textarea = textarea} className="form-control" onFocus={this.updateSelection.bind(this)} value={this.props.mainWindow.mainWindowText} onChange={this.tick.bind(this)} onSelect={this.selectText.bind(this)}></textarea>
 		);
 	}
 }
