@@ -6,10 +6,9 @@ import Sidebar from '../components/Sidebar';
 import MainWindow from '../components/MainWindow';
 import ResultWindow from '../components/ResultWindow';
 import SourceCodWindow from '../components/SourceCodWindow';
-import SplitPane from 'react-split-pane';
+import SplitLayout from 'react-split-layout';
 import Markdown from'react-remarkable';
 import LinkModalWindow from '../components/LinkModalWindow';
-
 
 export default class MDFileMode extends Component {
 	render() {
@@ -19,21 +18,21 @@ export default class MDFileMode extends Component {
 				<div className='toolbar-container'>
 					<Toolbar />
 				</div>
-
-				<SplitPane split="vertical" defaultSize="200">
-					<div className='sidebar-container'>
-						<Sidebar />
-					</div>
-
-					<SplitPane split="vertical" minSize="300">
+				<div className='panes-container'>
+					<SplitLayout
+						direction="vertical" initialSizes={[200, null, null]}
+						minSizes={[100, 100, 100]}>
+						<div className='sidebar-container'>
+							<Sidebar />
+						</div>
 						<div className='main-window-container'>
 							<MainWindow />
 						</div>
 						<div className='res-window-container'>
 								<ResultWindow />
 							</div>
-					</SplitPane>
-				</SplitPane>
+					</SplitLayout>
+				</div>
 			</div>
 		);
 	}
