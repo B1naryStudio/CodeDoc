@@ -29,6 +29,7 @@
 	border: none;
 	border-radius: 0;
 	box-shadow: none;
+	resize: none;
 }
 
 .sidebar-container {
@@ -72,6 +73,11 @@ textarea.form-control:focus {
 	bottom: 0;
 	left: 0;
 	right: 0;
+	background: #fff;
+}
+
+.panes-container > div > div {
+	margin: 0 5px;
 }
 
 ::-webkit-scrollbar {
