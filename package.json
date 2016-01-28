@@ -120,6 +120,7 @@
   "dependencies": {
     "bootstrap": "^3.3.6",
     "bootstrap-webpack": "0.0.5",
+    "bootswatch": "^3.3.6",
     "electron-debug": "^0.5.1",
     "electron-prebuilt": "^0.36.3",
     "file-loader": "^0.8.5",
