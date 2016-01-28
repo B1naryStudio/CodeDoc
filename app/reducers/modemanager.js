@@ -1,4 +1,4 @@
-import { OPEN_NEW_FILE, OPEN_DOCUMENTING, OPEN_LINE_COMMENTING, SET_TEXT_CHANGED } from '../actions/modemanager';
+import { OPEN_NEW_FILE, NEW_PROJECT, OPEN_PROJECT, SET_TEXT_CHANGED } from '../actions/modemanager';
 import { UPDATE_LOCATION } from 'redux-simple-router';
 
 export default function modemanager(state = 0, action) {

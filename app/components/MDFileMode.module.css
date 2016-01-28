@@ -19,6 +19,8 @@
 
 .toolbar-container .btn-default {
 	color: #95a5a6;
+	font-family: sans-serif;
+	font-size: 20px;
 }
 
 .main-window-container {
@@ -73,7 +75,7 @@ textarea.form-control:focus {
 
 .panes-container {
 	position: fixed;
-	top: 63px;
+	top: 70px;
 	bottom: 0;
 	left: 0;
 	right: 0;

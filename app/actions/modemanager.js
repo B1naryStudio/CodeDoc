@@ -1,6 +1,6 @@
 export const OPEN_NEW_FILE = 'OPEN_NEW_FILE';
-export const OPEN_DOCUMENTING = 'OPEN_DOCUMENTING';
-export const OPEN_LINE_COMMENTING = 'OPEN_LINE_COMMENTING';
+export const NEW_PROJECT = 'NEW_PROJECT';
+export const OPEN_PROJECT = 'OPEN_PROJECT';
 export const CREATE_NEW_FILE = 'CREATE_NEW_FILE';
 export const SET_TEXT_CHANGED = 'SET_TEXT_CHANGE';
 
@@ -115,15 +115,15 @@ export function saveFile(calledFromHomeScreen){
 }
 
 export  function openDocumenting(calledFromHomeScreen){
-	console.log('Open for documenting');
+	console.log('Create new project');
 	return {
-		type: OPEN_DOCUMENTING
+		type: NEW_PROJECT
 	}
 }
 
 export  function openLineCommenting(calledFromHomeScreen){
-	console.log('Open for commenting');
+	console.log('Open project');
 	return {
-		type: OPEN_LINE_COMMENTING
+		type: OPEN_PROJECT
 	}
 }
