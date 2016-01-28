@@ -1,7 +1,7 @@
-export const OPEN_NEW_FILE = 'OPEN_NEW_FILE';
 export const NEW_PROJECT = 'NEW_PROJECT';
+export const OPEN_MARKDOWN = 'OPEN_MARKDOWN';
 export const OPEN_PROJECT = 'OPEN_PROJECT';
-export const CREATE_NEW_FILE = 'CREATE_NEW_FILE';
+export const NEW_MARKDOWN = 'NEW_MARKDOWN';
 export const SET_TEXT_CHANGED = 'SET_TEXT_CHANGE';
 
 import { routeActions } from 'redux-simple-router'
@@ -11,7 +11,7 @@ const electron =  remote.require('electron');
 const fs = require('fs');
 const dialog = electron.dialog;
 
-export  function createNewFile(calledFromHomeScreen){
+export  function createMarkdownFile(calledFromHomeScreen){
 	return (dispatch, getStore) => {
 		const store = getStore();
 		if (calledFromHomeScreen) {
@@ -19,13 +19,15 @@ export  function createNewFile(calledFromHomeScreen){
 		} else {
 			if (store.mainWindow && store.mainWindow.textChanged){
 				dialog.showMessageBox({
-					type: 'none',
-					buttons: ['Save', 'Cancel'],
-					message: 'You have unsaved changes. Do you want to save them?'
-				}, function(response){
+					type: 'question',
+					buttons: ['Yes', 'No', 'Cancel'],
+					message: 'Do you want to save changes?'
+				}, function(response) {
 					console.log('Opened button', response);
-					if (response){
+					if (response === 2) {
 						return;
+					} else if(response === 1) {
+						return dispatch({ type: 'CLEAR_CURRENT_FILE'});
 					} else {
 						if (store.mainWindow && store.mainWindow.currentLink){
 							fs.writeFile(store.mainWindow.currentLink, store.mainWindow.mainWindowText, function (err) {
@@ -34,6 +36,7 @@ export  function createNewFile(calledFromHomeScreen){
 							dispatch({ type: 'CLEAR_CURRENT_FILE'});
 						} else {
 							dialog.showSaveDialog({ 
+								title: 'Save File',
 								filters: [{ 
 									name: 'Markdown', 
 									extensions: ['md'] 
@@ -54,15 +57,15 @@ export  function createNewFile(calledFromHomeScreen){
 			} else {
 				dispatch(routeActions.push('/md-file-mode'));
 			}
-			console.log('Create new file call from top menu');
+			console.log('Created new file call from top menu');
 		}
 		return dispatch({
-			type: CREATE_NEW_FILE
+			type: NEW_MARKDOWN
 		});
 	}
 }
 
-export function openFile(calledFromHomeScreen){
+export function openMarkdownFile(calledFromHomeScreen){
 	return dispatch => {
 		if (calledFromHomeScreen){
 			dialog.showOpenDialog({ 
@@ -79,7 +82,7 @@ export function openFile(calledFromHomeScreen){
 				});
 			});
 		} else {
-			/* check opened files */
+			console.log('open markdown file');
 		}
 	}
 }
@@ -94,7 +97,8 @@ export function saveFile(calledFromHomeScreen){
 					if(err) console.error(err);
 				});
 			} else {
-				dialog.showSaveDialog({ 
+				dialog.showSaveDialog({
+					title: 'Save File',
 					filters: [{ 
 						name: 'Markdown', 
 						extensions: ['md'] 
@@ -114,14 +118,14 @@ export function saveFile(calledFromHomeScreen){
 	}
 }
 
-export  function openDocumenting(calledFromHomeScreen){
+export function createProject(calledFromHomeScreen){
 	console.log('Create new project');
 	return {
 		type: NEW_PROJECT
 	}
 }
 
-export  function openLineCommenting(calledFromHomeScreen){
+export function openProject(calledFromHomeScreen){
 	console.log('Open project');
 	return {
 		type: OPEN_PROJECT

@@ -4,7 +4,7 @@ const fs = require('fs');
 const dialog = electron.dialog;
 const app = electron.app;
 const postal = require('postal');
-import { createNewFile, openDocumenting, openLineCommenting, openFile, saveFile } from '../actions/modemanager';
+import { createMarkdownFile, createProject, openMarkdownFile, openProject, saveFile } from '../actions/modemanager';
 
 export default function ActionsMapping(store) {
 
@@ -12,41 +12,41 @@ export default function ActionsMapping(store) {
 		
 		postal.subscribe({
 			channel: "filesOpen",
-			topic: "openNew",
+			topic: "NewMarkdown",
 			callback: function(data, envelope) {
-				store.dispatch(openFile());
+				store.dispatch(createMarkdownFile());
 			}
 		});
 
 		postal.subscribe({
 			channel: "filesOpen",
-			topic: "openForCommenting",
+			topic: "NewProject",
 			callback: function(data, envelope) {
-				store.dispatch(openDocumenting());
+				store.dispatch(createProject());
 			}
 		});
 
 		postal.subscribe({
 			channel: "filesOpen",
-			topic: "openForDocumenting",
+			topic: "OpenMarkdown",
 			callback: function(data, envelope) {
-				store.dispatch(openLineCommenting());
+				store.dispatch(openMarkdownFile());
 			}
 		});
 
 		postal.subscribe({
 			channel: "filesOpen",
-			topic: "saveFile",
+			topic: "OpenProject",
+			callback: function(data, envelope) {
+				store.dispatch(openProject());
+			}
+		});
+
+		postal.subscribe({
+			channel: "filesOpen",
+			topic: "SaveFile",
 			callback: function(data, envelope) {
 				store.dispatch(saveFile());
-			}
-		});
-
-		postal.subscribe({
-			channel: "filesOpen",
-			topic: "createNew",
-			callback: function(data, envelope) {
-				store.dispatch(createNewFile());
 			}
 		});
 }

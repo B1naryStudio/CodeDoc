@@ -85,11 +85,3 @@ textarea.form-control:focus {
 .panes-container > div > div {
 	margin: 0 5px;
 }
-
-::-webkit-scrollbar {
-	width: 8px;
-}
-
-::-webkit-scrollbar-thumb{
-	background: #bbb;
-}

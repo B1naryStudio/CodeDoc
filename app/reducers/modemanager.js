@@ -1,11 +1,11 @@
-import { OPEN_NEW_FILE, NEW_PROJECT, OPEN_PROJECT, SET_TEXT_CHANGED } from '../actions/modemanager';
+import { NEW_MARKDOWN, NEW_PROJECT, OPEN_PROJECT, SET_TEXT_CHANGED } from '../actions/modemanager';
 import { UPDATE_LOCATION } from 'redux-simple-router';
 
 export default function modemanager(state = 0, action) {
   switch (action.type) {
   	case UPDATE_LOCATION:
   		return state;
-  	case OPEN_NEW_FILE:
+  	case NEW_MARKDOWN:
   		return Object.assign({}, state, {
 			mainWindowText: action.text
 		});

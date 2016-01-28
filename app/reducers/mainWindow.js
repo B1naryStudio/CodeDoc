@@ -31,8 +31,8 @@ export default function mainWindow(state = initialState, action) {
 			cursorPosition: action.cursorPosition
 		})
 	case SELECT_TEXT:
-		var textChangedObject = onTextChanged();
-		return Object.assign({}, textChangedObject, state, {
+		//var textChangedObject = onTextChanged();
+		return Object.assign({}, state, {
 			mainWindowText: action.text,
 			cursorPosition: action.cursorPosition
 		})

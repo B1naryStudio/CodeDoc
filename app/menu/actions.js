@@ -7,38 +7,38 @@ const postal = require('postal');
 
 export class ActionsHandler {
 
-	onOpenNew(fileNames) {
+	onNewMarkdown(fileNames) {
 		postal.publish({
 			channel: "filesOpen",
-			topic: "openNew"
+			topic: "NewMarkdown"
+		});
+	};
+
+	onNewProject(){
+		postal.publish({
+			channel: "filesOpen",
+			topic: "NewProject"
+		});
+	}
+
+	onOpenMarkdown(fileNames) {
+		postal.publish({
+			channel: "filesOpen",
+			topic: "OpenMarkdown"
+		});
+	};
+
+	onOpenProject(){
+		postal.publish({
+			channel: "filesOpen",
+			topic: "OpenProject"
 		});
 	};
 
 	onSaveFile(){
 		postal.publish({
 			channel: "filesOpen",
-			topic: "saveFile"
-		});
-	}
-
-	onCreateNew(fileNames) {
-		postal.publish({
-			channel: "filesOpen",
-			topic: "createNew"
-		});
-	};
-
-	onOpenCommenting(){
-		postal.publish({
-			channel: "filesOpen",
-			topic: "openForCommenting"
-		});
-	};
-
-	onOpenDocumenting(){
-		postal.publish({
-			channel: "filesOpen",
-			topic: "openForDocumenting"
+			topic: "SaveFile"
 		});
 	}
 

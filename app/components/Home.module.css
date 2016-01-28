@@ -42,3 +42,21 @@
 	color: #fff !important;
 	background: rgba(60, 60, 60, .9) !important;
 }
+
+::-webkit-scrollbar {
+	width: 8px;
+}
+
+::-webkit-scrollbar-thumb{
+	background: #bbb;
+}
+
+::-moz-selection {
+	color: #fff;
+	background: #835C10;
+}
+
+::selection {
+	color: #fff;
+	background: #835C10;
+}
