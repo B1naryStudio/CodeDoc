@@ -17,6 +17,10 @@
 	margin: 10px;
 }
 
+.toolbar-container .btn-default {
+	color: #95a5a6;
+}
+
 .main-window-container {
 	height: 100%;
 	position: absolute;
