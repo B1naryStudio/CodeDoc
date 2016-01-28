@@ -58,9 +58,34 @@ export default class MainWindow extends Component {
 		setTimeout(function() {dispatchScrollEvent = true}, 100);
 	}
 
+	onKeyPress(e) {
+		if ((e.which === 13) && !e.shiftKey) {
+			let textarea = document.getElementsByTagName('textarea')[0];
+			let mW = this.props.mainWindow;
+			let cursorLine = 'N/A';
+			let arr = mW.mainWindowText.split('\n');
+			let sum = 0;
+			arr.forEach(function(el, index) {
+				sum += (el.length + 1);
+				if ((sum > mW.cursorPosition.start) && (cursorLine === 'N/A')) {
+					cursorLine = index;
+				}
+			});
+			if (arr[cursorLine].substring(0, 3) === "1. ") {
+				textarea.blur();
+				this.props.addNumList();
+				setTimeout(function(){textarea.focus()}, 0);
+			}else if (arr[cursorLine].substring(0, 2) === "+ ") {
+				textarea.blur();
+				this.props.addSimpleList();
+				setTimeout(function(){textarea.focus()}, 0);
+			}
+		}
+	}
+
 	render() {
 		return (
-			<textarea ref={(textarea) => this._textarea = textarea} className="form-control" onFocus={this.updateSelection.bind(this)} value={this.props.mainWindow.mainWindowText} onChange={this.tick.bind(this)} onSelect={this.selectText.bind(this)}></textarea>
+			<textarea ref={(textarea) => this._textarea = textarea} className="form-control" onKeyPress={this.onKeyPress.bind(this)} onFocus={this.updateSelection.bind(this)} value={this.props.mainWindow.mainWindowText} onChange={this.tick.bind(this)} onSelect={this.selectText.bind(this)}></textarea>
 		);
 	}
 }
