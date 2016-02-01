@@ -4,11 +4,13 @@ import App from './containers/App';
 import HomePage from './containers/HomePage';
 import CounterPage from './containers/CounterPage';
 import MDFileModePage from './containers/MDFileModePage';
+import ProjectCommentsModePage from './containers/ProjectCommentsModePage';
 
 export default (
   <Route path="/" component={App}>
     <IndexRoute component={HomePage} />
     <Route path="counter" component={CounterPage} />
-	<Route path="md-file-mode" component={MDFileModePage} />
+		<Route path="md-file-mode" component={MDFileModePage} />
+		<Route path="project-comments-mode" component={ProjectCommentsModePage} />
   </Route>
 );

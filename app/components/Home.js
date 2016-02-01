@@ -16,12 +16,20 @@ export default class Home extends Component {
 		this.props.openMarkdownFile(true);
 	}
 
-	createProject(evt) {
-		this.props.createProject(true);
+	createProjectComments(evt) {
+		this.props.createProjectComments(true);
 	}
 
-	openProject(evt) {
-		this.props.openProject(true);
+	openProjectComments(evt) {
+		this.props.openProjectComments(true);
+	}
+
+	createProjectDocs(evt) {
+		this.props.createProjectDocs(true);
+	}
+
+	openProjectDocs(evt) {
+		this.props.openProjectDocs(true);
 	}
 
 	createMarkdownFile(evt) {
@@ -42,10 +50,10 @@ export default class Home extends Component {
 								</div>
 								<div className="menu-link-group">
 									<div className="menu-link">
-										<a ref='#/md-file-mode' className="btn btn-sm btn-default"><i className="fa fa-plus"></i> Create Project documentation</a>
+										<a ref='#/md-file-mode' className="btn btn-sm btn-default" onClick={ this.createProjectDocs.bind(this) }><i className="fa fa-plus"></i> Create Project documentation</a>
 									</div>
 									<div className="menu-link">
-										<a ref='#/md-file-mode' className="btn btn-sm btn-default"><i className="fa fa-folder-open-o"></i> Open Project documentation</a>
+										<a ref='#/md-file-mode' className="btn btn-sm btn-default" onClick={ this.openProjectDocs.bind(this) }><i className="fa fa-folder-open-o"></i> Open Project documentation</a>
 									</div>
 									<div className="menu-link">
 										<a className="btn btn-sm btn-default" onClick={ this.createMarkdownFile.bind(this) }><i className="fa fa-plus"></i> Create single markdown file</a>
@@ -62,10 +70,10 @@ export default class Home extends Component {
 								</div>
 								<div className="menu-link-group">
 									<div className="menu-link">
-										<a className="btn btn-sm btn-default" onClick={ this.createProject.bind(this) }><i className="fa fa-plus"></i> Create line-by-line Project commentaries</a>
+										<a className="btn btn-sm btn-default" onClick={ this.createProjectComments.bind(this) }><i className="fa fa-plus"></i> Create line-by-line Project commentaries</a>
 									</div>
 									<div className="menu-link">
-										<a className="btn btn-sm btn-default" onClick={ this.openProject.bind(this) }><i className="fa fa-folder-open-o"></i> Open line-by-line Project commentaries</a>
+										<a className="btn btn-sm btn-default" onClick={ this.openProjectComments.bind(this) }><i className="fa fa-folder-open-o"></i> Open line-by-line Project commentaries</a>
 									</div>
 								</div>
 							</div>

@@ -1,6 +1,8 @@
-export const NEW_PROJECT = 'NEW_PROJECT';
+export const NEW_PROJECT_COMMENTS = 'NEW_PROJECT_COMMENTS';
+export const NEW_PROJECT_DOCS = 'NEW_PROJECT_DOCS';
 export const OPEN_MARKDOWN = 'OPEN_MARKDOWN';
-export const OPEN_PROJECT = 'OPEN_PROJECT';
+export const OPEN_PROJECT_COMMENTS = 'OPEN_PROJECT_COMMENTS';
+export const OPEN_PROJECT_DOCS = 'OPEN_PROJECT_DOCS';
 export const NEW_MARKDOWN = 'NEW_MARKDOWN';
 export const SET_TEXT_CHANGED = 'SET_TEXT_CHANGE';
 
@@ -9,6 +11,7 @@ import { routeActions } from 'redux-simple-router'
 const remote = require('remote');
 const electron =  remote.require('electron');
 const fs = require('fs');
+const path = require('path');
 const dialog = electron.dialog;
 const app = electron.app;
 
@@ -82,17 +85,74 @@ export function saveFile() {
 	}
 }
 
-export function createProject(calledFromHomeScreen){
-	console.log('---RUN LOGIC--- FOR CREATING NEW PROJECT');
+export function createProjectComments(calledFromHomeScreen) {
+	return (dispatch, getStore) => {
+		let store = getStore();
+
+		if (calledFromHomeScreen){
+			dialog.showOpenDialog({ 
+				properties: ['openDirectory', 'createDirectory']
+			}, function (folderPath) {
+				console.log(folderPath[0]);
+				var tree = getFileTree(folderPath[0]);
+				dispatch({ type: 'TREE_LOAD', tree: tree });
+				dispatch(routeActions.push('/project-comments-mode'));
+				/*if (fileNames === undefined) return;
+				var fileName = fileNames[0];
+				fs.readFile(fileName, 'utf-8', function (err, data) {
+					dispatch({ type: 'LOAD_FILE', text: data, link: fileName });
+					dispatch(routeActions.push('/md-file-mode'));
+				});*/
+			});
+		} else {
+			console.log('---RUN LOGIC--- FOR createProjectComments');
+		}
+	}
+
+
+
+	/*return (dispatch, getStore) => {
+		let store = getStore();
+
+		if (calledFromHomeScreen) {
+			dispatch(routeActions.push('/project-comments-mode'));
+		} else {
+			if (store.mainWindow && store.mainWindow.textChanged) {
+				saveChangesConfirmDialogBox(
+					store,
+					function() {
+						return dispatch({ type: 'CLEAR_CURRENT_FILE'});
+					}
+				);
+			} else {
+				return dispatch({ type: 'CLEAR_CURRENT_FILE'});
+			}
+		}
+	}*/
+
+	/*return {
+		type: NEW_PROJECT_COMMENTS
+	}*/
+}
+
+export function openProjectComments(calledFromHomeScreen) {
+	console.log('---RUN LOGIC--- FOR OPENING PROJECT comms');
 	return {
-		type: NEW_PROJECT
+		type: OPEN_PROJECT_COMMENTS
 	}
 }
 
-export function openProject(calledFromHomeScreen){
-	console.log('---RUN LOGIC--- FOR OPENING PROJECT');
+export function createProjectDocs(calledFromHomeScreen) {
+	console.log('---RUN LOGIC--- FOR CREATING NEW PROJECT docs');
 	return {
-		type: OPEN_PROJECT
+		type: NEW_PROJECT_DOCS
+	}
+}
+
+export function openProjectDocs(calledFromHomeScreen) {
+	console.log('---RUN LOGIC--- FOR OPENING PROJECT docs');
+	return {
+		type: OPEN_PROJECT_DOCS
 	}
 }
 
@@ -164,4 +224,20 @@ function saveFileDialogBox(store, next) {
 			return;
 		}
 	});
+}
+
+function getFileTree(filename) {
+	var stats = fs.lstatSync(filename),
+		tree = {
+			path: filename,
+			module: path.basename(filename)
+		};
+	if (stats.isDirectory()) {
+		tree.children = fs.readdirSync(filename).map(function(child) {
+			return getFileTree(filename + '/' + child);
+		});
+	} else {
+		tree.leaf = true;
+	}
+	return tree;
 }

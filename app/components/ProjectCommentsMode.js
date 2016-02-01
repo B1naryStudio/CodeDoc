@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import './MDFileMode.module.css';
 import Toolbar from '../components/Toolbar';
+import Sidebar from '../components/Sidebar';
 import MainWindow from '../components/MainWindow';
 import ResultWindow from '../components/ResultWindow';
 import SourceCodWindow from '../components/SourceCodWindow';
@@ -19,7 +20,11 @@ export default class MDFileMode extends Component {
 				</div>
 				<div className='panes-container'>
 					<SplitLayout
-						direction="vertical" minSizes={[100, 100]}>
+						direction="vertical" initialSizes={[200, null, null]}
+						minSizes={[100, 100, 100]}>
+						<div className='sidebar-container'>
+							<Sidebar />
+						</div>
 						<div className='main-window-container'>
 							<MainWindow />
 						</div>

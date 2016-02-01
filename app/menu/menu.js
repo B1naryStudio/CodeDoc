@@ -1,23 +1,31 @@
 export const menuConfig = [{
 	label: '&File',
 	submenu: [{
-		label: '&New markdown',
+		label: '&New markdown file',
 		accelerator: 'CmdOrCtrl+M',
 		id: 'NewMarkdown'
 	},{
-		label: '&New Project',
+		label: '&New Project documentation',
+		accelerator: 'CmdOrCtrl+D',
+		id: 'NewProjectDocs'
+	},{
+		label: '&New Project commentaries',
 		accelerator: 'CmdOrCtrl+N',
-		id: 'NewProject'
+		id: 'NewProjectComments'
 	},{
 		label: '&Open',
 		submenu:[{
-			label: '&Markdown',
+			label: '&Markdown file',
 			accelerator: 'CmdOrCtrl+O',
 			id: 'OpenMarkdown'
 		},{
-			label: '&Project',
+			label: '&Project documentation',
+			accelerator: 'CmdOrCtrl+T',
+			id: 'OpenProjectDocs'
+		},{
+			label: '&Project commentaries',
 			accelerator: 'CmdOrCtrl+P',
-			id: 'OpenProject'
+			id: 'OpenProjectComments'
 		}]
 	},{
 		label: '&Save',

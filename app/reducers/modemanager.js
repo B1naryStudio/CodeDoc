@@ -1,19 +1,19 @@
-import { NEW_MARKDOWN, NEW_PROJECT, OPEN_PROJECT, SET_TEXT_CHANGED } from '../actions/modemanager';
+import { NEW_MARKDOWN, NEW_PROJECT_COMMENTS, OPEN_PROJECT_COMMENTS, NEW_PROJECT_DOCS, OPEN_PROJECT_DOCS, SET_TEXT_CHANGED } from '../actions/modemanager';
 import { UPDATE_LOCATION } from 'redux-simple-router';
 
 export default function modemanager(state = 0, action) {
-  switch (action.type) {
-  	case UPDATE_LOCATION:
-  		return state;
-  	case NEW_MARKDOWN:
-  		return Object.assign({}, state, {
+	switch (action.type) {
+		case UPDATE_LOCATION:
+			return state;
+		case NEW_MARKDOWN:
+			return Object.assign({}, state, {
 			mainWindowText: action.text
 		});
-    case SET_TEXT_CHANGED:
-      return Object.assign({}, state, {
-      textChanged: action.textChanged
-    });
-    default:
-      return state;
-  }
+		case SET_TEXT_CHANGED:
+			return Object.assign({}, state, {
+			textChanged: action.textChanged
+		});
+		default:
+			return state;
+	}
 }

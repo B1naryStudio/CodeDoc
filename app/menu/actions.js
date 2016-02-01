@@ -14,10 +14,17 @@ export class ActionsHandler {
 		});
 	};
 
-	onNewProject(){
+	onNewProjectComments(){
 		postal.publish({
 			channel: "filesOpen",
-			topic: "NewProject"
+			topic: "NewProjectComments"
+		});
+	}
+
+	onNewProjectDocs(){
+		postal.publish({
+			channel: "filesOpen",
+			topic: "NewProjectDocs"
 		});
 	}
 
@@ -28,10 +35,17 @@ export class ActionsHandler {
 		});
 	};
 
-	onOpenProject(){
+	onOpenProjectComments(){
 		postal.publish({
 			channel: "filesOpen",
-			topic: "OpenProject"
+			topic: "OpenProjectComments"
+		});
+	};
+
+	onOpenProjectDocs(){
+		postal.publish({
+			channel: "filesOpen",
+			topic: "OpenProjectDocs"
 		});
 	};
 

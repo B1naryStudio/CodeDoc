@@ -4,7 +4,7 @@ const fs = require('fs');
 const dialog = electron.dialog;
 const app = electron.app;
 const postal = require('postal');
-import { createMarkdownFile, createProject, openMarkdownFile, openProject, saveFile, quitApp } from '../actions/modemanager';
+import { createMarkdownFile, createProjectComments, createProjectDocs, openMarkdownFile, openProjectComments, openProjectDocs, saveFile, quitApp } from '../actions/modemanager';
 
 export default function ActionsMapping(store) {
 
@@ -20,9 +20,17 @@ export default function ActionsMapping(store) {
 
 		postal.subscribe({
 			channel: "filesOpen",
-			topic: "NewProject",
+			topic: "NewProjectComments",
 			callback: function(data, envelope) {
-				store.dispatch(createProject());
+				store.dispatch(createProjectComments());
+			}
+		});
+
+		postal.subscribe({
+			channel: "filesOpen",
+			topic: "NewProjectDocs",
+			callback: function(data, envelope) {
+				store.dispatch(createProjectDocs());
 			}
 		});
 
@@ -36,9 +44,17 @@ export default function ActionsMapping(store) {
 
 		postal.subscribe({
 			channel: "filesOpen",
-			topic: "OpenProject",
+			topic: "OpenProjectComments",
 			callback: function(data, envelope) {
-				store.dispatch(openProject());
+				store.dispatch(openProjectComments());
+			}
+		});
+
+		postal.subscribe({
+			channel: "filesOpen",
+			topic: "OpenProjectDocs",
+			callback: function(data, envelope) {
+				store.dispatch(openProjectDocs());
 			}
 		});
 
