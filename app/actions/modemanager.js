@@ -10,62 +10,30 @@ const remote = require('remote');
 const electron =  remote.require('electron');
 const fs = require('fs');
 const dialog = electron.dialog;
+const app = electron.app;
 
-export  function createMarkdownFile(calledFromHomeScreen){
+export function createMarkdownFile(calledFromHomeScreen) {
 	return (dispatch, getStore) => {
-		const store = getStore();
+		let store = getStore();
+
 		if (calledFromHomeScreen) {
 			dispatch(routeActions.push('/md-file-mode'));
 		} else {
-			if (store.mainWindow && store.mainWindow.textChanged){
-				dialog.showMessageBox({
-					type: 'question',
-					buttons: ['Yes', 'No', 'Cancel'],
-					message: 'Do you want to save changes?'
-				}, function(response) {
-					console.log('Opened button', response);
-					if (response === 2) {
-						return;
-					} else if(response === 1) {
+			if (store.mainWindow && store.mainWindow.textChanged) {
+				saveChangesConfirmDialogBox(
+					store,
+					function() {
 						return dispatch({ type: 'CLEAR_CURRENT_FILE'});
-					} else {
-						if (store.mainWindow && store.mainWindow.currentLink){
-							fs.writeFile(store.mainWindow.currentLink, store.mainWindow.mainWindowText, function (err) {
-								if(err) console.error(err);
-							});
-							dispatch({ type: 'CLEAR_CURRENT_FILE'});
-						} else {
-							dialog.showSaveDialog({ 
-								title: 'Save File',
-								filters: [{ 
-									name: 'Markdown', 
-									extensions: ['md'] 
-								}]
-							}, function (filePath) {
-								if (filePath.substr(-3,3) !== '.md'){
-									filePath += '.md';
-								}
-								console.log('File saved to ', filePath);
-								fs.writeFile(filePath, store.mainWindow.mainWindowText, function (err) {
-									if(err) console.error(err);
-								});
-								dispatch({ type: 'CLEAR_CURRENT_FILE'});
-							});
-						}
 					}
-				});
+				);
 			} else {
-				dispatch(routeActions.push('/md-file-mode'));
+				return dispatch({ type: 'CLEAR_CURRENT_FILE'});
 			}
-			console.log('Created new file call from top menu');
 		}
-		return dispatch({
-			type: NEW_MARKDOWN
-		});
 	}
 }
 
-export function openMarkdownFile(calledFromHomeScreen){
+export function openMarkdownFile(calledFromHomeScreen) {
 	return dispatch => {
 		if (calledFromHomeScreen){
 			dialog.showOpenDialog({ 
@@ -82,52 +50,118 @@ export function openMarkdownFile(calledFromHomeScreen){
 				});
 			});
 		} else {
-			console.log('open markdown file');
+			console.log('---RUN LOGIC--- FOR OPENING .MD FILE');
 		}
 	}
 }
 
-export function saveFile(calledFromHomeScreen){
+export function saveFile() {
 	return (dispatch, getStore) => {
 		let store = getStore();
 
-		if (store.mainWindow && store.mainWindow.textChanged){
-			if (store.mainWindow && store.mainWindow.currentLink){
+		if (store.mainWindow.textChanged) {
+			if (store.mainWindow.currentLink){
 				fs.writeFile(store.mainWindow.currentLink, store.mainWindow.mainWindowText, function (err) {
 					if(err) console.error(err);
+					else {
+						// set changes to false
+						console.log('---RUN LOGIC--- FOR SETTING \'FILE CHANGED\' STATE TO FALSE');
+					}
 				});
 			} else {
-				dialog.showSaveDialog({
-					title: 'Save File',
-					filters: [{ 
-						name: 'Markdown', 
-						extensions: ['md'] 
-					}]
-				}, function (filePath) {
-					if (filePath.substr(-3,3) !== '.md'){
-						filePath += '.md';
-					}
-					console.log('File saved to ', filePath);
-					fs.writeFile(filePath, store.mainWindow.mainWindowText, function (err) {
-						if(err) console.error(err);
+				saveFileDialogBox(
+					store,
+					function(filePath) {
 						dispatch({ type: 'UPDATE_CURRENT_LINK', link: filePath });
-					});
-				});
+					}
+				);
 			}
+		} else {
+			console.log('NO FILE OPENED OR NO CHANGES MADE');
 		}
 	}
 }
 
 export function createProject(calledFromHomeScreen){
-	console.log('Create new project');
+	console.log('---RUN LOGIC--- FOR CREATING NEW PROJECT');
 	return {
 		type: NEW_PROJECT
 	}
 }
 
 export function openProject(calledFromHomeScreen){
-	console.log('Open project');
+	console.log('---RUN LOGIC--- FOR OPENING PROJECT');
 	return {
 		type: OPEN_PROJECT
 	}
+}
+
+export function quitApp() {
+	return (dispatch, getStore) => {
+		let store = getStore();
+
+		if (store.mainWindow && store.mainWindow.textChanged) {
+			saveChangesConfirmDialogBox(
+				store,
+				function() {
+					return app.quit();
+				}
+			);
+		} else {
+			return app.quit();
+		}
+	}
+}
+
+function saveChangesConfirmDialogBox(store, next) {
+	dialog.showMessageBox({
+		type: 'question',
+		buttons: ['Yes', 'No', 'Cancel'],
+		message: 'Do you want to save changes to current file?'
+	}, function(response) {
+		if (response === 2) {
+			return;
+		} else if(response === 1) {
+			return next();
+		} else if(response === 0) {
+			if (store.mainWindow.currentLink) {
+				fs.writeFile(store.mainWindow.currentLink, store.mainWindow.mainWindowText, function (err) {
+					if(err) console.error(err);
+					else {
+						// set changes to false
+						console.log('---RUN LOGIC--- FOR SETTING \'FILE CHANGED\' STATE TO FALSE');
+					}
+				});
+				return next();
+			} else {
+				return saveFileDialogBox(store, next);
+			}
+		}
+	});
+}
+
+function saveFileDialogBox(store, next) {
+	dialog.showSaveDialog({ 
+		title: 'Save File',
+		filters: [{ 
+			name: 'Markdown', 
+			extensions: ['md'] 
+		}]
+	}, function (filePath) {
+		if(filePath) {
+			if (filePath.substr(-3,3) !== '.md'){
+				filePath += '.md';
+			}
+			fs.writeFile(filePath, store.mainWindow.mainWindowText, function (err) {
+				if(err) console.error(err);
+				else {
+					// set changes to false
+					console.log('---RUN LOGIC--- FOR SETTING \'FILE CHANGED\' STATE TO FALSE');
+				}
+			});
+			return next();
+		} else {
+			return;
+		}
+	});
 }

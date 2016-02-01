@@ -43,7 +43,12 @@ export class ActionsHandler {
 	}
 
 	onQuit(){
-		app.quit();
+		postal.publish({
+			channel: "filesOpen",
+			topic: "Quit"
+		});
+		//console.log('TRYIN\' to QUIT OUTTA HERE');
+		//app.quit();
 	};
 
 }

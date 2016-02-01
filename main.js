@@ -5,6 +5,7 @@ const electron = require('electron');
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 const crashReporter = electron.crashReporter;
+const postal = require('postal');
 
 let mainWindow = null;
 
@@ -12,26 +13,32 @@ let mainWindow = null;
 crashReporter.start();
 
 if (process.env.NODE_ENV === 'development') {
-  require('electron-debug')();
+	require('electron-debug')();
 }
 
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit();
+	if (process.platform !== 'darwin') app.quit();
 });
 
 
 app.on('ready', () => {
-  mainWindow = new BrowserWindow({ width: 1024, height: 728, minWidth: 800, minHeight: 600  });
-  mainWindow.openDevTools();
-  if (process.env.HOT) {
-    mainWindow.loadURL(`file://${__dirname}/app/hot-dev-app.html`);
-  } else {
-    mainWindow.loadURL(`file://${__dirname}/app/app.html`);
-  }
+	mainWindow = new BrowserWindow({ width: 1024, height: 728, minWidth: 800, minHeight: 600  });
+	mainWindow.openDevTools();
+	if (process.env.HOT) {
+		mainWindow.loadURL(`file://${__dirname}/app/hot-dev-app.html`);
+	} else {
+		mainWindow.loadURL(`file://${__dirname}/app/app.html`);
+	}
 
-  mainWindow.on('closed', () => {
-    mainWindow = null;
-  });
+	/*mainWindow.on('close', (e) => {
+		if(true) {
+			e.preventDefault();
+		}
+	});*/
+
+	mainWindow.on('closed', () => {
+		mainWindow = null;
+	});
 
 });
