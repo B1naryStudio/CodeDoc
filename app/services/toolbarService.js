@@ -36,6 +36,38 @@ export var ToolbarService = {
 		return result;
 	},
 
+	undoAction(state) {
+		let currentState = {
+			mainWindowText: state.mainWindowText,
+			cursorPosition: state.cursorPosition
+		};
+		let newState = state.pastStates.pop();
+		state.futureStates.unshift(currentState);
+		let result = {
+			mainWindowText: newState.mainWindowText,
+			cursorPosition: newState.cursorPosition,
+			pastStates: state.pastStates,
+			futureStates: state.futureStates
+		};
+		return result;
+	},
+
+	redoAction(state) {
+		let currentState = {
+			mainWindowText: state.mainWindowText,
+			cursorPosition: state.cursorPosition
+		};
+		let newState = state.futureStates.shift();
+		state.pastStates.push(currentState);
+		let result = {
+			mainWindowText: newState.mainWindowText,
+			cursorPosition: newState.cursorPosition,
+			pastStates: state.pastStates,
+			futureStates: state.futureStates
+		};
+		return result;
+	},
+
 	addBold(state) {
 		let placeholder = 'Bold text';
 		let marks = '**';

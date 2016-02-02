@@ -11,6 +11,18 @@ export default class Toolbar extends Component {
 		super(props);
 	}
 
+	undoAction() {
+		var textarea = document.getElementsByTagName('textarea')[0];
+		this.props.undoAction();
+		setTimeout(function(){textarea.focus()}, 0);
+	}
+
+	redoAction() {
+		var textarea = document.getElementsByTagName('textarea')[0];
+		this.props.redoAction();
+		setTimeout(function(){textarea.focus()}, 0);
+	}
+
 	addBoldText() {
 		var textarea = document.getElementsByTagName('textarea')[0];
 		this.props.addBoldText();
@@ -77,25 +89,30 @@ export default class Toolbar extends Component {
 		return (
 			<div className="btn-toolbar">
 				<div className="btn-group" role="group" aria-label="...">
-					<button className="btn btn-default" onClick={this.addBoldText.bind(this)}><b>B</b></button>
-					<button className="btn btn-default" onClick={this.addItalicText.bind(this)}><i>I</i></button>
-					<button className="btn btn-default" onClick={this.addHeaderToText.bind(this, 1)}>H1</button>
-					<button className="btn btn-default" onClick={this.addHeaderToText.bind(this, 2)}>H2</button>
-					<button className="btn btn-default" onClick={this.addHeaderToText.bind(this, 3)}>H3</button>
+					<button disabled={!this.props.mainWindow.pastStates.length} className="btn btn-default" onClick={this.undoAction.bind(this)} data-toggle="tooltip" title="Undo"><i className="fa fa-reply"></i></button>
+					<button disabled={!this.props.mainWindow.futureStates.length} className="btn btn-default" onClick={this.redoAction.bind(this)} data-toggle="tooltip" title="Redo"><i className="fa fa-share"></i></button>
 				</div>
 
 				<div className="btn-group" role="group" aria-label="...">
-					<button className="btn btn-default" onClick={this.addLinkToText.bind(this)}><i className="fa fa-link"></i></button>
-					<button className="btn btn-default" onClick={this.addTheImageLinkToText.bind(this)}><i className="fa fa-image"></i></button>
-					<button className="btn btn-default" onClick={this.addBlockQuote.bind(this)}><i className="fa fa-quote-left"></i></button>
-					<button className="btn btn-default" onClick={this.addComment.bind(this)}><i className="fa fa-comment"></i></button>
-					<button className="btn btn-default" onClick={this.addCodeStyle.bind(this)}><i className="fa fa-code"></i></button>
+					<button className="btn btn-default" onClick={this.addBoldText.bind(this)} data-toggle="tooltip" title="Bold"><b>B</b></button>
+					<button className="btn btn-default" onClick={this.addItalicText.bind(this)} data-toggle="tooltip" title="Italic"><i>I</i></button>
+					<button className="btn btn-default" onClick={this.addHeaderToText.bind(this, 1)} data-toggle="tooltip" title="Big heading">H1</button>
+					<button className="btn btn-default" onClick={this.addHeaderToText.bind(this, 2)} data-toggle="tooltip" title="Medium heading">H2</button>
+					<button className="btn btn-default" onClick={this.addHeaderToText.bind(this, 3)} data-toggle="tooltip" title="Small heading">H3</button>
 				</div>
 
 				<div className="btn-group" role="group" aria-label="...">
-					<button className="btn btn-default" onClick={this.addSimpleList.bind(this)}><i className="fa fa-list"></i></button>
-					<button className="btn btn-default" onClick={this.addNumList.bind(this)}><i className="fa fa-list-ol"></i></button>
-					<button className="btn btn-default" onClick={this.addHorizRule.bind(this)}><i className="fa fa-ellipsis-h"></i></button>
+					<button className="btn btn-default" onClick={this.addLinkToText.bind(this)} data-toggle="tooltip" title="Link"><i className="fa fa-link"></i></button>
+					<button className="btn btn-default" onClick={this.addTheImageLinkToText.bind(this)} data-toggle="tooltip" title="Image"><i className="fa fa-image"></i></button>
+					<button className="btn btn-default" onClick={this.addBlockQuote.bind(this)} data-toggle="tooltip" title="Quote"><i className="fa fa-quote-left"></i></button>
+					<button className="btn btn-default" onClick={this.addComment.bind(this)} data-toggle="tooltip" title="Comment"><i className="fa fa-comment"></i></button>
+					<button className="btn btn-default" onClick={this.addCodeStyle.bind(this)} data-toggle="tooltip" title="Code"><i className="fa fa-code"></i></button>
+				</div>
+
+				<div className="btn-group" role="group" aria-label="...">
+					<button className="btn btn-default" onClick={this.addSimpleList.bind(this)} data-toggle="tooltip" title="Unodered list"><i className="fa fa-list"></i></button>
+					<button className="btn btn-default" onClick={this.addNumList.bind(this)} data-toggle="tooltip" title="Ordered list"><i className="fa fa-list-ol"></i></button>
+					<button className="btn btn-default" onClick={this.addHorizRule.bind(this)} data-toggle="tooltip" title="Horizontal rule"><i className="fa fa-ellipsis-h"></i></button>
 				</div>
 			</div>
 		);
@@ -104,7 +121,8 @@ export default class Toolbar extends Component {
 
 function mapStateToProps(state) {
 	return {
-		toolbarState: state.toolbar
+		toolbarState: state.toolbar,
+		mainWindow: state.mainWindow
 	}
 }
 

@@ -1,6 +1,8 @@
 export const CHANGE_TEXT = 'CHANGE_TEXT';
 export const SELECT_TEXT = 'SELECT_TEXT';
 export const ADD_BOLD_TEXT = 'ADD_BOLD_TEXT';
+export const UNDO_ACTION = 'UNDO_ACTION';
+export const REDO_ACTION = 'REDO_ACTION';
 export const ADD_ITALIC_TEXT = 'ADD_ITALIC_TEXT';
 export const ADD_HEADER = 'ADD_HEADER';
 export const ADD_CODE_STYLE = 'ADD_CODE_STYLE';
@@ -33,6 +35,18 @@ export function selectText(text, cursorPosition) {
 export function addBoldText() {
 	return {
 		type: ADD_BOLD_TEXT
+	};
+}
+
+export function undoAction() {
+	return {
+		type: UNDO_ACTION
+	};
+}
+
+export function redoAction() {
+	return {
+		type: REDO_ACTION
 	};
 }
 
