@@ -3,6 +3,11 @@ import { Link } from 'react-router';
 import * as mainWindowActions from '../actions/mainWindow'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import brace from 'brace';
+import AceEditor from 'react-ace';
+
+import 'brace/mode/markdown';
+import 'brace/theme/github';
 
 let dispatchScrollEvent = true;
 
@@ -13,7 +18,7 @@ export default class MainWindow extends Component {
 		super(props);
 	}
 
-	tick(e) {
+	/*tick(e) {
 		let cursorPosition = this.getSelectedText(e);
 		this.props.changeText(e.target.value, cursorPosition);
 	}
@@ -97,10 +102,36 @@ export default class MainWindow extends Component {
 			}
 		}
 	}
+*/
+	onload(editor){
+	        editor.getSession().setUseWrapMode(true);
+	    }
 
+	//<textarea ref={(textarea) => this._textarea = textarea} className="form-control" onKeyDown={this.onKeyDown.bind(this)} onKeyPress={this.onKeyPress.bind(this)} onFocus={this.updateSelection.bind(this)} value={this.props.mainWindow.mainWindowText} onChange={this.tick.bind(this)} onSelect={this.selectText.bind(this)}></textarea>
 	render() {
 		return (
-			<textarea ref={(textarea) => this._textarea = textarea} className="form-control" onKeyDown={this.onKeyDown.bind(this)} onKeyPress={this.onKeyPress.bind(this)} onFocus={this.updateSelection.bind(this)} value={this.props.mainWindow.mainWindowText} onChange={this.tick.bind(this)} onSelect={this.selectText.bind(this)}></textarea>
+			<div style={{width:'100%',height:'100%'}}>
+				<AceEditor
+					mode="markdown"
+					theme="github"
+					name="UNIQUE_ID_OF_DIV"
+					width="100%"
+					height="100%"
+					fontSize={17}
+					editorProps={{$blockScrolling: true}}
+					onLoad={this.onload}
+
+					/*ref={(textarea) => this._textarea = textarea}
+					className="form-control"
+					onKeyDown={this.onKeyDown.bind(this)}
+					onKeyPress={this.onKeyPress.bind(this)}
+					onFocus={this.updateSelection.bind(this)}
+					value={this.props.mainWindow.mainWindowText}
+					onChange={this.tick.bind(this)}
+					onSelect={this.selectText.bind(this)}*/
+				/>
+			</div>
+			/*<textarea ref={(textarea) => this._textarea = textarea} className="form-control" onKeyDown={this.onKeyDown.bind(this)} onKeyPress={this.onKeyPress.bind(this)} onFocus={this.updateSelection.bind(this)} value={this.props.mainWindow.mainWindowText} onChange={this.tick.bind(this)} onSelect={this.selectText.bind(this)}></textarea>*/
 		);
 	}
 }

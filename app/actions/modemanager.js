@@ -95,6 +95,7 @@ export function createProjectComments(calledFromHomeScreen) {
 			}, function (folderPath) {
 				console.log(folderPath[0]);
 				var tree = getFileTree(folderPath[0]);
+				tree.toggled = true;
 				dispatch({ type: 'TREE_LOAD', tree: tree });
 				dispatch(routeActions.push('/project-comments-mode'));
 				/*if (fileNames === undefined) return;
@@ -143,10 +144,64 @@ export function openProjectComments(calledFromHomeScreen) {
 }
 
 export function createProjectDocs(calledFromHomeScreen) {
-	console.log('---RUN LOGIC--- FOR CREATING NEW PROJECT docs');
-	return {
-		type: NEW_PROJECT_DOCS
+	return (dispatch, getStore) => {
+		let store = getStore();
+
+		if (calledFromHomeScreen){
+			dialog.showOpenDialog({ 
+				properties: ['openDirectory', 'createDirectory']
+			}, function (folderPath) {
+				console.log(folderPath[0]);
+				var tree = getFileTree(folderPath[0]);
+				tree.toggled = true;
+				dispatch({ type: 'TREE_LOAD', tree: tree });
+				dispatch(routeActions.push('/project-docs-mode'));
+				/*if (fileNames === undefined) return;
+				var fileName = fileNames[0];
+				fs.readFile(fileName, 'utf-8', function (err, data) {
+					dispatch({ type: 'LOAD_FILE', text: data, link: fileName });
+					dispatch(routeActions.push('/md-file-mode'));
+				});*/
+				let docsConfig = {
+					name: tree.name,
+					ignore: ['node_modules', '.codedoc', '.git']
+				};
+				fs.writeFile(tree.path + '/.codedoc/docsConfig.json', JSON.stringify(docsConfig), function (err) {
+					if(err) console.error(err);
+					else {
+						console.log('default config created');
+					}
+				});
+			});
+		} else {
+			console.log('---RUN LOGIC--- FOR createProjectComments');
+		}
 	}
+
+
+
+	/*return (dispatch, getStore) => {
+		let store = getStore();
+
+		if (calledFromHomeScreen) {
+			dispatch(routeActions.push('/project-comments-mode'));
+		} else {
+			if (store.mainWindow && store.mainWindow.textChanged) {
+				saveChangesConfirmDialogBox(
+					store,
+					function() {
+						return dispatch({ type: 'CLEAR_CURRENT_FILE'});
+					}
+				);
+			} else {
+				return dispatch({ type: 'CLEAR_CURRENT_FILE'});
+			}
+		}
+	}*/
+
+	/*return {
+		type: NEW_PROJECT_DOCS
+	}*/
 }
 
 export function openProjectDocs(calledFromHomeScreen) {
@@ -230,14 +285,20 @@ function getFileTree(filename) {
 	var stats = fs.lstatSync(filename),
 		tree = {
 			path: filename,
-			module: path.basename(filename)
+			name: path.basename(filename)
 		};
 	if (stats.isDirectory()) {
 		tree.children = fs.readdirSync(filename).map(function(child) {
 			return getFileTree(filename + '/' + child);
 		});
-	} else {
-		tree.leaf = true;
+		tree.children.sort(function(a, b) {
+			let A = a.children ? 1 : 0;
+			let B = b.children ? 1 : 0;
+			if ((B - A) === 0) {
+				return (b.name > a.name) ? -1 : 1;
+			}
+			return B - A;
+		})
 	}
 	return tree;
 }
