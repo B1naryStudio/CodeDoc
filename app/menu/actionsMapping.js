@@ -4,7 +4,7 @@ const fs = require('fs');
 const dialog = electron.dialog;
 const app = electron.app;
 const postal = require('postal');
-import { createMarkdownFile, createProjectComments, createProjectDocs, openMarkdownFile, openProjectComments, openProjectDocs, saveFile, quitApp } from '../actions/modemanager';
+import { createMarkdownFile, createProjectComments, createProjectDocs, openMarkdownFile, openProjectComments, openProjectDocs, saveFile, quitApp, openHomeScreen} from '../actions/modemanager';
 
 export default function ActionsMapping(store) {
 
@@ -71,6 +71,14 @@ export default function ActionsMapping(store) {
 			topic: "Quit",
 			callback: function(data, envelope) {
 				store.dispatch(quitApp());
+			}
+		});
+
+		postal.subscribe({
+			channel: "openHomeScreen",
+			topic: "Home",
+			callback: function(data, envelope) {
+				store.dispatch(openHomeScreen());
 			}
 		});
 }

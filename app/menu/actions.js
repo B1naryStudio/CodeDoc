@@ -19,14 +19,14 @@ export class ActionsHandler {
 			channel: "filesOpen",
 			topic: "NewProjectComments"
 		});
-	}
+	};
 
 	onNewProjectDocs(){
 		postal.publish({
 			channel: "filesOpen",
 			topic: "NewProjectDocs"
 		});
-	}
+	};
 
 	onOpenMarkdown(fileNames) {
 		postal.publish({
@@ -54,7 +54,7 @@ export class ActionsHandler {
 			channel: "filesOpen",
 			topic: "SaveFile"
 		});
-	}
+	};
 
 	onQuit(){
 		postal.publish({
@@ -63,6 +63,13 @@ export class ActionsHandler {
 		});
 		//console.log('TRYIN\' to QUIT OUTTA HERE');
 		//app.quit();
+	};
+
+	onOpenHomeScreen(){
+		postal.publish({
+			channel: "openHomeScreen",
+			topic: "Home"
+		});
 	};
 
 }

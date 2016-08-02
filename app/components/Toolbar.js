@@ -23,7 +23,7 @@ export default class Toolbar extends Component {
 		setTimeout(function(){textarea.focus()}, 0);
 	}
 
-	addBoldText() {
+	addBoldText() {		
 		var textarea = document.getElementsByTagName('textarea')[0];
 		this.props.addBoldText();
 		setTimeout(function(){textarea.focus()}, 0);

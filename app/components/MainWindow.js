@@ -18,7 +18,7 @@ export default class MainWindow extends Component {
 		super(props);
 	}
 
-	/*tick(e) {
+	tick(e) {
 		let cursorPosition = this.getSelectedText(e);
 		this.props.changeText(e.target.value, cursorPosition);
 	}
@@ -102,15 +102,16 @@ export default class MainWindow extends Component {
 			}
 		}
 	}
-*/
+
 	onload(editor){
+		console.log('onload'+ editor)
 	        editor.getSession().setUseWrapMode(true);
 	    }
 
-	//<textarea ref={(textarea) => this._textarea = textarea} className="form-control" onKeyDown={this.onKeyDown.bind(this)} onKeyPress={this.onKeyPress.bind(this)} onFocus={this.updateSelection.bind(this)} value={this.props.mainWindow.mainWindowText} onChange={this.tick.bind(this)} onSelect={this.selectText.bind(this)}></textarea>
+	/*<textarea ref={(textarea) => this._textarea = textarea} className="form-control" onKeyDown={this.onKeyDown.bind(this)} onKeyPress={this.onKeyPress.bind(this)} onFocus={this.updateSelection.bind(this)} value={this.props.mainWindow.mainWindowText} onChange={this.tick.bind(this)} onSelect={this.selectText.bind(this)}></textarea>*/
 	render() {
 		return (
-			<div style={{width:'100%',height:'100%'}}>
+			/*<div style={{width:'100%',height:'100%'}}>
 				<AceEditor
 					mode="markdown"
 					theme="github"
@@ -120,18 +121,23 @@ export default class MainWindow extends Component {
 					fontSize={17}
 					editorProps={{$blockScrolling: true}}
 					onLoad={this.onload}
+					//value={this.props.mainWindow.mainWindowText}
+					//onChange={this.tick.bind(this)}
 
-					/*ref={(textarea) => this._textarea = textarea}
+
+					ref={(textarea) => this._textarea = textarea}
 					className="form-control"
 					onKeyDown={this.onKeyDown.bind(this)}
 					onKeyPress={this.onKeyPress.bind(this)}
 					onFocus={this.updateSelection.bind(this)}
 					value={this.props.mainWindow.mainWindowText}
 					onChange={this.tick.bind(this)}
-					onSelect={this.selectText.bind(this)}*/
+					onSelect={this.selectText.bind(this)}
 				/>
-			</div>
-			/*<textarea ref={(textarea) => this._textarea = textarea} className="form-control" onKeyDown={this.onKeyDown.bind(this)} onKeyPress={this.onKeyPress.bind(this)} onFocus={this.updateSelection.bind(this)} value={this.props.mainWindow.mainWindowText} onChange={this.tick.bind(this)} onSelect={this.selectText.bind(this)}></textarea>*/
+			</div>*/
+			<textarea ref={(textarea) => this._textarea = textarea} className="form-control" onKeyDown={this.onKeyDown.bind(this)} 
+			onKeyPress={this.onKeyPress.bind(this)} onFocus={this.updateSelection.bind(this)} value={this.props.mainWindow.mainWindowText} 
+			onChange={this.tick.bind(this)} onSelect={this.selectText.bind(this)}></textarea>
 		);
 	}
 }

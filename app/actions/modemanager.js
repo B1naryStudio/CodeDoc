@@ -228,6 +228,14 @@ export function quitApp() {
 	}
 }
 
+export function openHomeScreen(calledFromHomeScreen) {
+	return (dispatch, getStore) => {
+		if (calledFromHomeScreen === undefined) {
+			dispatch(routeActions.push('/'));
+		}
+	}
+}
+
 function saveChangesConfirmDialogBox(store, next) {
 	dialog.showMessageBox({
 		type: 'question',
@@ -302,3 +310,4 @@ function getFileTree(filename) {
 	}
 	return tree;
 }
+
