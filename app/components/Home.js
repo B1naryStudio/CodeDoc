@@ -10,10 +10,19 @@ export default class Home extends Component {
 	constructor(props) {
 		super(props);
 		this.props = props;
+		if (localStorage.recentDocuments) {
+			this.recentDocuments = JSON.parse(localStorage.recentDocuments).splice(0, 5);
+		} else{
+			this.recentDocuments = [];
+		}		
 	}
 
 	openMarkdownFile(evt) {
 		this.props.openMarkdownFile(true);
+	}
+
+	openRecentMarkdownFile(file){
+		this.props.openRecentMarkdownFile(file);
 	}
 
 	createProjectComments(evt) {
@@ -83,13 +92,11 @@ export default class Home extends Component {
 							<div className="col-md-6 col-sm-6 col-xs-12">
 								<h3 className="recent-title">Recent Project documentations</h3>
 								<div className="panel-body">
-									<div className="list-group recent-files">
-										<a href="#" className="list-group-item">New Project (3)</a>
-										<a href="#" className="list-group-item">DAX</a>
-										<a href="#" className="list-group-item">Parquetrator 2.0</a>
-										<a href="#" className="list-group-item">Google killer</a>
-										<a href="#" className="list-group-item">To-do list</a>
-									</div>
+									<div className="list-group recent-files">									
+							        {this.recentDocuments.map(function(result, index) {
+							           return <a ref='#/md-file-mode' className="list-group-item" onClick={ this.openRecentMarkdownFile.bind(this, result) } key={index}>{result}</a>;
+							        }, this)}
+							      </div>
 								</div>
 							</div>
 							<div className="col-md-6 col-sm-6 col-xs-12">

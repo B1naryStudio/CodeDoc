@@ -58,6 +58,16 @@ export function openMarkdownFile(calledFromHomeScreen) {
 	}
 }
 
+export function openRecentMarkdownFile(file) {
+	return dispatch => {		
+		if (file === undefined) return;
+		fs.readFile(file, 'utf-8', function (err, data) {
+			dispatch({ type: 'LOAD_FILE', text: data, link: file });
+			dispatch(routeActions.push('/md-file-mode'));
+		});
+	}
+}
+
 export function saveFile() {
 	return (dispatch, getStore) => {
 		let store = getStore();
@@ -224,7 +234,7 @@ export function openHomeScreen(calledFromHomeScreen) {
 export function quitApp() {
 	return (dispatch, getStore) => {
 		let store = getStore();
-		checkChanges(store,	() => return app.quit());
+		checkChanges(store,	() => app.quit());
 	}
 }
 

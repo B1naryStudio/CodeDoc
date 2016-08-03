@@ -16,9 +16,18 @@ let initialState = {
 	futureStates: []
 }
 
+
+const remote = require('remote');
+const electron =  remote.require('electron');
+//const fs = require('fs');
+//const path = require('path');
+const app = electron.app;
+
 export default function mainWindow(state = initialState, action) {
 	switch (action.type) {
 		case LOAD_FILE:
+			//app.addRecentDocument(action.link);
+			saveFilesToStorage(action.link);
 			console.log('File loaded');
 		return Object.assign({}, state, {
 			mainWindowText: action.text,
@@ -178,4 +187,22 @@ function storePastState(state) {
 		pastStates,
 		futureStates
 	};
+}
+
+function saveFilesToStorage(file){
+	if (localStorage.recentDocuments) {
+		let files = JSON.parse(localStorage.recentDocuments);
+		let index = files.indexOf(file);
+		if (index !== -1) {
+			files.splice(index, 1);
+		}
+		files.unshift(file);
+		let jsonfile = JSON.stringify(files);
+		localStorage.setItem("recentDocuments", jsonfile);
+	} else{
+		let jsonfile = JSON.stringify([file]);
+		localStorage.setItem("recentDocuments", jsonfile);
+	}
+
+	//localStorage.setItem("recentDocuments",)
 }
