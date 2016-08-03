@@ -75,8 +75,8 @@ export default function ActionsMapping(store) {
 		});
 
 		postal.subscribe({
-			channel: "openHomeScreen",
-			topic: "Home",
+			channel: "filesOpen",
+			topic: "Close",
 			callback: function(data, envelope) {
 				store.dispatch(openHomeScreen());
 			}

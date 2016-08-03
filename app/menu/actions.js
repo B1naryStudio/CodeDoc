@@ -65,10 +65,10 @@ export class ActionsHandler {
 		//app.quit();
 	};
 
-	onOpenHomeScreen(){
+	onFileClose(){
 		postal.publish({
-			channel: "openHomeScreen",
-			topic: "Home"
+			channel: "filesOpen",
+			topic: "Close"
 		});
 	};
 

@@ -33,15 +33,12 @@ export const menuConfig =
 			accelerator: 'CmdOrCtrl+S', 
 			id: 'SaveFile'
 		},{
+			label: '&Close',
+			//accelerator: 'CmdOrCtrl+H',
+			id: 'FileClose'
+		},{
 			label: '&Quit',
 			accelerator: 'CmdOrCtrl+Q',
 			id: 'Quit'
-		}]
-},
-	{label: '&View',
-		submenu: [{
-			label: '&Home',
-			//accelerator: 'CmdOrCtrl+H',
-			id: 'OpenHomeScreen'
 		}]
 }];

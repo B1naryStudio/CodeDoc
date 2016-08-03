@@ -211,29 +211,29 @@ export function openProjectDocs(calledFromHomeScreen) {
 	}
 }
 
-export function quitApp() {
+export function openHomeScreen(calledFromHomeScreen) {
 	return (dispatch, getStore) => {
 		let store = getStore();
 
-		if (store.mainWindow && store.mainWindow.textChanged) {
-			saveChangesConfirmDialogBox(
-				store,
-				function() {
-					return app.quit();
-				}
-			);
-		} else {
-			return app.quit();
-		}
+		checkChanges(store,	function() {
+			dispatch({ type: 'CLEAR_CURRENT_FILE'});
+			dispatch(routeActions.push('/'));});
 	}
 }
 
-export function openHomeScreen(calledFromHomeScreen) {
+export function quitApp() {
 	return (dispatch, getStore) => {
-		if (calledFromHomeScreen === undefined) {
-			dispatch(routeActions.push('/'));
-		}
+		let store = getStore();
+		checkChanges(store,	() => return app.quit());
 	}
+}
+
+function checkChanges(store, next){
+	if (store.mainWindow && store.mainWindow.textChanged) {
+			saveChangesConfirmDialogBox(store, next);
+		} else {
+			return next();
+		}
 }
 
 function saveChangesConfirmDialogBox(store, next) {
