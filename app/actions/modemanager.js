@@ -176,7 +176,12 @@ export function createProjectDocs(calledFromHomeScreen) {
 					name: tree.name,
 					ignore: ['node_modules', '.codedoc', '.git']
 				};
-				fs.writeFile(tree.path + '/.codedoc/docsConfig.json', JSON.stringify(docsConfig), function (err) {
+				let dir = path.join(tree.path ,'.codedoc');
+				if (!fs.existsSync(dir)){
+					fs.mkdirSync(dir);
+				}
+
+				fs.writeFile(path.join(dir,'docsConfig.json'), JSON.stringify(docsConfig), function (err) {
 					if(err) console.error(err);
 					else {
 						console.log('default config created');

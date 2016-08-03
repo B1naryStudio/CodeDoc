@@ -83,7 +83,7 @@ export default class Sidebar extends Component {
 	}
 
 	reloadTree(e) {
-		fs.readFile(path.join(this.props.tree.path, '.codedoc/docsConfig.json'), 'utf8', (err, data) => {
+		fs.readFile(path.join(this.props.tree.path, '.codedoc','docsConfig.json'), 'utf8', (err, data) => {
 			if (err) throw err;
 			let ignore = JSON.parse(data).ignore;
 			var tree = getFileTree(this.props.tree.path, ignore);
