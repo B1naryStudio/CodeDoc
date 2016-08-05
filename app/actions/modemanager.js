@@ -162,20 +162,14 @@ export function createProjectDocs(calledFromHomeScreen) {
 				properties: ['openDirectory', 'createDirectory']
 			}, function (folderPath) {
 				console.log(folderPath[0]);
-				var tree = getFileTree(folderPath[0]);
-				tree.toggled = true;
-				dispatch({ type: 'TREE_LOAD', tree: tree });
-				dispatch(routeActions.push('/project-docs-mode'));
-				/*if (fileNames === undefined) return;
-				var fileName = fileNames[0];
-				fs.readFile(fileName, 'utf-8', function (err, data) {
-					dispatch({ type: 'LOAD_FILE', text: data, link: fileName });
-					dispatch(routeActions.push('/md-file-mode'));
-				});*/
+				var treePath = folderPath[0];
+				var treeName = path.basename(treePath);
 				let docsConfig = {
-					name: tree.name,
+					name: treeName,
 					ignore: ['node_modules', '.codedoc', '.git']
 				};
+				var tree = getFileTree(treePath, docsConfig.ignore);
+				tree.toggled = true;
 				let dir = path.join(tree.path ,'.codedoc');
 				if (!fs.existsSync(dir)){
 					fs.mkdirSync(dir);
@@ -187,6 +181,9 @@ export function createProjectDocs(calledFromHomeScreen) {
 						console.log('default config created');
 					}
 				});
+
+				dispatch({ type: 'TREE_LOAD', payload: {tree: tree}});
+				dispatch(routeActions.push('/project-docs-mode'));
 			});
 		} else {
 			console.log('---RUN LOGIC--- FOR createProjectComments');
@@ -220,10 +217,27 @@ export function createProjectDocs(calledFromHomeScreen) {
 }
 
 export function openProjectDocs(calledFromHomeScreen) {
-	console.log('---RUN LOGIC--- FOR OPENING PROJECT docs');
-	return {
+	return (dispatch, getStore) => {
+		dialog.showOpenDialog({ 
+				properties: ['openDirectory', 'createDirectory']
+			}, function (folderPath) {
+				console.log(folderPath[0]);
+				fs.readFile(path.join(folderPath[0], '.codedoc','docsConfig.json'), 'utf8', (err, data) => {
+					if (err) {
+						console.log('no project here')
+						throw err
+					};
+					let ignore = JSON.parse(data).ignore;
+					let tree = getFileTree(folderPath[0], ignore);
+					tree.toggled = true;
+					dispatch({ type: 'TREE_LOAD', payload : {tree: tree} });
+					dispatch(routeActions.push('/project-docs-mode'));
+				});
+			});
+	};
+	/*return {
 		type: OPEN_PROJECT_DOCS
-	}
+	}*/
 }
 
 export function openHomeScreen(calledFromHomeScreen) {
@@ -304,7 +318,44 @@ function saveFileDialogBox(store, next) {
 	});
 }
 
-function getFileTree(filename) {
+function getFileTree(folderPath, ignore = [], base = folderPath) {
+	let stats = fs.lstatSync(folderPath),
+			tree = {
+				path: folderPath,
+				hasDocs: false,
+				name: path.basename(folderPath)
+			};
+	let docsPath = path.join(base, '.codedoc', folderPath.substring(base.length, folderPath.length - (stats.isDirectory() ? 0 : path.basename(folderPath).length)), (path.basename(folderPath) + '.md'));
+	try {
+		fs.accessSync(docsPath, fs.F_OK);
+		tree.hasDocs = true;
+		tree.docsPath = docsPath;
+	} catch (e) {
+		tree.hasDocs = false;
+		tree.docsPath = docsPath;
+	}
+	if (stats.isDirectory()) {
+		let filteredChildren = fs.readdirSync(folderPath).filter(function(child) {
+			return !_.find(ignore, function(item) {
+				return item === child;
+			});
+		});
+		tree.children = filteredChildren.map(function(child) {
+			return getFileTree(path.join(folderPath, child), ignore, base);
+		});
+		tree.children.sort(function(a, b) {
+			let A = a.children ? 1 : 0;
+			let B = b.children ? 1 : 0;
+			if ((B - A) === 0) {
+				return (b.name > a.name) ? -1 : 1;
+			}
+			return B - A;
+		});
+	}
+	return tree;
+}
+
+/*function getFileTree(filename) {
 	var stats = fs.lstatSync(filename),
 		tree = {
 			path: filename,
@@ -325,4 +376,4 @@ function getFileTree(filename) {
 	}
 	return tree;
 }
-
+*/

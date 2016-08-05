@@ -7,9 +7,10 @@ let initialState = {
 export default function projectWindow(state = initialState, action) {
 	switch (action.type) {
 		case TREE_LOAD:
-		return Object.assign({}, state, {
-			tree: action.tree
-		})
+			//let tree = readFile(action.payload.path)
+			return Object.assign({}, state, {
+				tree: action.payload.tree
+			})
 		default:
 			return state
 	}

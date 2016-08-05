@@ -1,10 +1,9 @@
 export const TREE_LOAD = 'TREE_LOAD';
 
-
 export function loadTree(tree) {
-	return {
+		return {
 		type: TREE_LOAD,
-		tree: tree
+		payload: { tree: tree }
 	};
 }
 
