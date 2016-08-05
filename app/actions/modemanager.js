@@ -15,47 +15,50 @@ const path = require('path');
 const dialog = electron.dialog;
 const app = electron.app;
 
-export function createMarkdownFile(calledFromHomeScreen) {
+export function createMarkdownFile(calledFromHomeScreen = false) {
 	return (dispatch, getStore) => {
 		let store = getStore();
-
-		if (calledFromHomeScreen) {
+		debugger;
+		if (store.routing.location.pathname !== '/md-file-mode') {
 			dispatch(routeActions.push('/md-file-mode'));
 		} else {
-			if (store.mainWindow && store.mainWindow.textChanged) {
-				saveChangesConfirmDialogBox(
-					store,
-					function() {
-						return dispatch({ type: 'CLEAR_CURRENT_FILE'});
-					}
-				);
-			} else {
-				return dispatch({ type: 'CLEAR_CURRENT_FILE'});
-			}
+			checkChanges(store, () => dispatch({ type: 'CLEAR_CURRENT_FILE'}));
 		}
 	}
 }
 
-export function openMarkdownFile(calledFromHomeScreen) {
-	return dispatch => {
-		if (calledFromHomeScreen){
-			dialog.showOpenDialog({ 
-				filters: [{ 
-					name: 'Markdown', 
-					extensions: ['md'] 
-				}]
-			}, function (fileNames) {
-				if (fileNames === undefined) return;
-				var fileName = fileNames[0];
-				fs.readFile(fileName, 'utf-8', function (err, data) {
-					dispatch({ type: 'LOAD_FILE', text: data, link: fileName });
-					dispatch(routeActions.push('/md-file-mode'));
-				});
-			});
+export function openMarkdownFile(calledFromHomeScreen = false) {
+	return (dispatch, getStore) => {
+		let store = getStore();
+		debugger;
+		if (store.routing.location.pathname !== '/md-file-mode' || !(store.mainWindow && store.mainWindow.textChanged)) {
+			showDialogToOpenFile(dispatch);
 		} else {
-			console.log('---RUN LOGIC--- FOR OPENING .MD FILE');
+			//if (store.mainWindow && store.mainWindow.textChanged) {
+				checkChanges(store, () => showDialogToOpenFile(dispatch));
+			//} else {
+				//showDialogToOpenFile(dispatch);
+
+			//}
 		}
 	}
+}
+
+function showDialogToOpenFile(dispatch){
+	dialog.showOpenDialog({ 
+			filters: [{ 
+				name: 'Markdown', 
+				extensions: ['md'] 
+			}]
+		}, function (fileNames) {
+			if (fileNames === undefined) return;
+			var fileName = fileNames[0];
+			dispatch({ type: 'CLEAR_CURRENT_FILE'});
+			fs.readFile(fileName, 'utf-8', function (err, data) {
+				dispatch({ type: 'LOAD_FILE', text: data, link: fileName });
+				dispatch(routeActions.push('/md-file-mode'));
+			});
+		});
 }
 
 export function openRecentMarkdownFile(file) {
@@ -153,41 +156,44 @@ export function openProjectComments(calledFromHomeScreen) {
 	}
 }
 
-export function createProjectDocs(calledFromHomeScreen) {
+export function createProjectDocs(calledFromHomeScreen = false) {
 	return (dispatch, getStore) => {
 		let store = getStore();
-
-		if (calledFromHomeScreen){
-			dialog.showOpenDialog({ 
-				properties: ['openDirectory', 'createDirectory']
-			}, function (folderPath) {
-				console.log(folderPath[0]);
-				var treePath = folderPath[0];
-				var treeName = path.basename(treePath);
-				let docsConfig = {
-					name: treeName,
-					ignore: ['node_modules', '.codedoc', '.git']
-				};
-				var tree = getFileTree(treePath, docsConfig.ignore);
-				tree.toggled = true;
-				let dir = path.join(tree.path ,'.codedoc');
-				if (!fs.existsSync(dir)){
-					fs.mkdirSync(dir);
-				}
-
-				fs.writeFile(path.join(dir,'docsConfig.json'), JSON.stringify(docsConfig), function (err) {
-					if(err) console.error(err);
-					else {
-						console.log('default config created');
-					}
-				});
-
-				dispatch({ type: 'TREE_LOAD', payload: {tree: tree}});
-				dispatch(routeActions.push('/project-docs-mode'));
-			});
-		} else {
-			console.log('---RUN LOGIC--- FOR createProjectComments');
+		if (!calledFromHomeScreen){
+			console.log('---RUN LOGIC--- FOR asking for saving')
+			if (store.mainWindow && store.mainWindow.textChanged) {
+			}
 		}
+		//if (calledFromHomeScreen){
+		dialog.showOpenDialog({ 
+			properties: ['openDirectory', 'createDirectory']
+		}, function (folderPath) {
+			if (folderPath === undefined) return;
+			var treeName = path.basename(folderPath[0]);
+			let docsConfig = {
+				name: treeName,
+				ignore: ['node_modules', '.codedoc', '.git']
+			};
+			var tree = getFileTree(folderPath[0], docsConfig.ignore);
+			tree.toggled = true;
+			let dir = path.join(tree.path ,'.codedoc');
+			if (!fs.existsSync(dir)){
+				fs.mkdirSync(dir);
+			}
+
+			fs.writeFile(path.join(dir,'docsConfig.json'), JSON.stringify(docsConfig), function (err) {
+				if(err) console.error(err);
+				else {
+					console.log('default config created');
+				}
+			});
+
+			dispatch({ type: 'TREE_LOAD', payload: {tree: tree}});
+			dispatch(routeActions.push('/project-docs-mode'));
+		});
+		//} else {
+		//	console.log('---RUN LOGIC--- FOR createProjectComments');
+		//}
 	}
 
 
@@ -218,6 +224,10 @@ export function createProjectDocs(calledFromHomeScreen) {
 
 export function openProjectDocs(calledFromHomeScreen) {
 	return (dispatch, getStore) => {
+		if (!calledFromHomeScreen) {
+			console.log('---RUN LOGIC--- FOR SETTING \'FILE CHANGED\' STATE TO FALSE');
+		}
+
 		dialog.showOpenDialog({ 
 				properties: ['openDirectory', 'createDirectory']
 			}, function (folderPath) {
