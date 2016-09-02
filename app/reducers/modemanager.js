@@ -11,7 +11,7 @@ export default function modemanager(state = 0, action) {
 		});
 		case SET_TEXT_CHANGED:
 			return Object.assign({}, state, {
-			textChanged: action.textChanged
+			textChanged: action.payload.textChanged
 		});
 		default:
 			return state;

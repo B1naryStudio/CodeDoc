@@ -7,6 +7,7 @@ export const NEW_MARKDOWN = 'NEW_MARKDOWN';
 export const SET_TEXT_CHANGED = 'SET_TEXT_CHANGE';
 
 import { routeActions } from 'redux-simple-router'
+import {FilesService} from '../services/filesService';
 
 const remote = require('remote');
 const electron =  remote.require('electron');
@@ -81,7 +82,8 @@ export function saveFile() {
 					if(err) console.error(err);
 					else {
 						// set changes to false
-						console.log('---RUN LOGIC--- FOR SETTING \'FILE CHANGED\' STATE TO FALSE');
+						dispatch({type: SET_TEXT_CHANGED, payload: {textChanged: false}})
+						//console.log('---RUN LOGIC--- FOR SETTING \'FILE CHANGED\' STATE TO FALSE');						
 					}
 				});
 			} else {
@@ -232,14 +234,9 @@ export function openProjectDocs(calledFromHomeScreen) {
 				properties: ['openDirectory', 'createDirectory']
 			}, function (folderPath) {
 				console.log(folderPath[0]);
-				fs.readFile(path.join(folderPath[0], '.codedoc','docsConfig.json'), 'utf8', (err, data) => {
-					if (err) {
-						console.log('no project here')
-						throw err
-					};
-					let ignore = JSON.parse(data).ignore;
-					let tree = getFileTree(folderPath[0], ignore);
-					tree.toggled = true;
+
+
+				FilesService.openProjectTree(folderPath[0], (tree) => {
 					dispatch({ type: 'TREE_LOAD', payload : {tree: tree} });
 					dispatch(routeActions.push('/project-docs-mode'));
 				});
