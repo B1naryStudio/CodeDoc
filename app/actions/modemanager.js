@@ -82,7 +82,7 @@ export function saveFile() {
 					if(err) console.error(err);
 					else {
 						// set changes to false
-						dispatch({type: SET_TEXT_CHANGED, payload: {textChanged: false}})
+						dispatch({type: 'UPDATE_CURRENT_LINK', link: store.mainWindow.currentLink})
 						//console.log('---RUN LOGIC--- FOR SETTING \'FILE CHANGED\' STATE TO FALSE');						
 					}
 				});

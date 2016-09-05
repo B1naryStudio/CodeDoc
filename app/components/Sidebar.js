@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import {Treebeard, decorators} from 'react-treebeard';
-import * as treeUi from 'react-ui-tree';
 import Tree, { TreeNode } from 'rc-tree';
 import '../../node_modules/rc-tree/assets/index.css';
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
 import * as projectWindowActions from '../actions/projectWindow';
-//import * as sidebarActions from '../actions/sidebar';
+
 import _ from 'lodash';
 
 const fs = require('fs');
@@ -65,8 +64,8 @@ export default class Sidebar extends Component {
 		
 		return (
 		<span className="cus-label">
-			<span >{node.name}</span>
-			<i className={iconClass} style={iconStyle} onClick={action.bind(this, node)}></i>
+			<span onClick={action.bind(this, node)}>{node.name}</span>
+			<i className={iconClass} style={iconStyle}></i>
 		</span>)
 	}
 

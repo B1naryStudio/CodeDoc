@@ -15,7 +15,6 @@ export function createFile(node) {
     return (dispatch, getStore) => {
         let store = getStore();
 		
-		console.log(node);
 		var dir = node.docsPath.slice(0, -node.name.length - 4);
 		if (!fs.existsSync(dir)){
 				fs.mkdirSync(dir);
@@ -31,7 +30,7 @@ export function createFile(node) {
 
 export function openFile(node){
 	return (dispatch) => {	
-		console.log(node);
+		
 		FilesService.openFile(node.docsPath, (text) => {
             dispatch({ type: 'LOAD_FILE', text: text, link: node.docsPath });
         });
