@@ -3,7 +3,7 @@ import { TREE_LOAD, FILE_OPENED, CLEAR_CURRENT_PROJECT } from '../actions/projec
 let initialState = {
 	tree: {},
 	openedFiles: [],
-	count: {}
+	activeFile: {}
 }
 
 export default function projectWindow(state = initialState, action) {
@@ -14,15 +14,20 @@ export default function projectWindow(state = initialState, action) {
 				tree: action.payload.tree
 			})
 		case FILE_OPENED: {
-			let fileList = state.openedFiles;
-			fileList.push(action.payload.openFile);
+			// let fileList = state.openedFiles;
+			// fileList.push(action.payload.openFile);
+			
 			return Object.assign({}, state, {
-				openedFiles: fileList,
-				count: fileList.length
+				openedFiles: action.payload.openedFiles,
+				activeFile: action.payload.activeFile
 			})
 		}
 		case CLEAR_CURRENT_PROJECT: {
-			return Object.assign({}, state, initialState)
+			return Object.assign({}, state, {
+				tree: {},
+				openedFiles: [],
+				activeFile: {}
+			})
 		}
 		default:
 			return state

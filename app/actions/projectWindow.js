@@ -23,7 +23,7 @@ export function createFile(node) {
 			}
         FilesService.createFile(node.docsPath, () => {
             dispatch({ type: 'LOAD_FILE', text: '', link: node.docsPath });
-			dispatch({type: FILE_OPENED, payload: { openFile: node } });
+			addFileTab(node);
         });
         FilesService.openProjectTree(store.projectWindow.tree.path, (tree) => {
 					dispatch({ type: 'TREE_LOAD', payload : {tree: tree} });
@@ -32,11 +32,12 @@ export function createFile(node) {
 }    
 
 export function openFile(node){
-	return (dispatch) => {	
-		
+	return (dispatch, getStore) => {	
+		let store = getStore();
 		FilesService.openFile(node.docsPath, (text) => {
             dispatch({ type: 'LOAD_FILE', text: text, link: node.docsPath });
-			dispatch({type: FILE_OPENED, payload: { openFile: node } });
+			
+			(addFileTab(node))(dispatch, getStore);
         });
 	};
 }
@@ -56,3 +57,18 @@ export function updateTree(text, link) {
 		dispatch({type: 'TREE_LOAD', tree});
 	}
 }
+
+export function addFileTab(file){
+	return (dispatch, getStore) => {
+        let store = getStore();
+		let files = store.projectWindow.openedFiles;
+		
+		let exist = files.find((x)=>{return x.path === file.path});
+		if(exist === undefined){
+			file.key = files.length;
+			files.push(file);
+		}
+		dispatch({type: FILE_OPENED, payload: { openedFiles: files, activeFile: file } });
+	}
+}
+

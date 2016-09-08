@@ -18,22 +18,6 @@ constructor(props) {
 		
 		this.props = props;
 		this.state = {};
-    this.myState = {
-      openedFiles:  [
-        {
-          name: "Tab1",
-          content: "content 1"
-        },
-        {
-          name: "Tab2",
-          content: "content 2"
-        },
-        {
-          name: "Tab3",
-          content: "content 3"
-        }
-      ]
-    }
   }
 
 	beginDrag() {
@@ -49,17 +33,11 @@ constructor(props) {
   }
 
 	renderTabs(tabs) {
-		if(Array.isArray(tabs)){
 			return tabs.map((item, index) => {
-				return (<Panel title={item.name} key={index} />
+				return (<Panel title={item.name} key={item.key} />
                   
                 );
 			});
-			} else {
-			return (<Panel title={tabs.name} key={0} />
-                  
-               );
-		}
 	}
 
 
@@ -69,7 +47,7 @@ constructor(props) {
 			<div>
 				<Tabs 
 						tabDeleteButton={true}
-
+						activeKey={this.props.activeFile.key}
 						draggable={true}
 						beginDrag={this.beginDrag.bind(this)}
 						setMoveData={this.setMoveData.bind(this)}>
@@ -84,7 +62,7 @@ constructor(props) {
 function mapStateToProps(state) {
 	return {
 		openedFiles: state.projectWindow.openedFiles,
-		count: state.projectWindow.count
+		activeFile: state.projectWindow.activeFile
 	}
 }
 

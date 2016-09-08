@@ -27,16 +27,23 @@ export default class MDFileMode extends Component {
 						<div className='sidebar-container'>
 							<Sidebar />
 						</div>
+						<div>
 							<div className='tab-window-container'>
  								<Tab />	
  							</div>
-							<div className='main-window-container'>
-								<MainWindow />
+							<div>
+								<SplitLayout direction="vertical" initialSizes={[null, null]}
+									minSizes={[100, 100]}>
+									
+									<div className='main-window-container'>
+										<MainWindow />
+									</div>
+									<div className='res-window-container'>
+											<ResultWindow />
+									</div>
+								</SplitLayout>
 							</div>
-							<div className='res-window-container'>
-									<ResultWindow />
-							</div>
-						
+						</div>
 					</SplitLayout>
 				</div>
 			</div>
