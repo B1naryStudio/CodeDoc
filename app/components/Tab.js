@@ -20,21 +20,27 @@ constructor(props) {
 		this.state = {};
   }
 
+	openFile(key){
+		console.log(key);
+		let file = this.props.openedFiles.find((item) => item.key === key);
+		this.props.openFile(file);
+	}
+
 	beginDrag() {
     //this.setState({beginDrag: 'beginDrag'});
   }
 
   setMoveData(dragIndex, hoverIndex) {
-    var data = this.myState.data;
-    var dragData = data[dragIndex];
-    data.splice(dragIndex, 1);
-    data.splice(hoverIndex, 0, dragData);
-    this.myState.data = data;
+    // var data = this.myState.data;
+    // var dragData = data[dragIndex];
+    // data.splice(dragIndex, 1);
+    // data.splice(hoverIndex, 0, dragData);
+    // this.myState.data = data;
   }
 
 	renderTabs(tabs) {
 			return tabs.map((item, index) => {
-				return (<Panel title={item.name} key={item.key} />
+				return (<Panel title={item.name} key={item.key}  />
                   
                 );
 			});
@@ -48,6 +54,7 @@ constructor(props) {
 				<Tabs 
 						tabDeleteButton={true}
 						activeKey={this.props.activeFile.key}
+						handleTabClick={this.openFile.bind(this)}
 						draggable={true}
 						beginDrag={this.beginDrag.bind(this)}
 						setMoveData={this.setMoveData.bind(this)}>
