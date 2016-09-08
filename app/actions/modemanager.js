@@ -253,6 +253,7 @@ export function openHomeScreen(calledFromHomeScreen) {
 
 		checkChanges(store,	function() {
 			dispatch({ type: 'CLEAR_CURRENT_FILE'});
+			dispatch({ type: 'CLEAR_CURRENT_PROJECT'});
 			dispatch(routeActions.push('/'));});
 	}
 }

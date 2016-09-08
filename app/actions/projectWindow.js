@@ -1,5 +1,7 @@
 export const TREE_LOAD = 'TREE_LOAD';
 export const CREATE_FILE = 'CREATE_FILE';
+export const FILE_OPENED = 'FILE_OPENED';
+export const CLEAR_CURRENT_PROJECT = 'CLEAR_CURRENT_PROJECT';
 
 import {FilesService} from '../services/filesService';
 const fs = require('fs');
@@ -21,6 +23,7 @@ export function createFile(node) {
 			}
         FilesService.createFile(node.docsPath, () => {
             dispatch({ type: 'LOAD_FILE', text: '', link: node.docsPath });
+			dispatch({type: FILE_OPENED, payload: { openFile: node } });
         });
         FilesService.openProjectTree(store.projectWindow.tree.path, (tree) => {
 					dispatch({ type: 'TREE_LOAD', payload : {tree: tree} });
@@ -33,6 +36,7 @@ export function openFile(node){
 		
 		FilesService.openFile(node.docsPath, (text) => {
             dispatch({ type: 'LOAD_FILE', text: text, link: node.docsPath });
+			dispatch({type: FILE_OPENED, payload: { openFile: node } });
         });
 	};
 }

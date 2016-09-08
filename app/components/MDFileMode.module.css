@@ -23,6 +23,10 @@
 	font-size: 20px;
 }
 
+.tab-window-container {
+	position: absolute;
+}
+
 .main-window-container {
 	height: 100%;
 	position: absolute;

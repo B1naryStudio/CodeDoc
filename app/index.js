@@ -14,13 +14,21 @@ const store = configureStore();
 const app = new appSetup();
 const listeners = new EvtListeners();
 
-render(
-  <Provider store={store}>
-    <Router history={hashHistory}>
-      {routes}
-    </Router>
-  </Provider>,
-  document.getElementById('root')
+import {DragDropContext} from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
+
+const el = React.createClass({
+  render: function(){
+    return (<Provider store={store}>
+      <Router history={hashHistory}>
+        {routes}
+      </Router>
+    </Provider>);
+  }
+});
+
+var Ex = DragDropContext(HTML5Backend)(el);
+render(<Ex />, document.getElementById('root')
 );
 
 if (process.env.NODE_ENV !== 'production') {

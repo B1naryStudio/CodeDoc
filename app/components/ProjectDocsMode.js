@@ -9,6 +9,8 @@ import SourceCodWindow from '../components/SourceCodWindow';
 import SplitLayout from 'react-split-layout';
 import Markdown from'react-remarkable';
 import LinkModalWindow from '../components/LinkModalWindow';
+import Tab from '../components/Tab';
+
 
 export default class MDFileMode extends Component {
 	render() {
@@ -25,12 +27,16 @@ export default class MDFileMode extends Component {
 						<div className='sidebar-container'>
 							<Sidebar />
 						</div>
-						<div className='main-window-container'>
-							<MainWindow />
-						</div>
-						<div className='res-window-container'>
-								<ResultWindow />
+							<div className='tab-window-container'>
+ 								<Tab />	
+ 							</div>
+							<div className='main-window-container'>
+								<MainWindow />
 							</div>
+							<div className='res-window-container'>
+									<ResultWindow />
+							</div>
+						
 					</SplitLayout>
 				</div>
 			</div>
