@@ -16,17 +16,19 @@ export function loadTree(tree) {
 	};
 }
 
-export function createFile(node) {
+export function createFile(file) {
     return (dispatch, getStore) => {
         let store = getStore();
-		
-		var dir = node.docsPath.slice(0, -node.name.length - 4);
+		let files = store.projectWindow.openedFiles;
+		var dir = file.docsPath.slice(0, -file.name.length - 4);
 		if (!fs.existsSync(dir)){
 				fs.mkdirSync(dir);
 			}
-        FilesService.createFile(node.docsPath, () => {
-            dispatch({ type: 'LOAD_FILE', text: '', link: node.docsPath });
-			addFileTab(node);
+        FilesService.createFile(file.docsPath, () => {
+            dispatch({ type: 'LOAD_FILE', text: '', link: file.docsPath });
+			file.key = files.length;
+			files.push(file);
+			dispatch({type: FILE_OPENED, payload: { openedFiles: files, activeFile: file } });
         });
         FilesService.openProjectTree(store.projectWindow.tree.path, (tree) => {
 					dispatch({ type: 'TREE_LOAD', payload : {tree: tree} });
@@ -102,13 +104,18 @@ export function changeTabPosition(dragIndex, hoverIndex){
 	return (dispatch, getStore) => {
 		let store = getStore();
 		let files = store.projectWindow.openedFiles;
-		let activeFile = files[dragIndex];
+		let fileToSlice = files[dragIndex];
+		//let activeFilePath = store.projectWindow.activeFile.path;
+		//console.log('activeFile - key', store.projectWindow.activeFile.key);
 		files.splice(dragIndex, 1);
-		files.splice(hoverIndex, 0, activeFile);
+		files.splice(hoverIndex, 0, fileToSlice);
 		files.forEach(function(item, index){
 			item.key = index;
 		});
-		dispatch({type: DRAG_AND_DROP, payload: { openedFiles: files, activeFile: activeFile, dragAndDrop: !store.projectWindow.dragAndDrop} });
+		// let activeFile = files.find(function(item){
+		// 	return item.path === activeFilePath;
+		// });
+		dispatch({type: DRAG_AND_DROP, payload: { openedFiles: files, /*activeFile: activeFile,*/ dragAndDrop: !store.projectWindow.dragAndDrop} });
 	};
 }
 

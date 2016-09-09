@@ -5,10 +5,10 @@ import { connect } from 'react-redux';
 import * as projectWindowActions from '../actions/projectWindow';
 
 
-import '../../node_modules/react-tabtab/public/stylesheets/default.css';
-import '../../node_modules/react-tabtab/public/stylesheets/folder.css';
-import '../../node_modules/react-tabtab/public/stylesheets/modern.css';
-import '../../node_modules/react-tabtab/public/stylesheets/side.css';
+// import '../../node_modules/react-tabtab/public/stylesheets/default.css';
+// import '../../node_modules/react-tabtab/public/stylesheets/folder.css';
+// import '../../node_modules/react-tabtab/public/stylesheets/modern.css';
+import './Tab.module.css';
 import {Tabs, Panel} from 'react-tabtab';
 
 export default class Tab extends Component {
@@ -39,7 +39,7 @@ constructor(props) {
   	}
 
 	setMoveData(dragIndex, hoverIndex) {
-		console.log(dragIndex, '-' ,hoverIndex)
+		//console.log(dragIndex, '-' ,hoverIndex)
 		this.props.changeTabPosition(dragIndex, hoverIndex);
 		// var data = this.myState.data;
 		// var dragData = data[dragIndex];

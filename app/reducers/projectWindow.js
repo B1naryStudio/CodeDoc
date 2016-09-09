@@ -26,7 +26,7 @@ export default function projectWindow(state = initialState, action) {
 		case DRAG_AND_DROP: {
 			return Object.assign({}, state, {
 				openedFiles: action.payload.openedFiles,
-				activeFile: action.payload.activeFile,
+				/*activeFile: action.payload.activeFile,*/
 				dragAndDrop: action.payload.dragAndDrop
 			})
 		}

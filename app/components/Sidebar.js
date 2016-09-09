@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import {Treebeard, decorators} from 'react-treebeard';
 import Tree, { TreeNode } from 'rc-tree';
-import '../../node_modules/rc-tree/assets/index.css';
+import './Sidebar.module.css';
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
 import * as projectWindowActions from '../actions/projectWindow';
