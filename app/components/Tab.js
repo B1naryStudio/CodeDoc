@@ -34,11 +34,13 @@ constructor(props) {
 
 	beginDrag() {
 		console.log('beginDrag')
+		this.props.beginDrag();
     //this.setState({beginDrag: 'beginDrag'});
   	}
 
 	setMoveData(dragIndex, hoverIndex) {
 		console.log(dragIndex, '-' ,hoverIndex)
+		this.props.changeTabPosition(dragIndex, hoverIndex);
 		// var data = this.myState.data;
 		// var dragData = data[dragIndex];
 		// data.splice(dragIndex, 1);
@@ -76,7 +78,8 @@ constructor(props) {
 function mapStateToProps(state) {
 	return {
 		openedFiles: state.projectWindow.openedFiles,
-		activeFile: state.projectWindow.activeFile
+		activeFile: state.projectWindow.activeFile,
+		dragAndDrop: state.projectWindow.dragAndDrop
 	}
 }
 

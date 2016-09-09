@@ -2,6 +2,8 @@ export const TREE_LOAD = 'TREE_LOAD';
 export const CREATE_FILE = 'CREATE_FILE';
 export const FILE_OPENED = 'FILE_OPENED';
 export const CLOSE_ALL_FILES = 'CLOSE_ALL_FILES';
+export const DRAG_AND_DROP = 'DRAG_AND_DROP';
+export const DRAG_AND_DROP_BEGIN = 'DRAG_AND_DROP_BEGIN';
 export const CLEAR_CURRENT_PROJECT = 'CLEAR_CURRENT_PROJECT';
 
 import {FilesService} from '../services/filesService';
@@ -82,8 +84,8 @@ export function closeFile(){
 			dispatch({ type: 'CLOSE_ALL_FILES'  });
 			return;
 		}
-		files.forEach(function(item, index){
-			item.key = index;
+		files.forEach(function(item, i){
+			item.key = i;
 		});
 		if(index-1 <= 0){
 			activeFile = files[0];
@@ -93,17 +95,26 @@ export function closeFile(){
 		
 		dispatch({ type: 'LOAD_OPENED_FILE', payload: {mainWindow: activeFile.mainWindow} });
 		dispatch({type: FILE_OPENED, payload: { openedFiles: files, activeFile: activeFile } });
-		// if(exist === undefined){
-		// 	file.key = files.length;
-		// 	files.push(file);
-		// 	FilesService.openFile(file.docsPath, (text) => {
-		// 		dispatch({ type: 'LOAD_FILE', text: text, link: file.docsPath });
-		// 		dispatch({type: FILE_OPENED, payload: { openedFiles: files, activeFile: file } });
-		// 	});
-		// } else {			
-		// 	dispatch({ type: 'LOAD_OPENED_FILE', payload: {mainWindow: file.mainWindow} });
-		// 	dispatch({type: FILE_OPENED, payload: { openedFiles: files, activeFile: file } });
-		// }
+	};
+}
+
+export function changeTabPosition(dragIndex, hoverIndex){
+	return (dispatch, getStore) => {
+		let store = getStore();
+		let files = store.projectWindow.openedFiles;
+		let activeFile = files[dragIndex];
+		files.splice(dragIndex, 1);
+		files.splice(hoverIndex, 0, activeFile);
+		files.forEach(function(item, index){
+			item.key = index;
+		});
+		dispatch({type: DRAG_AND_DROP, payload: { openedFiles: files, activeFile: activeFile, dragAndDrop: !store.projectWindow.dragAndDrop} });
+	};
+}
+
+export function beginDrag(){
+	return {
+		type: DRAG_AND_DROP_BEGIN
 	};
 }
 
