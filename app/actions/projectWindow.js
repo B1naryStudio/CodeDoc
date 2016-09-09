@@ -31,14 +31,42 @@ export function createFile(node) {
 	};
 }    
 
-export function openFile(node){
+export function openFile(file){
 	return (dispatch, getStore) => {	
 		let store = getStore();
-		FilesService.openFile(node.docsPath, (text) => {
-            dispatch({ type: 'LOAD_FILE', text: text, link: node.docsPath });
+
+		let files = store.projectWindow.openedFiles;
+		let oldFile = store.projectWindow.activeFile;
+		if(oldFile){
+			//let oldFile = files.find(x => {return x.path === file.path});
+			for(let i=0;i<files.length;i++){
+				if(oldFile.path === files[i].path){
+					files[i].mainWindow = store.mainWindow;
+				}
+			}
+
+		}
+
+		let exist = files.find((x)=>{return x.path === file.path});
+		if(exist === undefined){
+			file.key = files.length;
+			//file.mainWindow = store.mainWindow;
+			files.push(file);
+			FilesService.openFile(file.docsPath, (text) => {
+				dispatch({ type: 'LOAD_FILE', text: text, link: file.docsPath });
+				dispatch({type: FILE_OPENED, payload: { openedFiles: files, activeFile: file } });
+				//(addFileTab(file))(dispatch, getStore);
+			});
+		} else {
 			
-			(addFileTab(node))(dispatch, getStore);
-        });
+			dispatch({ type: 'LOAD_OPENED_FILE', payload: {mainWindow: file.mainWindow} });
+			dispatch({type: FILE_OPENED, payload: { openedFiles: files, activeFile: file } });
+			// FilesService.openFile(file.docsPath, (text) => {
+			// 	dispatch({ type: 'LOAD_FILE', text: text, link: file.docsPath });
+				
+			// 	(addFileTab(file))(dispatch, getStore);
+			// });
+		}
 	};
 }
 
@@ -58,17 +86,18 @@ export function updateTree(text, link) {
 	}
 }
 
-export function addFileTab(file){
-	return (dispatch, getStore) => {
-        let store = getStore();
-		let files = store.projectWindow.openedFiles;
+// export function addFileTab(file){
+// 	return (dispatch, getStore) => {
+//         let store = getStore();
+// 		let files = store.projectWindow.openedFiles;
 		
-		let exist = files.find((x)=>{return x.path === file.path});
-		if(exist === undefined){
-			file.key = files.length;
-			files.push(file);
-		}
-		dispatch({type: FILE_OPENED, payload: { openedFiles: files, activeFile: file } });
-	}
-}
+// 		let exist = files.find((x)=>{return x.path === file.path});
+// 		if(exist === undefined){
+// 			file.key = files.length;
+// 			file.mainWindow = store.mainWindow;
+// 			files.push(file);
+// 		}
+// 		dispatch({type: FILE_OPENED, payload: { openedFiles: files, activeFile: file } });
+// 	}
+// }
 

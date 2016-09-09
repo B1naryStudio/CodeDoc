@@ -15,6 +15,7 @@ export const LOAD_FILE = 'LOAD_FILE';
 export const CLEAR_CURRENT_FILE = 'CLEAR_CURRENT_FILE';
 export const UPDATE_CURRENT_LINK = 'UPDATE_CURRENT_LINK';
 export const SHOW_MODAL = 'SHOW_MODAL';
+export const LOAD_OPENED_FILE = 'LOAD_OPENED_FILE';
 
 export function changeText(text, cursorPosition) {
 	return {

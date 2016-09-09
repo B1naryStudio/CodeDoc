@@ -21,7 +21,10 @@ constructor(props) {
   }
 
 	openFile(key){
-		console.log(key);
+		//console.log(key);
+		if(key === this.props.activeFile.key){
+			return;
+		}
 		let file = this.props.openedFiles.find((item) => item.key === key);
 		this.props.openFile(file);
 	}
