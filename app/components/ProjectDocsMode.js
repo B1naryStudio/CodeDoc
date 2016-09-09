@@ -39,7 +39,7 @@ export default class MDFileMode extends Component {
 										<MainWindow />
 									</div>
 									<div className='res-window-container'>
-											<ResultWindow />
+										<ResultWindow />
 									</div>
 								</SplitLayout>
 							</div>

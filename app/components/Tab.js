@@ -18,10 +18,9 @@ constructor(props) {
 		
 		this.props = props;
 		this.state = {};
-  }
+  	}
 
 	openFile(key){
-		//console.log(key);
 		if(key === this.props.activeFile.key){
 			return;
 		}
@@ -29,23 +28,27 @@ constructor(props) {
 		this.props.openFile(file);
 	}
 
-	beginDrag() {
-    //this.setState({beginDrag: 'beginDrag'});
-  }
+	closeFile(){
+		this.props.closeFile();
+	}
 
-  setMoveData(dragIndex, hoverIndex) {
-    // var data = this.myState.data;
-    // var dragData = data[dragIndex];
-    // data.splice(dragIndex, 1);
-    // data.splice(hoverIndex, 0, dragData);
-    // this.myState.data = data;
-  }
+	beginDrag() {
+		console.log('beginDrag')
+    //this.setState({beginDrag: 'beginDrag'});
+  	}
+
+	setMoveData(dragIndex, hoverIndex) {
+		console.log(dragIndex, '-' ,hoverIndex)
+		// var data = this.myState.data;
+		// var dragData = data[dragIndex];
+		// data.splice(dragIndex, 1);
+		// data.splice(hoverIndex, 0, dragData);
+		// this.myState.data = data;
+	}
 
 	renderTabs(tabs) {
 			return tabs.map((item, index) => {
-				return (<Panel title={item.name} key={item.key}  />
-                  
-                );
+				return (<Panel title={item.name} key={item.key}  />);
 			});
 	}
 
@@ -55,7 +58,8 @@ constructor(props) {
 		return (
 			<div>
 				<Tabs 
-						tabDeleteButton={true}
+						tabDeleteButton = {true}
+						handleTabDeleteButton={this.closeFile.bind(this)}
 						activeKey={this.props.activeFile.key}
 						handleTabClick={this.openFile.bind(this)}
 						draggable={true}

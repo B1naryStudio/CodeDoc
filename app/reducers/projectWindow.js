@@ -1,4 +1,4 @@
-import { TREE_LOAD, FILE_OPENED, CLEAR_CURRENT_PROJECT } from '../actions/projectWindow';
+import { TREE_LOAD, FILE_OPENED, CLOSE_ALL_FILES, CLEAR_CURRENT_PROJECT } from '../actions/projectWindow';
 
 let initialState = {
 	tree: {},
@@ -20,6 +20,12 @@ export default function projectWindow(state = initialState, action) {
 			return Object.assign({}, state, {
 				openedFiles: action.payload.openedFiles,
 				activeFile: action.payload.activeFile
+			})
+		}
+		case CLOSE_ALL_FILES: {
+			return Object.assign({}, state, {
+				openedFiles: [],
+				activeFile: {}
 			})
 		}
 		case CLEAR_CURRENT_PROJECT: {
