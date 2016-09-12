@@ -56,6 +56,13 @@ export class ActionsHandler {
 		});
 	};
 
+	onSaveFileAs(){
+		postal.publish({
+			channel: "filesOpen",
+			topic: "SaveFileAs"
+		});
+	};
+
 	onQuit(){
 		postal.publish({
 			channel: "filesOpen",

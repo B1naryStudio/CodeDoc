@@ -19,7 +19,6 @@ const app = electron.app;
 export function createMarkdownFile(calledFromHomeScreen = false) {
 	return (dispatch, getStore) => {
 		let store = getStore();
-		debugger;
 		if (store.routing.location.pathname !== '/md-file-mode') {
 			dispatch(routeActions.push('/md-file-mode'));
 		} else {
@@ -31,7 +30,6 @@ export function createMarkdownFile(calledFromHomeScreen = false) {
 export function openMarkdownFile(calledFromHomeScreen = false) {
 	return (dispatch, getStore) => {
 		let store = getStore();
-		debugger;
 		if (store.routing.location.pathname !== '/md-file-mode' || !(store.mainWindow && store.mainWindow.textChanged)) {
 			showDialogToOpenFile(dispatch);
 		} else {
@@ -82,7 +80,7 @@ export function saveFile() {
 					if(err) console.error(err);
 					else {
 						// set changes to false
-						dispatch({type: 'UPDATE_CURRENT_LINK', link: store.mainWindow.currentLink})
+						dispatch({type: 'UPDATE_CURRENT_LINK', payload: {link: store.mainWindow.currentLink}})
 						//console.log('---RUN LOGIC--- FOR SETTING \'FILE CHANGED\' STATE TO FALSE');						
 					}
 				});
@@ -90,7 +88,7 @@ export function saveFile() {
 				saveFileDialogBox(
 					store,
 					function(filePath) {
-						dispatch({ type: 'UPDATE_CURRENT_LINK', link: filePath });
+						dispatch({ type: 'UPDATE_CURRENT_LINK', payload: {link: filePath} });
 					}
 				);
 			}
@@ -239,12 +237,23 @@ export function openProjectDocs(calledFromHomeScreen) {
 				FilesService.openProjectTree(folderPath[0], (tree) => {
 					dispatch({ type: 'TREE_LOAD', payload : {tree: tree} });
 					dispatch(routeActions.push('/project-docs-mode'));
-				});
+				}, (content) => dialog.showErrorBox('Error', content));
 			});
 	};
 	/*return {
 		type: OPEN_PROJECT_DOCS
 	}*/
+}
+
+export function saveFileAs(){
+	return (dispatch, getStore) => {
+		let store = getStore();
+		//checkChanges(store,	() => app.quit());
+
+		saveFileDialogBox(store, (filePath) =>{
+			dispatch({ type: 'UPDATE_CURRENT_LINK', payload: {link: filePath} });
+		});
+	}
 }
 
 export function openHomeScreen(calledFromHomeScreen) {
@@ -266,7 +275,8 @@ export function quitApp() {
 }
 
 function checkChanges(store, next){
-	if (store.mainWindow && store.mainWindow.textChanged) {
+
+	if (store.mainWindow && store.mainWindow.textChanged){// || checkProjectChange(store)) {
 			saveChangesConfirmDialogBox(store, next);
 		} else {
 			return next();
@@ -319,7 +329,7 @@ function saveFileDialogBox(store, next) {
 					console.log('---RUN LOGIC--- FOR SETTING \'FILE CHANGED\' STATE TO FALSE');
 				}
 			});
-			return next();
+			return next(filePath);
 		} else {
 			return;
 		}
@@ -361,6 +371,19 @@ function getFileTree(folderPath, ignore = [], base = folderPath) {
 		});
 	}
 	return tree;
+}
+
+function checkProjectChange(store){
+	// store.projectWindow.openedFiles.forEach((item)=>{
+	 	debugger
+	// 	if(item.mainWindow.textChanged) return true;
+	// });
+	if(store.projectWindow.openedFiles.length < 1) return false;
+	for(let i=0; i < store.projectWindow.openedFiles.length; i++){
+		debugger
+	 	if(item.mainWindow.textChanged) return true;
+	}
+	return false;
 }
 
 /*function getFileTree(filename) {

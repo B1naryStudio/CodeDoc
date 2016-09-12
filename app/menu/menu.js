@@ -33,6 +33,10 @@ export const menuConfig =
 			accelerator: 'CmdOrCtrl+S', 
 			id: 'SaveFile'
 		},{
+			label: '&Save as',
+			accelerator: 'CmdOrCtrl+Shift+S', 
+			id: 'SaveFileAs'
+		},{
 			label: '&Close',
 			//accelerator: 'CmdOrCtrl+H',
 			id: 'FileClose'

@@ -7,10 +7,11 @@ export var FilesService = {
     openFile: openFile
 }
 
-    function openProjectTree(projectPath, callback){
+    function openProjectTree(projectPath, callback, errorCallback){
         fs.readFile(path.join(projectPath, '.codedoc','docsConfig.json'), 'utf8', (err, data) => {
             if (err) {
                 console.log('no project here')
+                errorCallback(err.message);
                 throw err
             };
             let ignore = JSON.parse(data).ignore;

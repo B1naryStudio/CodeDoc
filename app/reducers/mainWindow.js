@@ -156,11 +156,13 @@ export default function mainWindow(state = initialState, action) {
 			return Object.assign({}, state, {
 				mainWindowText: '',
 				textChanged: false,
-				currentLink: ''
+				currentLink: '',
+				pastStates: [],
+				futureStates: []
 			})
 		case UPDATE_CURRENT_LINK:
 			return Object.assign({}, state, {
-				currentLink: state.link,
+				currentLink: action.payload.link,
 				textChanged: false
 			})
 		default:
