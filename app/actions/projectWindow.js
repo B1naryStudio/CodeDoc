@@ -4,6 +4,7 @@ export const FILE_OPENED = 'FILE_OPENED';
 export const CLOSE_ALL_FILES = 'CLOSE_ALL_FILES';
 export const DRAG_AND_DROP = 'DRAG_AND_DROP';
 export const DRAG_AND_DROP_BEGIN = 'DRAG_AND_DROP_BEGIN';
+export const UPDATE_PROJECT = 'UPDATE_PROJECT';
 export const CLEAR_CURRENT_PROJECT = 'CLEAR_CURRENT_PROJECT';
 
 import {FilesService} from '../services/filesService';
@@ -53,6 +54,7 @@ export function openFile(file){
 		let exist = files.find((x)=>{return x.path === file.path});
 		if(exist === undefined){
 			file.key = files.length;
+			file.mainWindow = {textChanged: false};
 			files.push(file);
 			FilesService.openFile(file.docsPath, (text) => {
 				dispatch({ type: 'LOAD_FILE', text: text, link: file.docsPath });

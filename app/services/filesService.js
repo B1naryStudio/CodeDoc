@@ -4,20 +4,21 @@ const path = require('path');
 export var FilesService = {
     openProjectTree: openProjectTree,
     createFile: createFile,
-    openFile: openFile
+    openFile: openFile,
+    saveFile: saveFile
 }
 
     function openProjectTree(projectPath, callback, errorCallback){
         fs.readFile(path.join(projectPath, '.codedoc','docsConfig.json'), 'utf8', (err, data) => {
             if (err) {
                 console.log('no project here')
-                errorCallback(err.message);
-                throw err
+                errorCallback && errorCallback(err.message);
+                //throw err
             };
             let ignore = JSON.parse(data).ignore;
             let tree = getFileTree(projectPath, ignore);
             tree.collapsed = true;
-            callback(tree);
+            callback && callback(tree);
         });
     }
 
@@ -25,7 +26,7 @@ export var FilesService = {
         fs.writeFile(filePath, "", function (err) {
             if(err) console.error(err);
             else {
-                callback();
+                callback && callback();
             }
         });
     }
@@ -35,9 +36,22 @@ export var FilesService = {
             if(err) console.error(err)
             else{
                 console.log('file open');
-                callback(data);
+                callback && callback(data);
             }
 		});
+    }
+
+    function saveFile(filePath, content, callback, errorCallback){
+        console.log(filePath, '--begin save');    
+        fs.writeFile(filePath, content, function (err) {
+            if(err) {
+                console.error(err);
+                errorCallback && errorCallback(err.message);
+            } else {
+                console.log(filePath, '--saved');
+                callback && callback(filePath);
+            }
+        });
     }
 
     function getFileTree(folderPath, ignore = [], base = folderPath) {

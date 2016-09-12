@@ -1,5 +1,5 @@
 import { TREE_LOAD, FILE_OPENED, CLOSE_ALL_FILES, DRAG_AND_DROP, CLEAR_CURRENT_PROJECT,
-	DRAG_AND_DROP_BEGIN } from '../actions/projectWindow';
+	DRAG_AND_DROP_BEGIN, UPDATE_PROJECT } from '../actions/projectWindow';
 
 let initialState = {
 	tree: {},
@@ -46,6 +46,11 @@ export default function projectWindow(state = initialState, action) {
 				tree: {},
 				openedFiles: [],
 				activeFile: {}
+			})
+		}
+		case UPDATE_PROJECT: {
+			return Object.assign({}, state, {
+				openedFiles: action.payload.openedFiles
 			})
 		}
 		default:

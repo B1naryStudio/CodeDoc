@@ -74,15 +74,28 @@ export function saveFile() {
 	return (dispatch, getStore) => {
 		let store = getStore();
 
+		if(checkProjectChange(store)){
+			let openedFiles = store.projectWindow.openedFiles;
+			openedFiles.forEach((item) => {
+				if(item.mainWindow.textChanged){
+					item.mainWindow.textChanged = false;
+					FilesService.saveFile(item.mainWindow.currentLink, item.mainWindow.mainWindowText);
+				}
+			});
+			dispatch({type: 'UPDATE_PROJECT', payload: {openedFiles}})
+			if(store.mainWindow.textChanged){
+				FilesService.saveFile(store.mainWindow.currentLink, store.mainWindow.mainWindowText, () =>{
+					dispatch({type: 'UPDATE_CURRENT_LINK', payload: {link: store.mainWindow.currentLink}});
+				});
+			}
+			return;
+		}
+
+
 		if (store.mainWindow.textChanged) {
 			if (store.mainWindow.currentLink){
-				fs.writeFile(store.mainWindow.currentLink, store.mainWindow.mainWindowText, function (err) {
-					if(err) console.error(err);
-					else {
-						// set changes to false
-						dispatch({type: 'UPDATE_CURRENT_LINK', payload: {link: store.mainWindow.currentLink}})
-						//console.log('---RUN LOGIC--- FOR SETTING \'FILE CHANGED\' STATE TO FALSE');						
-					}
+				FilesService.saveFile(store.mainWindow.currentLink, store.mainWindow.mainWindowText, () =>{
+					dispatch({type: 'UPDATE_CURRENT_LINK', payload: {link: store.mainWindow.currentLink}});
 				});
 			} else {
 				saveFileDialogBox(
@@ -179,21 +192,18 @@ export function createProjectDocs(calledFromHomeScreen = false) {
 			let dir = path.join(tree.path ,'.codedoc');
 			if (!fs.existsSync(dir)){
 				fs.mkdirSync(dir);
+			} else {
+				console.log('file already created');
+				return;
 			}
 
-			fs.writeFile(path.join(dir,'docsConfig.json'), JSON.stringify(docsConfig), function (err) {
-				if(err) console.error(err);
-				else {
-					console.log('default config created');
-				}
+			FilesService.saveFile(path.join(dir,'docsConfig.json'), JSON.stringify(docsConfig), ()=>{
+				console.log('default config created');
 			});
 
 			dispatch({ type: 'TREE_LOAD', payload: {tree: tree}});
 			dispatch(routeActions.push('/project-docs-mode'));
 		});
-		//} else {
-		//	console.log('---RUN LOGIC--- FOR createProjectComments');
-		//}
 	}
 
 
@@ -248,8 +258,6 @@ export function openProjectDocs(calledFromHomeScreen) {
 export function saveFileAs(){
 	return (dispatch, getStore) => {
 		let store = getStore();
-		//checkChanges(store,	() => app.quit());
-
 		saveFileDialogBox(store, (filePath) =>{
 			dispatch({ type: 'UPDATE_CURRENT_LINK', payload: {link: filePath} });
 		});
@@ -261,9 +269,10 @@ export function openHomeScreen(calledFromHomeScreen) {
 		let store = getStore();
 
 		checkChanges(store,	function() {
+			console.log('reset');
+			dispatch(routeActions.push('/'));
 			dispatch({ type: 'CLEAR_CURRENT_FILE'});
-			dispatch({ type: 'CLEAR_CURRENT_PROJECT'});
-			dispatch(routeActions.push('/'));});
+			dispatch({ type: 'CLEAR_CURRENT_PROJECT'});});
 	}
 }
 
@@ -276,36 +285,65 @@ export function quitApp() {
 
 function checkChanges(store, next){
 
-	if (store.mainWindow && store.mainWindow.textChanged){// || checkProjectChange(store)) {
-			saveChangesConfirmDialogBox(store, next);
+	if(store.projectWindow.tree.path){
+		if(checkProjectChange(store)){
+			saveChangesConfirmDialogBox('Do you want to save changes to current project?',
+				()=>{
+					store.projectWindow.openedFiles.forEach((item, index) => {
+						console.log('select file', index);
+						console.log('item.mainWindow.textChanged ->', item.mainWindow.textChanged);
+						if(item.mainWindow.textChanged){
+							FilesService.saveFile(item.mainWindow.currentLink, item.mainWindow.mainWindowText);
+						}
+					});
+					if(store.mainWindow.textChanged){
+						FilesService.saveFile(store.mainWindow.currentLink, store.mainWindow.mainWindowText, next);
+					}
+					next();
+				},
+				next);
+			return;
 		} else {
 			return next();
 		}
+	}
+
+	//TODO check for comment project
+	// if(store.commentWindow){
+	// 	if(checkCommentProjectChange(store)){
+
+	// 	}
+	// 	//save comment project FilesService
+	// }
+
+	if (store.mainWindow.textChanged) {
+			saveChangesConfirmDialogBox('Do you want to save changes to current file?',
+				() => {
+					if (store.mainWindow.currentLink) {
+						FilesService.saveFile(store.mainWindow.currentLink, store.mainWindow.mainWindowText, next);
+					} else {
+						return saveFileDialogBox(store, next);
+					}
+				},
+				next);
+			return;
+	} else {
+		return next();
+	}
 }
 
-function saveChangesConfirmDialogBox(store, next) {
+function saveChangesConfirmDialogBox(message, callbackOk, callbackNo) {
 	dialog.showMessageBox({
 		type: 'question',
 		buttons: ['Yes', 'No', 'Cancel'],
-		message: 'Do you want to save changes to current file?'
+		message: message
 	}, function(response) {
 		if (response === 2) {
 			return;
 		} else if(response === 1) {
-			return next();
+			return callbackNo();
 		} else if(response === 0) {
-			if (store.mainWindow.currentLink) {
-				fs.writeFile(store.mainWindow.currentLink, store.mainWindow.mainWindowText, function (err) {
-					if(err) console.error(err);
-					else {
-						// set changes to false
-						console.log('---RUN LOGIC--- FOR SETTING \'FILE CHANGED\' STATE TO FALSE');
-					}
-				});
-				return next();
-			} else {
-				return saveFileDialogBox(store, next);
-			}
+			callbackOk();
 		}
 	});
 }
@@ -322,14 +360,7 @@ function saveFileDialogBox(store, next) {
 			if (filePath.substr(-3,3) !== '.md'){
 				filePath += '.md';
 			}
-			fs.writeFile(filePath, store.mainWindow.mainWindowText, function (err) {
-				if(err) console.error(err);
-				else {
-					// set changes to false
-					console.log('---RUN LOGIC--- FOR SETTING \'FILE CHANGED\' STATE TO FALSE');
-				}
-			});
-			return next(filePath);
+			FilesService.saveFile(filePath, store.mainWindow.mainWindowText, next);
 		} else {
 			return;
 		}
@@ -374,37 +405,11 @@ function getFileTree(folderPath, ignore = [], base = folderPath) {
 }
 
 function checkProjectChange(store){
-	// store.projectWindow.openedFiles.forEach((item)=>{
-	 	debugger
-	// 	if(item.mainWindow.textChanged) return true;
-	// });
-	if(store.projectWindow.openedFiles.length < 1) return false;
-	for(let i=0; i < store.projectWindow.openedFiles.length; i++){
-		debugger
-	 	if(item.mainWindow.textChanged) return true;
+	if(store.mainWindow.textChanged) return true;
+	let openedFiles = store.projectWindow.openedFiles;
+	if(openedFiles.length < 1) return false;
+	for(let i=0; i < openedFiles.length; i++){
+	 	if(openedFiles[i].mainWindow.textChanged) return true;
 	}
 	return false;
 }
-
-/*function getFileTree(filename) {
-	var stats = fs.lstatSync(filename),
-		tree = {
-			path: filename,
-			name: path.basename(filename)
-		};
-	if (stats.isDirectory()) {
-		tree.children = fs.readdirSync(filename).map(function(child) {
-			return getFileTree(filename + '/' + child);
-		});
-		tree.children.sort(function(a, b) {
-			let A = a.children ? 1 : 0;
-			let B = b.children ? 1 : 0;
-			if ((B - A) === 0) {
-				return (b.name > a.name) ? -1 : 1;
-			}
-			return B - A;
-		})
-	}
-	return tree;
-}
-*/
