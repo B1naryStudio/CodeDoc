@@ -35,20 +35,16 @@ export var FilesService = {
         fs.readFile(filePath, 'utf-8', function (err, data) {
             if(err) console.error(err)
             else{
-                console.log('file open');
                 callback && callback(data);
             }
 		});
     }
 
     function saveFile(filePath, content, callback, errorCallback){
-        console.log(filePath, '--begin save');    
         fs.writeFile(filePath, content, function (err) {
             if(err) {
-                console.error(err);
                 errorCallback && errorCallback(err.message);
             } else {
-                console.log(filePath, '--saved');
                 callback && callback(filePath);
             }
         });

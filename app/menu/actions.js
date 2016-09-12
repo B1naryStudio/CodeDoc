@@ -63,6 +63,13 @@ export class ActionsHandler {
 		});
 	};
 
+	onSaveAllFiles(){
+		postal.publish({
+			channel: "filesOpen",
+			topic: "SaveAllFiles"
+		});
+	};
+
 	onQuit(){
 		postal.publish({
 			channel: "filesOpen",

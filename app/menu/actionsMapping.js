@@ -4,7 +4,8 @@ const fs = require('fs');
 const dialog = electron.dialog;
 const app = electron.app;
 const postal = require('postal');
-import { createMarkdownFile, createProjectComments, createProjectDocs, openMarkdownFile, openProjectComments, openProjectDocs, saveFile, saveFileAs, quitApp, openHomeScreen} from '../actions/modemanager';
+import { createMarkdownFile, createProjectComments, createProjectDocs, openMarkdownFile, openProjectComments, openProjectDocs, saveFile, saveFileAs, quitApp, openHomeScreen, 
+	saveAllFiles} from '../actions/modemanager';
 
 export default function ActionsMapping(store) {
 
@@ -71,6 +72,14 @@ export default function ActionsMapping(store) {
 			topic: "SaveFileAs",
 			callback: function(data, envelope) {
 				store.dispatch(saveFileAs());
+			}
+		});
+
+		postal.subscribe({
+			channel: "filesOpen",
+			topic: "SaveAllFiles",
+			callback: function(data, envelope) {
+				store.dispatch(saveAllFiles());
 			}
 		});
 

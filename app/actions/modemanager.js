@@ -74,6 +74,29 @@ export function saveFile() {
 	return (dispatch, getStore) => {
 		let store = getStore();
 
+		if (store.mainWindow.textChanged) {
+			if (store.mainWindow.currentLink){
+				FilesService.saveFile(store.mainWindow.currentLink, store.mainWindow.mainWindowText, () =>{
+					dispatch({type: 'UPDATE_CURRENT_LINK', payload: {link: store.mainWindow.currentLink}});
+				});
+			} else {
+				saveFileDialogBox(
+					store,
+					function(filePath) {
+						dispatch({ type: 'UPDATE_CURRENT_LINK', payload: {link: filePath} });
+					}
+				);
+			}
+		} else {
+			console.log('NO FILE OPENED OR NO CHANGES MADE');
+		}
+	}
+}
+
+export function saveAllFiles() {
+	return (dispatch, getStore) => {
+		let store = getStore();
+		console.log('saveAllFiles');
 		if(checkProjectChange(store)){
 			let openedFiles = store.projectWindow.openedFiles;
 			openedFiles.forEach((item) => {
@@ -258,6 +281,7 @@ export function openProjectDocs(calledFromHomeScreen) {
 export function saveFileAs(){
 	return (dispatch, getStore) => {
 		let store = getStore();
+		console.log('saveFileAs');		
 		saveFileDialogBox(store, (filePath) =>{
 			dispatch({ type: 'UPDATE_CURRENT_LINK', payload: {link: filePath} });
 		});
