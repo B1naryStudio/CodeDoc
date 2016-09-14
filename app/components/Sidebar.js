@@ -28,7 +28,7 @@ const path = require('path');
 // 	);
 // };
 
-export default class Sidebar extends Component {
+class Sidebar extends Component {
 	constructor(props) {
 		super(props);
 		this.props = props;

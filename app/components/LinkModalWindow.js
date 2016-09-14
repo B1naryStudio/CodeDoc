@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
 
-export default class LinkModalWindow extends Component {
+class LinkModalWindow extends Component {
 
 	static defaultProps = {initialValue: ''};
 

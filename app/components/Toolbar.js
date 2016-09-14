@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 
 
 
-export default class Toolbar extends Component {
+class Toolbar extends Component {
 	constructor(props) {
 		super(props);
 	}

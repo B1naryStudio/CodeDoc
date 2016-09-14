@@ -5,6 +5,7 @@ import Toolbar from '../components/Toolbar';
 import Sidebar from '../components/Sidebar';
 import MainWindow from '../components/MainWindow';
 import ResultWindow from '../components/ResultWindow';
+import ContentWindow from '../components/ContentWindow';
 import SourceCodWindow from '../components/SourceCodWindow';
 import SplitLayout from 'react-split-layout';
 import Markdown from'react-remarkable';
@@ -32,9 +33,10 @@ export default class MDFileMode extends Component {
  								<Tab />	
  							</div>
 							<div>
-								<SplitLayout direction="vertical" initialSizes={[null, null]}
-									minSizes={[100, 100]}>
-									
+								<SplitLayout direction="vertical" minSizes={[100, 100, 100]}>
+									<div className="main-window-container">
+										<ContentWindow />
+									</div>
 									<div className='main-window-container'>
 										<MainWindow />
 									</div>
