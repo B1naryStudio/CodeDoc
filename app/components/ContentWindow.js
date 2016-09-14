@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import brace from 'brace';
 import AceEditor from 'react-ace';
+import Markdown from'react-remarkable';
 
 import 'brace/mode/markdown';
 import 'brace/theme/github';
@@ -112,7 +113,10 @@ class ContentWindow extends Component {
 
 	render() {
 		return (
-			<textarea disabled ref={(textarea) => this._textarea = textarea}  className="form-control"  value={this.props.mainWindow.mainWindowContent} ></textarea>
+			//<textarea disabled ref={(textarea) => this._textarea = textarea}  className="form-control"  value={this.props.mainWindow.mainWindowContent} ></textarea>
+			<Markdown>
+				{this.props.mainWindow.mainWindowContent}
+			</Markdown>
 		);
 	}
 }

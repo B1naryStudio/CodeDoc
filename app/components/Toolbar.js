@@ -87,7 +87,6 @@ class Toolbar extends Component {
 
 	render() {
 		return (
-			<div className="btn-toolbar">
 				<div className="btn-group" role="group" aria-label="...">
 					<button disabled={!this.props.mainWindow.pastStates.length} className="btn btn-default" onClick={this.undoAction.bind(this)} data-toggle="tooltip" title="Undo"><i className="fa fa-reply"></i></button>
 					<button disabled={!this.props.mainWindow.futureStates.length} className="btn btn-default" onClick={this.redoAction.bind(this)} data-toggle="tooltip" title="Redo"><i className="fa fa-share"></i></button>
@@ -104,11 +103,7 @@ class Toolbar extends Component {
 					<button className="btn btn-default" onClick={this.addSimpleList.bind(this)} data-toggle="tooltip" title="Unodered list"><i className="fa fa-list"></i></button>
 					<button className="btn btn-default" onClick={this.addNumList.bind(this)} data-toggle="tooltip" title="Ordered list"><i className="fa fa-list-ol"></i></button>
 					<button className="btn btn-default" onClick={this.addHorizRule.bind(this)} data-toggle="tooltip" title="Horizontal rule"><i className="fa fa-ellipsis-h"></i></button>
-					<div>
-						
-					</div>
 				</div>
-			</div>
 		);
 	}
 }
