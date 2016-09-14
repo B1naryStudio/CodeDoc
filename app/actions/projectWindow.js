@@ -56,6 +56,9 @@ export function openFile(file){
 			file.key = files.length;
 			file.mainWindow = {textChanged: false};
 			files.push(file);
+			FilesService.openFile(file.path, (text) =>{
+				dispatch({ type: 'LOAD_CONTENT_FILE', payload: {text} });
+			});
 			FilesService.openFile(file.docsPath, (text) => {
 				dispatch({ type: 'LOAD_FILE', text: text, link: file.docsPath });
 				dispatch({type: FILE_OPENED, payload: { openedFiles: files, activeFile: file } });

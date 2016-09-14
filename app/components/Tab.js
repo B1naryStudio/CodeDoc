@@ -11,7 +11,7 @@ import * as projectWindowActions from '../actions/projectWindow';
 import './Tab.module.css';
 import {Tabs, Panel} from 'react-tabtab';
 
-export default class Tab extends Component {
+class Tab extends Component {
 
 constructor(props) {
     super(props);

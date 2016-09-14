@@ -11,7 +11,7 @@ import 'brace/theme/github';
 
 let dispatchScrollEvent = true;
 
-export default class MainWindow extends Component {
+class MainWindow extends Component {
 	static defaultProps = {initialValue: ''};
 
 	constructor(props) {

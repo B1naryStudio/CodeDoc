@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 
 let dispatchScrollEvent = true;
 
-export default class ResultWindow extends Component {
+class ResultWindow extends Component {
 
 	componentDidMount() {
 		var res = document.getElementsByClassName('res-window-container')[0];

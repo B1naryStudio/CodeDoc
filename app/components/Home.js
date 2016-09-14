@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as ChangeModeActions from '../actions/modemanager';
 
-export default class Home extends Component {
+class Home extends Component {
 	
 	constructor(props) {
 		super(props);
