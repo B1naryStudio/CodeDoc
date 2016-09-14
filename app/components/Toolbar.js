@@ -104,6 +104,9 @@ class Toolbar extends Component {
 					<button className="btn btn-default" onClick={this.addSimpleList.bind(this)} data-toggle="tooltip" title="Unodered list"><i className="fa fa-list"></i></button>
 					<button className="btn btn-default" onClick={this.addNumList.bind(this)} data-toggle="tooltip" title="Ordered list"><i className="fa fa-list-ol"></i></button>
 					<button className="btn btn-default" onClick={this.addHorizRule.bind(this)} data-toggle="tooltip" title="Horizontal rule"><i className="fa fa-ellipsis-h"></i></button>
+					<div>
+						
+					</div>
 				</div>
 			</div>
 		);
