@@ -27,6 +27,15 @@
 	/*position: absolute;*/
 }
 
+.content-window-container {
+	height: 100%;
+	position: absolute;
+	left: 0;
+	right: 0;
+	background: white;
+	overflow: scroll;
+}
+
 .main-window-container {
 	height: 100%;
 	position: absolute;

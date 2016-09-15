@@ -42,7 +42,7 @@ class MDFileMode extends Component {
 							{this.props.windowManager.showContent &&
 								<div>
 									<SplitLayout direction="vertical" initialSizes={[null, null, null]} minSizes={[100, 100, 100]}>
-										<div className="main-window-container">
+										<div className="content-window-container">
 											<ContentWindow />
 										</div>
 										<div className='main-window-container'>
