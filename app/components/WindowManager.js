@@ -17,16 +17,25 @@ class WindowManager extends Component {
 		// this.props.undoAction();
 		// setTimeout(function(){textarea.focus()}, 0);
 	}
+
 	showContentWindow() {
 		this.props.showContentWindow();
 	}
 
+	showResultWindow() {
+		this.props.showResultWindow();
+	}
+
 	render() {
-		let className = (this.props.windowManager.showContent ? 'active ' : ' ') + 'btn btn-default';
+		const contentClassName = (this.props.windowManager.showContent ? 'active ' : ' ') + 'btn btn-default';
+		const resultClassName = (this.props.windowManager.showResult ? 'active ' : ' ') + 'btn btn-default';		
 		return (
 				<div className="btn-group" role="group" aria-label="...">
-					<button className={className} onClick={this.showContentWindow.bind(this)} data-toggle="tooltip" title="showContent">
+					<button className={contentClassName} onClick={this.showContentWindow.bind(this)} data-toggle="tooltip" title="Show content">
 						<i className='fa fa-file-code-o'></i>
+					</button>
+					<button className={resultClassName} onClick={this.showResultWindow.bind(this)} data-toggle="tooltip" title="Show result">
+						<i className='fa fa-eye'></i>
 					</button>
 				</div>
 		);

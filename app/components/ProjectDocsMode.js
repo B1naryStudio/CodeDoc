@@ -9,7 +9,6 @@ import ResultWindow from '../components/ResultWindow';
 import ContentWindow from '../components/ContentWindow';
 import SourceCodWindow from '../components/SourceCodWindow';
 import SplitLayout from 'react-split-layout';
-import Markdown from'react-remarkable';
 import LinkModalWindow from '../components/LinkModalWindow';
 import Tab from '../components/Tab';
 import { connect } from 'react-redux'
@@ -20,11 +19,30 @@ class MDFileMode extends Component {
 		super(props);
 	}
 
+	windowItems(){
+		let result = [];
+		if(this.props.windowManager.showContent){
+			result.push(<div className='content-window-container' key='0'>
+							<ContentWindow />
+						</div> );
+		}
+		result.push(<div className='main-window-container' key='1'>
+ 						<MainWindow />
+					</div>);
+		if(this.props.windowManager.showResult){
+			result.push(<div className='res-window-container' key='2'>
+ 							<ResultWindow />
+ 						</div>);
+		}
+		return result;
+	}
+
 	render() {
+		const windowItems = this.windowItems();
 		return (
 			<div className='md-mode-container'>
 				<LinkModalWindow />
-				<div className='toolbar-container btn-toolbar'>
+				<div className='toolbar-container btn-toolbar' role="toolbar">
 					<Toolbar />
 					<WindowManager />
 				</div>
@@ -39,31 +57,9 @@ class MDFileMode extends Component {
 							<div className='tab-window-container'>
  								<Tab />	
  							</div>
-							{this.props.windowManager.showContent &&
-								<div>
-									<SplitLayout direction="vertical" initialSizes={[null, null, null]} minSizes={[100, 100, 100]}>
-										<div className="content-window-container">
-											<ContentWindow />
-										</div>
-										<div className='main-window-container'>
-											<MainWindow />
-										</div>
-										<div className='res-window-container'>
-											<ResultWindow />
-										</div>
-									</SplitLayout>
-								</div>}
-							{!this.props.windowManager.showContent &&<div>
-									<SplitLayout direction="vertical" initialSizes={[null, null]} minSizes={[100, 100]}>
-										<div className='main-window-container'>
-											<MainWindow />
-										</div>
-										<div className='res-window-container'>
-											<ResultWindow />
-										</div>
-									</SplitLayout>
-								</div>
-							}
+							<SplitLayout direction="vertical">
+								{windowItems}
+							</SplitLayout>
 						</div>
 					</SplitLayout>
 				</div>
@@ -85,3 +81,29 @@ function mapStateToProps(state) {
 // }
 
 export default connect(mapStateToProps)(MDFileMode)
+
+
+// {this.props.windowManager.showContent &&
+								
+// 									<SplitLayout direction="vertical" initialSizes={[null, null, null]} minSizes={[100, 100, 100]}>
+// 										<div className="content-window-container">
+// 											<ContentWindow />
+// 										</div>
+// 										<div className='main-window-container'>
+// 											<MainWindow />
+// 										</div>
+// 										<div className='res-window-container'>
+// 											<ResultWindow />
+// 										</div>
+// 									</SplitLayout>
+// 								}
+// 							{!this.props.windowManager.showContent &&
+// 									<SplitLayout direction="vertical" initialSizes={[null, null]} minSizes={[100, 100]}>
+// 										<div className='main-window-container'>
+// 											<MainWindow />
+// 										</div>
+// 										{this.props.windowManager.showContent && <div className='res-window-container'>
+// 											<ResultWindow />
+// 										</div>}
+// 									</SplitLayout>
+// 							}

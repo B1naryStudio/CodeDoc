@@ -23,6 +23,10 @@
 	font-size: 20px;
 }
 
+.toolbar-container > .btn-group:last-child {
+	float:right;
+}
+
 .tab-window-container {
 	/*position: absolute;*/
 }

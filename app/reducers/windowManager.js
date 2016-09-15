@@ -1,10 +1,8 @@
-import { SHOW_CONTENT_WINDOW } from '../actions/windowManager';
+import { SHOW_CONTENT_WINDOW, SHOW_RESULT_WINDOW } from '../actions/windowManager';
 
 let initialState = {
-	// tree: {},
-	// openedFiles: [],
-	// activeFile: {}
-	showContent: false
+	showContent: false,
+	showResult: true
 }
 
 export default function windowManager(state = initialState, action) {
@@ -19,6 +17,11 @@ export default function windowManager(state = initialState, action) {
 		case SHOW_CONTENT_WINDOW: {
 			return Object.assign({}, state, {
 				showContent: !state.showContent
+			})
+		}
+		case SHOW_RESULT_WINDOW: {
+			return Object.assign({}, state, {
+				showResult: !state.showResult
 			})
 		}
 		default:
