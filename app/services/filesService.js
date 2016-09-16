@@ -5,7 +5,8 @@ export var FilesService = {
     openProjectTree: openProjectTree,
     createFile: createFile,
     openFile: openFile,
-    saveFile: saveFile
+    saveFile: saveFile,
+    addContentFileToConfig: addContentFileToConfig
 }
 
     function openProjectTree(projectPath, callback, errorCallback){
@@ -28,6 +29,8 @@ export var FilesService = {
         fs.writeFile(filePath, "", function (err) {
             if(err) console.error(err);
             else {
+                debugger;
+                console.log(filePath);
                 callback && callback();
             }
         });
@@ -38,8 +41,7 @@ export var FilesService = {
             if(err) {
                 console.error(err);
                 errorCallback && errorCallback(err.message);
-            }
-            else{
+            } else {
                 callback && callback(data);
             }
 		});
@@ -53,6 +55,33 @@ export var FilesService = {
                 callback && callback(filePath);
             }
         });
+    }
+
+    function addContentFileToConfig(projectPath, file, callback){
+        let configPath = path.join(projectPath, '.codedoc', 'docsConfig.json');
+        fs.readFile(configPath, 'utf-8', function (err, data) {
+            if(err) {
+                console.error(err);
+                //errorCallback && errorCallback(err.message);
+            } else {
+                //console.log('data--',data);
+                let config = JSON.parse(data);
+                let newFile= {path: file.docsPath, name: file.name, parentPath: file.path};
+                config.contentTree.push(newFile);
+                fs.writeFile(configPath, JSON.stringify(config), (err) => {
+                    if(err) {
+                        console.error(err);
+                        //errorCallback && errorCallback(err.message);
+                    } else {
+                        callback && callback(newFile);
+                    }
+                    
+                } )
+            }
+		});
+
+        //console.log('file--',file);
+        //console.log('config--',config);
     }
 
     function getFileTree(folderPath, ignore = [], base = folderPath) {

@@ -57,7 +57,6 @@ class ContentTree extends Component {
 	renderTree(node) {
 		if(Array.isArray(node)){
 			return node.map((item) => {
-				debugger
 				if (item.children) {
 					return <TreeNode title={this.customLabel(item)} >{this.renderTree(item.children)}</TreeNode>;
 				}
@@ -69,7 +68,7 @@ class ContentTree extends Component {
 	}
 
 	render() {
-    const treeNodes = this.renderTree(this.props.contentTree);
+    const treeNodes = this.renderTree(this.props.contentTree.tree);
 		return (
 			<div>
 				<Tree showIcon={false}  defaultExpandAll={true}   >
@@ -82,7 +81,8 @@ class ContentTree extends Component {
 
 function mapStateToProps(state) {
 	return {
-		contentTree: state.projectWindow.contentTree
+		contentTree: state.projectWindow.contentTree//,
+		//contentTreeCount: state.projectWindow
 	}
 }
 

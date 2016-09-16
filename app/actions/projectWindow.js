@@ -32,9 +32,15 @@ export function createFile(file) {
 			files.push(file);
 			dispatch({type: FILE_OPENED, payload: { openedFiles: files, activeFile: file } });
         });
-		
+
+		FilesService.addContentFileToConfig(store.projectWindow.tree.path, file, (newFile) => {
+			let contentTree = store.projectWindow.contentTree.tree;
+			contentTree.push(newFile);
+			dispatch({ type: CONTENT_TREE_LOAD, payload: {contentTree}});
+		});
+
         FilesService.openProjectTree(store.projectWindow.tree.path, (tree) => {
-					dispatch({ type: 'TREE_LOAD', payload : {tree: tree} });
+				dispatch({ type: 'TREE_LOAD', payload : {tree: tree} });
 		});	
 	};
 }    

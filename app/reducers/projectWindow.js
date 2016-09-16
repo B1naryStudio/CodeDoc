@@ -17,7 +17,7 @@ export default function projectWindow(state = initialState, action) {
 			})
 		case CONTENT_TREE_LOAD:
 			return Object.assign({}, state, {
-				contentTree: action.payload.contentTree
+				contentTree: {tree:action.payload.contentTree}
 			})
 		case FILE_OPENED: {
 			// let fileList = state.openedFiles;
