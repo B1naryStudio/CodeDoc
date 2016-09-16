@@ -210,8 +210,11 @@ export function createProjectDocs(calledFromHomeScreen = false) {
 				name: treeName,
 				ignore: ['node_modules', '.codedoc', '.git']
 			};
-			var tree = getFileTree(folderPath[0], docsConfig.ignore);
-			tree.toggled = true;
+			var contentTree = getContentTree(folderPath[0]);
+			docsConfig.contentTree = contentTree;
+
+			var tree = getFileTree(folderPath[0], docsConfig.ignore);			
+			//tree.toggled = true;
 			let dir = path.join(tree.path ,'.codedoc');
 			if (!fs.existsSync(dir)){
 				fs.mkdirSync(dir);
@@ -224,7 +227,8 @@ export function createProjectDocs(calledFromHomeScreen = false) {
 				console.log('default config created');
 			});
 
-			dispatch({ type: 'TREE_LOAD', payload: {tree: tree}});
+			dispatch({ type: 'TREE_LOAD', payload: {tree}});
+			dispatch({ type: 'CONTENT_TREE_LOAD', payload: {contentTree}});
 			dispatch(routeActions.push('/project-docs-mode'));
 		});
 	}
@@ -267,10 +271,11 @@ export function openProjectDocs(calledFromHomeScreen) {
 				console.log(folderPath[0]);
 
 
-				FilesService.openProjectTree(folderPath[0], (tree) => {
+				FilesService.openProjectTree(folderPath[0], (tree, contentTree) => {
 					dispatch({ type: 'TREE_LOAD', payload : {tree: tree} });
+					dispatch({ type: 'CONTENT_TREE_LOAD', payload: {contentTree}});
 					dispatch(routeActions.push('/project-docs-mode'));
-				}, (content) => dialog.showErrorBox('Error', content));
+				}, (content) => dialog.showErrorBox('Error', content));				
 			});
 	};
 	/*return {
@@ -423,6 +428,39 @@ function getFileTree(folderPath, ignore = [], base = folderPath) {
 				return (b.name > a.name) ? -1 : 1;
 			}
 			return B - A;
+		});
+	}
+	return tree;
+}
+
+function getContentTree(folderPath) {
+	let stats = fs.lstatSync(folderPath),
+			tree = [];
+	if (stats.isDirectory()) {
+		// let filteredChildren = fs.readdirSync(folderPath).filter(function(child) {
+		// 	return child.substr(-3) === '.md';
+		// });
+		// let filteredFolders = fs.readdirSync(folderPath).filter(function(child) {
+		// 	return fs.lstatSync(path.join(folderPath, child)).isDirectory();
+		// });
+		let filteredChildren = [];
+		let filteredFolders =  [];
+		fs.readdirSync(folderPath).forEach(function(child) {
+			if(child.substr(-3) === '.md') {
+				filteredChildren.push(child);
+				return;
+			}
+			if(fs.lstatSync(path.join(folderPath, child)).isDirectory()){
+				filteredFolders.push(child);
+			}
+		});
+		filteredFolders.map((item) => {
+			getContentTree(path.join(folderPath, item)).map((child => {
+				tree.push(child);
+			}));
+		});
+		filteredChildren.map((item) =>{
+			tree.push( {path: path.join(folderPath, item), name: item});
 		});
 	}
 	return tree;

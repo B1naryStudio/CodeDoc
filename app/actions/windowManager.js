@@ -1,9 +1,9 @@
-export const SHOW_CONTENT_WINDOW = 'SHOW_CONTENT_WINDOW';
+export const SHOW_CODE_WINDOW = 'SHOW_CODE_WINDOW';
 export const SHOW_RESULT_WINDOW = 'SHOW_RESULT_WINDOW';
 
-export function showContentWindow(){
+export function showCodeWindow(){
 	return {
-		type: SHOW_CONTENT_WINDOW
+		type: SHOW_CODE_WINDOW
 	}
 }
 

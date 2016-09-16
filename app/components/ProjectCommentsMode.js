@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import './MDFileMode.module.css';
 import Toolbar from '../components/Toolbar';
-import Sidebar from '../components/Sidebar';
+import FilesTree from '../components/FilesTree';
 import MainWindow from '../components/MainWindow';
 import ResultWindow from '../components/ResultWindow';
 import SourceCodWindow from '../components/SourceCodWindow';
@@ -23,7 +23,7 @@ export default class MDFileMode extends Component {
 						direction="vertical" initialSizes={[250, null, null]}
 						minSizes={[100, 100, 100]}>
 						<div className='sidebar-container'>
-							<Sidebar />
+							<FilesTree />
 						</div>
 						<div className='main-window-container'>
 							<MainWindow />

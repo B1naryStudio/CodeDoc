@@ -15,10 +15,12 @@ export var FilesService = {
                 errorCallback && errorCallback(err.message);
                 //throw err
             };
-            let ignore = JSON.parse(data).ignore;
+            let config = JSON.parse(data);
+            let ignore = config.ignore;
+            let contentTree = config.contentTree;
             let tree = getFileTree(projectPath, ignore);
             tree.collapsed = true;
-            callback && callback(tree);
+            callback && callback(tree, contentTree);
         });
     }
 
@@ -31,9 +33,12 @@ export var FilesService = {
         });
     }
     
-    function openFile(filePath, callback){
+    function openFile(filePath, callback, errorCallback){
         fs.readFile(filePath, 'utf-8', function (err, data) {
-            if(err) console.error(err)
+            if(err) {
+                console.error(err);
+                errorCallback && errorCallback(err.message);
+            }
             else{
                 callback && callback(data);
             }

@@ -1,6 +1,6 @@
 import { CHANGE_TEXT, SELECT_TEXT, UNDO_ACTION, REDO_ACTION, ADD_BOLD_TEXT, ADD_ITALIC_TEXT, ADD_HEADER,
 		ADD_CODE_STYLE, ADD_COMMENT, ADD_BLOCK_QUOTE, ADD_NUM_LIST, ADD_SIMPLE_LIST, ADD_HORIZ_RULE,
-		LOAD_FILE, CLEAR_CURRENT_FILE, UPDATE_CURRENT_LINK, LOAD_OPENED_FILE, LOAD_CONTENT_FILE } from '../actions/mainWindow';
+		LOAD_FILE, CLEAR_CURRENT_FILE, UPDATE_CURRENT_LINK, LOAD_OPENED_FILE, LOAD_CODE_FILE } from '../actions/mainWindow';
 
 import { ADD_LINK, ADD_IMAGE_LINK} from '../actions/modalWindow';
 
@@ -8,7 +8,7 @@ import {ToolbarService} from '../services/toolbarService';
 
 let initialState = {
 	mainWindowText: '',
-	mainWindowContent: '',
+	mainWindowCode: '',
 	cursorPosition: {
 		start: 0,
 		end: 0
@@ -156,7 +156,7 @@ export default function mainWindow(state = initialState, action) {
 		case CLEAR_CURRENT_FILE:
 			return Object.assign({}, state, {
 				mainWindowText: '',
-				mainWindowContent: '',
+				mainWindowCode: '',
 				textChanged: false,
 				currentLink: '',
 				pastStates: [],
@@ -167,9 +167,9 @@ export default function mainWindow(state = initialState, action) {
 				currentLink: action.payload.link,
 				textChanged: false
 			})
-		case LOAD_CONTENT_FILE:
+		case LOAD_CODE_FILE:
 			return Object.assign({}, state, {
-				mainWindowContent: action.payload.text
+				mainWindowCode: action.payload.text
 			})
 		default:
 			return state

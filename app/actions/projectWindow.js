@@ -6,6 +6,7 @@ export const DRAG_AND_DROP = 'DRAG_AND_DROP';
 export const DRAG_AND_DROP_BEGIN = 'DRAG_AND_DROP_BEGIN';
 export const UPDATE_PROJECT = 'UPDATE_PROJECT';
 export const CLEAR_CURRENT_PROJECT = 'CLEAR_CURRENT_PROJECT';
+export const CONTENT_TREE_LOAD = 'CONTENT_TREE_LOAD';
 
 import {FilesService} from '../services/filesService';
 const fs = require('fs');
@@ -31,6 +32,7 @@ export function createFile(file) {
 			files.push(file);
 			dispatch({type: FILE_OPENED, payload: { openedFiles: files, activeFile: file } });
         });
+		
         FilesService.openProjectTree(store.projectWindow.tree.path, (tree) => {
 					dispatch({ type: 'TREE_LOAD', payload : {tree: tree} });
 		});	
@@ -57,7 +59,9 @@ export function openFile(file){
 			file.mainWindow = {textChanged: false};
 			files.push(file);
 			FilesService.openFile(file.path, (text) =>{
-				dispatch({ type: 'LOAD_CONTENT_FILE', payload: {text} });
+				dispatch({ type: 'LOAD_CODE_FILE', payload: {text} });
+			}, () => {
+				dispatch({ type: 'LOAD_CODE_FILE', payload: {text: 'no content'} });
 			});
 			FilesService.openFile(file.docsPath, (text) => {
 				dispatch({ type: 'LOAD_FILE', text: text, link: file.docsPath });

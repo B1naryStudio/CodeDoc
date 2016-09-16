@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
-import {Treebeard, decorators} from 'react-treebeard';
 import Tree, { TreeNode } from 'rc-tree';
-import './Sidebar.module.css';
+import './FilesTree.module.css';
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
 import * as projectWindowActions from '../actions/projectWindow';
@@ -28,7 +27,7 @@ const path = require('path');
 // 	);
 // };
 
-class Sidebar extends Component {
+class FilesTree extends Component {
 	constructor(props) {
 		super(props);
 		this.props = props;
@@ -64,7 +63,9 @@ class Sidebar extends Component {
 		
 		return (
 		<span className="cus-label">
-			<span onClick={action.bind(this, node)}>{node.name}</span>
+			<span onClick={action.bind(this, node)} >
+				{node.name}
+			</span>
 			<i className={iconClass} style={iconStyle}></i>
 		</span>)
 	}
@@ -86,7 +87,7 @@ class Sidebar extends Component {
     const treeNodes = this.renderTree(this.props.tree);
 		return (
 			<div>
-				<Tree showIcon={false}     >
+				<Tree showIcon={false}  defaultExpandAll={true}   >
 					{treeNodes}
       			</Tree>
 			</div>
@@ -104,4 +105,4 @@ function mapDispatchToProps(dispatch) {
 	return bindActionCreators(projectWindowActions, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Sidebar)
+export default connect(mapStateToProps, mapDispatchToProps)(FilesTree)

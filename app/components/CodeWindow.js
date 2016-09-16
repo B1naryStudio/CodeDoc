@@ -7,7 +7,7 @@ import { docco } from 'react-syntax-highlighter/dist/styles';
 
 let dispatchScrollEvent = true;
 
-class ContentWindow extends Component {
+class CodeWindow extends Component {
 	static defaultProps = {initialValue: ''};
 
 	constructor(props) {
@@ -19,7 +19,7 @@ class ContentWindow extends Component {
 	render() {
 		return (
 			<SyntaxHighlighter  language='javascript' style={docco} >
-				{this.props.mainWindow.mainWindowContent}
+				{this.props.mainWindow.mainWindowCode}
 			</SyntaxHighlighter  >
 		);
 	}
@@ -35,4 +35,4 @@ function mapDispatchToProps(dispatch) {
 	return bindActionCreators(mainWindowActions, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContentWindow)
+export default connect(mapStateToProps, mapDispatchToProps)(CodeWindow)

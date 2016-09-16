@@ -18,8 +18,8 @@ class WindowManager extends Component {
 		// setTimeout(function(){textarea.focus()}, 0);
 	}
 
-	showContentWindow() {
-		this.props.showContentWindow();
+	showCodeWindow() {
+		this.props.showCodeWindow();
 	}
 
 	showResultWindow() {
@@ -27,11 +27,11 @@ class WindowManager extends Component {
 	}
 
 	render() {
-		const contentClassName = (this.props.windowManager.showContent ? 'active ' : ' ') + 'btn btn-default';
+		const codeClassName = (this.props.windowManager.showCode ? 'active ' : ' ') + 'btn btn-default';
 		const resultClassName = (this.props.windowManager.showResult ? 'active ' : ' ') + 'btn btn-default';		
 		return (
 				<div className="btn-group" role="group" aria-label="...">
-					<button className={contentClassName} onClick={this.showContentWindow.bind(this)} data-toggle="tooltip" title="Show content">
+					<button className={codeClassName} onClick={this.showCodeWindow.bind(this)} data-toggle="tooltip" title="Show code">
 						<i className='fa fa-file-code-o'></i>
 					</button>
 					<button className={resultClassName} onClick={this.showResultWindow.bind(this)} data-toggle="tooltip" title="Show result">

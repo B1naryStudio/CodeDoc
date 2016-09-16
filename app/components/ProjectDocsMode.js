@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import './MDFileMode.module.css';
 import Toolbar from '../components/Toolbar';
-import Sidebar from '../components/Sidebar';
+import FilesTree from '../components/FilesTree';
+import ContentTree from '../components/ContentTree';
 import WindowManager from '../components/WindowManager';
 import MainWindow from '../components/MainWindow';
 import ResultWindow from '../components/ResultWindow';
-import ContentWindow from '../components/ContentWindow';
+import CodeWindow from '../components/CodeWindow';
 import SourceCodWindow from '../components/SourceCodWindow';
 import SplitLayout from 'react-split-layout';
 import LinkModalWindow from '../components/LinkModalWindow';
@@ -19,11 +20,11 @@ class MDFileMode extends Component {
 		super(props);
 	}
 
-	windowItems(){
+	windowItems() {
 		let result = [];
-		if(this.props.windowManager.showContent){
-			result.push(<div className='content-window-container' key='0'>
-							<ContentWindow />
+		if(this.props.windowManager.showCode && this.props.mainWindow.mainWindowCode !== 'no content'){
+			result.push(<div className='code-window-container' key='0'>
+							<CodeWindow />
 						</div> );
 		}
 		result.push(<div className='main-window-container' key='1'>
@@ -51,7 +52,10 @@ class MDFileMode extends Component {
 						direction="vertical" initialSizes={[250, null, null]}
 						minSizes={[100, 100, 100]}>
 						<div className='sidebar-container'>
-							<Sidebar />							
+							<SplitLayout direction="horizontal">
+								<ContentTree />
+								<FilesTree />
+							</SplitLayout>
 						</div>
 						<div>
 							<div className='tab-window-container'>
@@ -72,7 +76,8 @@ class MDFileMode extends Component {
 function mapStateToProps(state) {
 	return {
 		//toolbarState: state.toolbar,
-		windowManager: state.windowManager
+		windowManager: state.windowManager,
+		mainWindow: state.mainWindow
 	}
 }
 
@@ -81,29 +86,3 @@ function mapStateToProps(state) {
 // }
 
 export default connect(mapStateToProps)(MDFileMode)
-
-
-// {this.props.windowManager.showContent &&
-								
-// 									<SplitLayout direction="vertical" initialSizes={[null, null, null]} minSizes={[100, 100, 100]}>
-// 										<div className="content-window-container">
-// 											<ContentWindow />
-// 										</div>
-// 										<div className='main-window-container'>
-// 											<MainWindow />
-// 										</div>
-// 										<div className='res-window-container'>
-// 											<ResultWindow />
-// 										</div>
-// 									</SplitLayout>
-// 								}
-// 							{!this.props.windowManager.showContent &&
-// 									<SplitLayout direction="vertical" initialSizes={[null, null]} minSizes={[100, 100]}>
-// 										<div className='main-window-container'>
-// 											<MainWindow />
-// 										</div>
-// 										{this.props.windowManager.showContent && <div className='res-window-container'>
-// 											<ResultWindow />
-// 										</div>}
-// 									</SplitLayout>
-// 							}

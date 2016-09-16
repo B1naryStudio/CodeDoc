@@ -1,8 +1,9 @@
 import { TREE_LOAD, FILE_OPENED, CLOSE_ALL_FILES, DRAG_AND_DROP, CLEAR_CURRENT_PROJECT,
-	DRAG_AND_DROP_BEGIN, UPDATE_PROJECT } from '../actions/projectWindow';
+	DRAG_AND_DROP_BEGIN, UPDATE_PROJECT, CONTENT_TREE_LOAD } from '../actions/projectWindow';
 
 let initialState = {
 	tree: {},
+	contentTree: {},
 	openedFiles: [],
 	activeFile: {}
 }
@@ -13,6 +14,10 @@ export default function projectWindow(state = initialState, action) {
 			//let tree = readFile(action.payload.path)
 			return Object.assign({}, state, {
 				tree: action.payload.tree
+			})
+		case CONTENT_TREE_LOAD:
+			return Object.assign({}, state, {
+				contentTree: action.payload.contentTree
 			})
 		case FILE_OPENED: {
 			// let fileList = state.openedFiles;
