@@ -170,6 +170,13 @@ export function updateTree(text, link) {
 	}
 }
 
+export function changeContentTree(contentTree){
+	return {
+		type: CONTENT_TREE_LOAD,
+		payload: {contentTree}
+	}
+}
+
 // export function addFileTab(file){
 // 	return (dispatch, getStore) => {
 //         let store = getStore();
