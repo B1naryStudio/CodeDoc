@@ -8,6 +8,7 @@ export const SET_TEXT_CHANGED = 'SET_TEXT_CHANGE';
 
 import { routeActions } from 'redux-simple-router'
 import {FilesService} from '../services/filesService';
+import {guid} from '../services/guid';
 
 const remote = require('remote');
 const electron =  remote.require('electron');
@@ -210,10 +211,10 @@ export function createProjectDocs(calledFromHomeScreen = false) {
 				name: treeName,
 				ignore: ['node_modules', '.codedoc', '.git']
 			};
-			var contentTree = getContentTree(folderPath[0]);
-			docsConfig.contentTree = contentTree;
+			var contentTree = [];
 
-			var tree = getFileTree(folderPath[0], docsConfig.ignore);			
+			var tree = getFileTree(folderPath[0], contentTree, docsConfig.ignore);
+			docsConfig.contentTree = contentTree;
 			//tree.toggled = true;
 			let dir = path.join(tree.path ,'.codedoc');
 			if (!fs.existsSync(dir)){
@@ -396,12 +397,13 @@ function saveFileDialogBox(store, next) {
 	});
 }
 
-function getFileTree(folderPath, ignore = [], base = folderPath) {
+function getFileTree(folderPath, contentTree, ignore = [], base = folderPath, key = 0) {
 	let stats = fs.lstatSync(folderPath),
 			tree = {
 				path: folderPath,
 				hasDocs: false,
-				name: path.basename(folderPath)
+				name: path.basename(folderPath),
+				key: key
 			};
 	let docsPath = path.join(base, '.codedoc', folderPath.substring(base.length, folderPath.length - (stats.isDirectory() ? 0 : path.basename(folderPath).length)), (path.basename(folderPath) + '.md'));
 	try {
@@ -411,6 +413,10 @@ function getFileTree(folderPath, ignore = [], base = folderPath) {
 	} catch (e) {
 		tree.hasDocs = false;
 		tree.docsPath = docsPath;
+		if(tree.name.substr(-3) === '.md'){
+			tree.docsPath = tree.path;
+			delete tree.path;
+		}
 	}
 	if (stats.isDirectory()) {
 		let filteredChildren = fs.readdirSync(folderPath).filter(function(child) {
@@ -419,7 +425,11 @@ function getFileTree(folderPath, ignore = [], base = folderPath) {
 			});
 		});
 		tree.children = filteredChildren.map(function(child) {
-			return getFileTree(path.join(folderPath, child), ignore, base);
+			let newKey = guid();
+			if(child.substr(-3) === '.md') {
+				contentTree.push({docsPath: path.join(folderPath, child), name: child, key: newKey});
+			}
+			return getFileTree(path.join(folderPath, child), contentTree, ignore, base, newKey);
 		});
 		tree.children.sort(function(a, b) {
 			let A = a.children ? 1 : 0;
@@ -428,39 +438,6 @@ function getFileTree(folderPath, ignore = [], base = folderPath) {
 				return (b.name > a.name) ? -1 : 1;
 			}
 			return B - A;
-		});
-	}
-	return tree;
-}
-
-function getContentTree(folderPath) {
-	let stats = fs.lstatSync(folderPath),
-			tree = [];
-	if (stats.isDirectory()) {
-		// let filteredChildren = fs.readdirSync(folderPath).filter(function(child) {
-		// 	return child.substr(-3) === '.md';
-		// });
-		// let filteredFolders = fs.readdirSync(folderPath).filter(function(child) {
-		// 	return fs.lstatSync(path.join(folderPath, child)).isDirectory();
-		// });
-		let filteredChildren = [];
-		let filteredFolders =  [];
-		fs.readdirSync(folderPath).forEach(function(child) {
-			if(child.substr(-3) === '.md') {
-				filteredChildren.push(child);
-				return;
-			}
-			if(fs.lstatSync(path.join(folderPath, child)).isDirectory()){
-				filteredFolders.push(child);
-			}
-		});
-		filteredFolders.map((item) => {
-			getContentTree(path.join(folderPath, item)).map((child => {
-				tree.push(child);
-			}));
-		});
-		filteredChildren.map((item) =>{
-			tree.push( {path: path.join(folderPath, item), name: item});
 		});
 	}
 	return tree;

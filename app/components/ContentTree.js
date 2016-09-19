@@ -42,15 +42,15 @@ class ContentTree extends Component {
 	customLabel(node){
 		//const iconType = node.hasDocs ? 'file-text' : 'plus-square-o';
 		//const iconClass = `fa fa-${iconType}`;
-		const iconStyle = { marginLeft: '5px' };
+		const iconStyle = { marginRight: '5px' };
 		//const action = node.hasDocs ? this.openFile : this.createFile;
 		
 		return (
-		<span className="cus-label">
+		<span className="cus-label" onClick={this.openFile.bind(this, node)}>
+			<i className='fa fa-file-text-o' style={iconStyle}></i>
 			<span>
 				{node.name}
 			</span>
-			<i  style={iconStyle}></i>
 		</span>)
 	}
 
@@ -58,20 +58,25 @@ class ContentTree extends Component {
 		if(Array.isArray(node)){
 			return node.map((item) => {
 				if (item.children) {
-					return <TreeNode title={this.customLabel(item)} >{this.renderTree(item.children)}</TreeNode>;
+					return <TreeNode title={this.customLabel(item)} key={item.key + '7'} >{this.renderTree(item.children)}</TreeNode>;
 				}
-				return (<TreeNode title={this.customLabel(item)} />);
+				return (<TreeNode title={this.customLabel(item)} key={item.key + '7'} />);
 			});
 			} else {
-			return (<TreeNode title={this.customLabel(node)} >{this.renderTree(node.children)}</TreeNode>);
+			return (<TreeNode title={this.customLabel(node)} key={node.key + '7'} >{this.renderTree(node.children)}</TreeNode>);
 		}
+	}
+
+	activeFileKey(){
+		if(this.props.activeFile) return [this.props.activeFile.key + '7'];
+		else return [];
 	}
 
 	render() {
     const treeNodes = this.renderTree(this.props.contentTree.tree);
 		return (
 			<div>
-				<Tree showIcon={false}  defaultExpandAll={true}   >
+				<Tree showIcon={false}  defaultExpandAll={true} selectedKeys = {this.activeFileKey()}  >
 					{treeNodes}
       			</Tree>
 			</div>
@@ -81,8 +86,9 @@ class ContentTree extends Component {
 
 function mapStateToProps(state) {
 	return {
-		contentTree: state.projectWindow.contentTree//,
+		contentTree: state.projectWindow.contentTree,
 		//contentTreeCount: state.projectWindow
+		activeFile: state.projectWindow.activeFile,
 	}
 }
 

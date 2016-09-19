@@ -20,11 +20,11 @@ constructor(props) {
 		this.state = {};
   	}
 
-	openFile(key){
-		if(key === this.props.activeFile.key){
+	openFile(tabKey){
+		if(tabKey === this.props.activeFile.tabKey){
 			return;
 		}
-		let file = this.props.openedFiles.find((item) => item.key === key);
+		let file = this.props.openedFiles.find((item) => item.tabKey === tabKey);
 		this.props.openFile(file);
 	}
 
@@ -50,7 +50,7 @@ constructor(props) {
 
 	renderTabs(tabs) {
 			return tabs.map((item, index) => {
-				return (<Panel title={item.name} key={item.key}  />);
+				return (<Panel title={item.name} key={item.tabKey}  />);
 			});
 	}
 
@@ -62,7 +62,7 @@ constructor(props) {
 				<Tabs 
 						tabDeleteButton = {true}
 						handleTabDeleteButton={this.closeFile.bind(this)}
-						activeKey={this.props.activeFile.key}
+						activeKey={this.props.activeFile.tabKey}
 						handleTabClick={this.openFile.bind(this)}
 						draggable={true}
 						beginDrag={this.beginDrag.bind(this)}

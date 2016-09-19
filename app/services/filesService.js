@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+import {guid} from '../services/guid';
 
 export var FilesService = {
     openProjectTree: openProjectTree,
@@ -19,8 +20,8 @@ export var FilesService = {
             let config = JSON.parse(data);
             let ignore = config.ignore;
             let contentTree = config.contentTree;
-            let tree = getFileTree(projectPath, ignore);
-            tree.collapsed = true;
+            let tree = getFileTree(projectPath, ignore, contentTree);
+            //tree.expand = true;
             callback && callback(tree, contentTree);
         });
     }
@@ -29,7 +30,6 @@ export var FilesService = {
         fs.writeFile(filePath, "", function (err) {
             if(err) console.error(err);
             else {
-                debugger;
                 console.log(filePath);
                 callback && callback();
             }
@@ -64,9 +64,8 @@ export var FilesService = {
                 console.error(err);
                 //errorCallback && errorCallback(err.message);
             } else {
-                //console.log('data--',data);
                 let config = JSON.parse(data);
-                let newFile= {path: file.docsPath, name: file.name, parentPath: file.path};
+                let newFile= {docsPath: file.docsPath, name: file.name, path: file.path, key: file.key};
                 config.contentTree.push(newFile);
                 fs.writeFile(configPath, JSON.stringify(config), (err) => {
                     if(err) {
@@ -79,35 +78,43 @@ export var FilesService = {
                 } )
             }
 		});
-
-        //console.log('file--',file);
-        //console.log('config--',config);
     }
 
-    function getFileTree(folderPath, ignore = [], base = folderPath) {
+    function getFileTree(folderPath, ignore = [], contentTree, base = folderPath, key = 0) {
         let stats = fs.lstatSync(folderPath),
                 tree = {
                     path: folderPath,
                     hasDocs: false,
-                    name: path.basename(folderPath)
+                    name: path.basename(folderPath),
+                    key: key
                 };
         let docsPath = path.join(base, '.codedoc', folderPath.substring(base.length, folderPath.length - (stats.isDirectory() ? 0 : path.basename(folderPath).length)), (path.basename(folderPath) + '.md'));
         try {
             fs.accessSync(docsPath, fs.F_OK);
             tree.hasDocs = true;
             tree.docsPath = docsPath;
+            tree.key = findKey(docsPath, contentTree);
         } catch (e) {
             tree.hasDocs = false;
             tree.docsPath = docsPath;
+            if(tree.name.substr(-3) === '.md'){
+                tree.docsPath = tree.path;
+                delete tree.path;
+            }
         }
         if (stats.isDirectory()) {
-            let filteredChildren = fs.readdirSync(folderPath).filter(function(child) {
+            let filteredChildren = fs.readdirSync(folderPath).filter(function(child) { 
                 return !_.find(ignore, function(item) {
                     return item === child;
                 });
             });
             tree.children = filteredChildren.map(function(child) {
-                return getFileTree(path.join(folderPath, child), ignore, base);
+                let newKey = guid();
+                if(child.substr(-3) === '.md') {
+                    newKey = findKey(path.join(folderPath, child), contentTree)                    
+				    //contentTree.push({docsPath: path.join(folderPath, child), name: child, key: newKey});
+			    }
+                return getFileTree(path.join(folderPath, child), ignore, contentTree, base, newKey);
             });
             tree.children.sort(function(a, b) {
                 let A = a.children ? 1 : 0;
@@ -121,3 +128,10 @@ export var FilesService = {
         return tree;
     }
 
+function findKey(currentFilePath, contentTree){
+    let contentFile = contentTree.find((item) => {
+        return currentFilePath === item.docsPath;
+    });
+    //if(contentFile) 
+    return contentFile.key;
+}

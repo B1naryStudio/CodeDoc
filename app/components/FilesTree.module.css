@@ -157,9 +157,9 @@
   cursor: not-allowed;
 }
 .rc-tree-node-selected {
-  /*background-color: #ffe6b0;
+  background-color: #ffe6b0;
   border: 1px #ffb951 solid;
-  opacity: 0.8;*/
+  opacity: 0.8;
 }
 .rc-tree-icon__open {
   margin-right: 2px;
