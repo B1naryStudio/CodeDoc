@@ -171,11 +171,14 @@ export function updateTree(text, link) {
 }
 
 export function changeContentTree(contentTree){
-	return {
-		type: CONTENT_TREE_LOAD,
-		payload: {contentTree}
+	return (dispatch, getStore) => {
+			let store = getStore();
+			let tree = store.projectWindow.tree;
+			FilesService.addContentTreeToConfig(tree.path, contentTree, (contentTree) =>{
+				dispatch({type: CONTENT_TREE_LOAD, payload: {contentTree}});
+			});			
+		}
 	}
-}
 
 // export function addFileTab(file){
 // 	return (dispatch, getStore) => {

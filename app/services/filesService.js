@@ -7,7 +7,8 @@ export var FilesService = {
     createFile: createFile,
     openFile: openFile,
     saveFile: saveFile,
-    addContentFileToConfig: addContentFileToConfig
+    addContentFileToConfig: addContentFileToConfig,
+    addContentTreeToConfig: addContentTreeToConfig
 }
 
     function openProjectTree(projectPath, callback, errorCallback){
@@ -80,6 +81,30 @@ export var FilesService = {
 		});
     }
 
+
+    function addContentTreeToConfig(projectPath, contentTree, callback){
+        let configPath = path.join(projectPath, '.codedoc', 'docsConfig.json');
+        fs.readFile(configPath, 'utf-8', function (err, data) {
+            if(err) {
+                console.error(err);
+                //errorCallback && errorCallback(err.message);
+            } else {
+                let config = JSON.parse(data);
+                //let newFile= {docsPath: file.docsPath, name: file.name, path: file.path, key: file.key};
+                config.contentTree = contentTree;
+                fs.writeFile(configPath, JSON.stringify(config), (err) => {
+                    if(err) {
+                        console.error(err);
+                        //errorCallback && errorCallback(err.message);
+                    } else {
+                        callback && callback(contentTree);
+                    }
+                    
+                } )
+            }
+        });
+    }
+
     function getFileTree(folderPath, ignore = [], contentTree, base = folderPath, key = 0) {
         let stats = fs.lstatSync(folderPath),
                 tree = {
@@ -129,9 +154,20 @@ export var FilesService = {
     }
 
 function findKey(currentFilePath, contentTree){
-    let contentFile = contentTree.find((item) => {
-        return currentFilePath === item.docsPath;
+    const loop = (data, filePath, callback) => {
+      data.forEach((item, index, arr) => {
+        if (item.docsPath === filePath) {
+          return callback(item, index, arr);
+        }
+        if (item.children) {
+          return loop(item.children, filePath, callback);
+        }
+      });
+    };
+    let contentFile;
+    loop(contentTree, currentFilePath, (item) => {
+      contentFile = item;
     });
-    //if(contentFile) 
+
     return contentFile.key;
 }

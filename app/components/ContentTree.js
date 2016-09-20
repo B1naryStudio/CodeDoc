@@ -31,12 +31,12 @@ class ContentTree extends Component {
 		// }
 	}
 
-	onDragStart(info) {
-		console.log('start', info);
-	}
-	onDragEnter(info) {
-		console.log('enter', info);
-	}
+	// onDragStart(info) {
+	// 	console.log('start', info);
+	// }
+	// onDragEnter(info) {
+	// 	console.log('enter', info);
+	// }
 	onDrop(info) {
 		console.log('drop', info);
 
@@ -132,8 +132,6 @@ class ContentTree extends Component {
 				defaultExpandAll={true}
 				selectedKeys = {this.activeFileKey()}
 				draggable
-				onDragStart={this.onDragStart.bind(this)}
-				onDragEnter={this.onDragEnter.bind(this)}
 				onDrop={this.onDrop.bind(this)} >
 					{treeNodes}
       			</Tree>
