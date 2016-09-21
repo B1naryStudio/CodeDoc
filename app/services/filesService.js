@@ -54,7 +54,7 @@ export var FilesService = {
             if(err) {
                 errorCallback && errorCallback(err.message);
             } else {
-                callback && callback(filePath);
+                callback && callback(filePath, path.basename(filePath));
             }
         });
     }
@@ -138,7 +138,6 @@ export var FilesService = {
             tree.children = filteredChildren.map(function(child) {
                 let newKey = guid();
                 if(child.substr(-3) === '.md') {
-                    debugger;
                     if(isNew){
                         contentTree.push({docsPath: path.join(folderPath, child), name: child, key: newKey});
                     } else {

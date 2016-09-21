@@ -57,8 +57,6 @@ export function createFile(file) {
 export function openFile(file){
 	return (dispatch, getStore) => {	
 		let store = getStore();
-		console.log(file);
-
 		let files = store.projectWindow.openedFiles;
 		let oldFile = store.projectWindow.activeFile;
 		if(files.length >= 1){
@@ -137,17 +135,12 @@ export function changeTabPosition(dragIndex, hoverIndex){
 		let store = getStore();
 		let files = store.projectWindow.openedFiles;
 		let fileToSlice = files[dragIndex];
-		//let activeFilePath = store.projectWindow.activeFile.path;
-		//console.log('activeFile - key', store.projectWindow.activeFile.key);
 		files.splice(dragIndex, 1);
 		files.splice(hoverIndex, 0, fileToSlice);
 		files.forEach(function(item, index){
 			item.tabKey = index;
 		});
-		// let activeFile = files.find(function(item){
-		// 	return item.path === activeFilePath;
-		// });
-		dispatch({type: DRAG_AND_DROP, payload: { openedFiles: files, /*activeFile: activeFile,*/ dragAndDrop: !store.projectWindow.dragAndDrop} });
+		dispatch({type: DRAG_AND_DROP, payload: { openedFiles: files, dragAndDrop: !store.projectWindow.dragAndDrop} });
 	};
 }
 
@@ -183,18 +176,4 @@ export function changeContentTree(contentTree){
 		}
 	}
 
-// export function addFileTab(file){
-// 	return (dispatch, getStore) => {
-//         let store = getStore();
-// 		let files = store.projectWindow.openedFiles;
-		
-// 		let exist = files.find((x)=>{return x.path === file.path});
-// 		if(exist === undefined){
-// 			file.key = files.length;
-// 			file.mainWindow = store.mainWindow;
-// 			files.push(file);
-// 		}
-// 		dispatch({type: FILE_OPENED, payload: { openedFiles: files, activeFile: file } });
-// 	}
-// }
 

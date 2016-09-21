@@ -22,8 +22,6 @@ function checkChanges(store, next){
 			saveChangesConfirmDialogBox('Do you want to save changes to current project?',
 				()=>{
 					store.projectWindow.openedFiles.forEach((item, index) => {
-						console.log('select file', index);
-						console.log('item.mainWindow.textChanged ->', item.mainWindow.textChanged);
 						if(item.mainWindow.textChanged){
 							FilesService.saveFile(item.mainWindow.currentLink, item.mainWindow.mainWindowText);
 						}

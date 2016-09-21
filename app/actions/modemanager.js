@@ -9,6 +9,7 @@ export const SET_TEXT_CHANGED = 'SET_TEXT_CHANGE';
 import { routeActions } from 'redux-simple-router'
 import {FilesService} from '../services/filesService';
 import {CheckChangesService} from '../services/checkChangesService';
+import {guid} from '../services/guid';
 
 const remote = require('remote');
 const electron =  remote.require('electron');
@@ -97,7 +98,6 @@ export function saveFile() {
 export function saveAllFiles() {
 	return (dispatch, getStore) => {
 		let store = getStore();
-		console.log('saveAllFiles');
 		if(CheckChangesService.checkProjectChange(store)){
 			let openedFiles = store.projectWindow.openedFiles;
 			openedFiles.forEach((item) => {
@@ -221,7 +221,6 @@ export function createProjectDocs(calledFromHomeScreen = false) {
 			if (!fs.existsSync(dir)){
 				fs.mkdirSync(dir);
 			} else {
-				console.log('file already created');
 				return;
 			}
 
@@ -288,9 +287,22 @@ export function openProjectDocs(calledFromHomeScreen) {
 export function saveFileAs(){
 	return (dispatch, getStore) => {
 		let store = getStore();
+		let files = store.projectWindow.openedFiles;
+		let file = store.projectWindow.activeFile;
+		let newFile= {};
 		console.log('saveFileAs');		
-		CheckChangesService.saveFileDialogBox(store, (filePath) =>{			
-			dispatch({ type: 'UPDATE_CURRENT_LINK', payload: {link: filePath} });
+		CheckChangesService.saveFileDialogBox(store, (filePath, fileName) =>{
+			debugger;
+			newFile.name = fileName;
+			newFile.docsPath = filePath;
+			newFile.tabKey = files.length;
+			newFile.key = guid();
+			newFile.mainWindow = {textChanged: false};
+			files.push(newFile);
+			FilesService.openFile(newFile.docsPath, (text) => {
+				dispatch({ type: 'LOAD_FILE', text: text, link: newFile.docsPath });
+				dispatch({type: 'FILE_OPENED', payload: { openedFiles: files, activeFile: newFile } });
+			});
 		});
 	}
 }
@@ -300,7 +312,6 @@ export function openHomeScreen(calledFromHomeScreen) {
 		let store = getStore();
 
 		CheckChangesService.checkChanges(store,	function() {
-			console.log('reset');
 			dispatch(routeActions.push('/'));
 			dispatch({ type: 'CLEAR_CURRENT_FILE'});
 			dispatch({ type: 'CLEAR_CURRENT_PROJECT'});});
