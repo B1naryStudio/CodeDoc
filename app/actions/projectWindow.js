@@ -9,6 +9,7 @@ export const CLEAR_CURRENT_PROJECT = 'CLEAR_CURRENT_PROJECT';
 export const CONTENT_TREE_LOAD = 'CONTENT_TREE_LOAD';
 
 import {FilesService} from '../services/filesService';
+import {CheckChangesService} from '../services/checkChangesService';
 const fs = require('fs');
 
 export function loadTree(tree) {
@@ -103,29 +104,31 @@ export function closeFile(){
 
 		let index = -1;
 		for(let i = 0; i < files.length; i++) {
-			if (files[i].path === activeFile.path) {
+			if (files[i].key === activeFile.key) {
 				index = i;
 				break;
 			}
 		}
 
-		files.splice(index, 1);
-		if(files.length === 0) {
-			dispatch({ type: 'CLEAR_CURRENT_FILE'});
-			dispatch({ type: 'CLOSE_ALL_FILES'  });
-			return;
-		}
-		files.forEach(function(item, i){
-			item.tabKey = i;
+		CheckChangesService.checkCurrentFile(store,	()=>{
+			files.splice(index, 1);
+			if(files.length === 0) {
+				dispatch({ type: 'CLEAR_CURRENT_FILE'});
+				dispatch({ type: 'CLOSE_ALL_FILES'  });
+				return;
+			}
+			files.forEach(function(item, i){
+				item.tabKey = i;
+			});
+			if(index-1 <= 0){
+				activeFile = files[0];
+			} else{
+				activeFile = files[index-1];
+			}
+			
+			dispatch({ type: 'LOAD_OPENED_FILE', payload: {mainWindow: activeFile.mainWindow} });
+			dispatch({type: FILE_OPENED, payload: { openedFiles: files, activeFile: activeFile } });
 		});
-		if(index-1 <= 0){
-			activeFile = files[0];
-		} else{
-			activeFile = files[index-1];
-		}
-		
-		dispatch({ type: 'LOAD_OPENED_FILE', payload: {mainWindow: activeFile.mainWindow} });
-		dispatch({type: FILE_OPENED, payload: { openedFiles: files, activeFile: activeFile } });
 	};
 }
 
