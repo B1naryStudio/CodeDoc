@@ -52,7 +52,7 @@ class MDFileMode extends Component {
 						direction="vertical" initialSizes={[250, null, null]}
 						minSizes={[100, 100, 100]}>
 						<div className='sidebar-container'>
-							<SplitLayout direction="horizontal">
+							<SplitLayout direction="horizontal" initialSizes={[null, null]} minSizes={[100, 100]}>
 								<ContentTree />
 								<FilesTree />
 							</SplitLayout>

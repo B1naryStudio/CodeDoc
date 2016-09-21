@@ -106,7 +106,7 @@ export var FilesService = {
         });
     }
 
-    function getFileTree(folderPath, ignore = [], contentTree, isNew = false, base = folderPath, key = 0) {
+    function getFileTree(folderPath, ignore = [], contentTree, isNew = false, base = folderPath, key = 'base') {
         let stats = fs.lstatSync(folderPath),
                 tree = {
                     path: folderPath,

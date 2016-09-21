@@ -1,6 +1,12 @@
 .rc-tree {
   margin: 0;
   padding: 5px;
+  overflow: auto;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  right: 0;
 }
 .rc-tree li {
   padding: 0;

@@ -78,7 +78,7 @@ class ContentTree extends Component {
 				item.children.push(dragObj);
 			});
 		}
-		debugger;
+		//debugger;
 		this.props.changeContentTree(data);
 		console.log('result data', data);
 	}

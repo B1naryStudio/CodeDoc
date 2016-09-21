@@ -260,18 +260,11 @@ export function createProjectDocs(calledFromHomeScreen = false) {
 	}*/
 }
 
-export function openProjectDocs(calledFromHomeScreen) {
+export function openProjectDocs() {
 	return (dispatch, getStore) => {
-		if (!calledFromHomeScreen) {
-			console.log('---RUN LOGIC--- FOR SETTING \'FILE CHANGED\' STATE TO FALSE');
-		}
-
 		dialog.showOpenDialog({ 
 				properties: ['openDirectory', 'createDirectory']
 			}, function (folderPath) {
-				console.log(folderPath[0]);
-
-
 				FilesService.openProjectTree(folderPath[0], (tree, contentTree) => {
 					dispatch({ type: 'TREE_LOAD', payload : {tree: tree} });
 					dispatch({ type: 'CONTENT_TREE_LOAD', payload: {contentTree}});
