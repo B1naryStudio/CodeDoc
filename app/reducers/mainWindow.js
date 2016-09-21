@@ -9,6 +9,7 @@ import {ToolbarService} from '../services/toolbarService';
 let initialState = {
 	mainWindowText: '',
 	mainWindowCode: '',
+	textChanged: false,
 	cursorPosition: {
 		start: 0,
 		end: 0
@@ -33,7 +34,9 @@ export default function mainWindow(state = initialState, action) {
 		return Object.assign({}, state, {
 			mainWindowText: action.text,
 			currentLink: action.link,
-			textChanged: false
+			textChanged: false,
+			pastStates: [],
+			futureStates: []
 		})
 		case LOAD_OPENED_FILE:
 		return Object.assign({}, state, action.payload.mainWindow)

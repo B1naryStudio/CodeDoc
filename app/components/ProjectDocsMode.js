@@ -59,11 +59,13 @@ class MDFileMode extends Component {
 						</div>
 						<div>
 							<div className='tab-window-container'>
- 								<Tab />	
- 							</div>
-							<SplitLayout direction="vertical">
-								{windowItems}
-							</SplitLayout>
+								<Tab />	
+							</div>
+							<div className='editor-window-container'>
+								<SplitLayout direction="vertical">
+									{windowItems}
+								</SplitLayout>
+							</div>
 						</div>
 					</SplitLayout>
 				</div>

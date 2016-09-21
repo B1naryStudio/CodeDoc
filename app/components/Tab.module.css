@@ -12,7 +12,7 @@
     color: #95A5A6; }
 
 .tabtab__default__tab__wrapper {
-  margin-bottom: 5px; }
+  /*margin-bottom: 5px;*/ }
 
 .tabtab__default__panel.active {
   display: block; }

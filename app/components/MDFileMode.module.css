@@ -30,6 +30,12 @@
 .tab-window-container {
 	/*position: absolute;*/
 }
+.editor-window-container {	
+    top: 35px;
+    position: absolute;
+    width: 100%;
+    bottom: 0px;
+}
 
 .code-window-container {
 	height: 100%;
