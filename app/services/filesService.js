@@ -8,7 +8,8 @@ export var FilesService = {
     openFile: openFile,
     saveFile: saveFile,
     addContentFileToConfig: addContentFileToConfig,
-    addContentTreeToConfig: addContentTreeToConfig
+    addContentTreeToConfig: addContentTreeToConfig,
+    getFileTree: getFileTree
 }
 
     function openProjectTree(projectPath, callback, errorCallback){
@@ -105,7 +106,7 @@ export var FilesService = {
         });
     }
 
-    function getFileTree(folderPath, ignore = [], contentTree, base = folderPath, key = 0) {
+    function getFileTree(folderPath, ignore = [], contentTree, isNew = false, base = folderPath, key = 0) {
         let stats = fs.lstatSync(folderPath),
                 tree = {
                     path: folderPath,
@@ -118,7 +119,8 @@ export var FilesService = {
             fs.accessSync(docsPath, fs.F_OK);
             tree.hasDocs = true;
             tree.docsPath = docsPath;
-            tree.key = findKey(docsPath, contentTree);
+            if (!isNew)
+                tree.key = findKey(docsPath, contentTree);
         } catch (e) {
             tree.hasDocs = false;
             tree.docsPath = docsPath;
@@ -136,10 +138,14 @@ export var FilesService = {
             tree.children = filteredChildren.map(function(child) {
                 let newKey = guid();
                 if(child.substr(-3) === '.md') {
-                    newKey = findKey(path.join(folderPath, child), contentTree)                    
-				    //contentTree.push({docsPath: path.join(folderPath, child), name: child, key: newKey});
+                    debugger;
+                    if(isNew){
+                        contentTree.push({docsPath: path.join(folderPath, child), name: child, key: newKey});
+                    } else {
+                        newKey = findKey(path.join(folderPath, child), contentTree);                    
+                    }
 			    }
-                return getFileTree(path.join(folderPath, child), ignore, contentTree, base, newKey);
+                return getFileTree(path.join(folderPath, child), ignore, contentTree, isNew, base, newKey);
             });
             tree.children.sort(function(a, b) {
                 let A = a.children ? 1 : 0;

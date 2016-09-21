@@ -135,6 +135,7 @@ export function saveAllFiles() {
 	}
 }
 
+// remove this function -> design-the-workflow-for-one-mode-application
 export function createProjectComments(calledFromHomeScreen) {
 	return (dispatch, getStore) => {
 		let store = getStore();
@@ -186,6 +187,7 @@ export function createProjectComments(calledFromHomeScreen) {
 	}*/
 }
 
+// remove this function -> design-the-workflow-for-one-mode-application
 export function openProjectComments(calledFromHomeScreen) {
 	console.log('---RUN LOGIC--- FOR OPENING PROJECT comms');
 	return {
@@ -212,8 +214,7 @@ export function createProjectDocs(calledFromHomeScreen = false) {
 				ignore: ['node_modules', '.codedoc', '.git']
 			};
 			var contentTree = [];
-
-			var tree = CheckChangesService.getFileTree(folderPath[0], contentTree, docsConfig.ignore);
+			var tree = FilesService.getFileTree(folderPath[0], docsConfig.ignore, contentTree, true);
 			docsConfig.contentTree = contentTree;
 			//tree.toggled = true;
 			let dir = path.join(tree.path ,'.codedoc');

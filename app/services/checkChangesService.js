@@ -5,17 +5,9 @@ const path = require('path');
 const dialog = electron.dialog;
 
 import {FilesService} from './filesService';
-import {guid} from './guid';
 
 export var CheckChangesService = {
-    // openProjectTree: openProjectTree,
-    // createFile: createFile,
-    // openFile: openFile,
-    // saveFile: saveFile,
-    // addContentFileToConfig: addContentFileToConfig,
-    // addContentTreeToConfig: addContentTreeToConfig
 	checkChanges: checkChanges,
-	getFileTree: getFileTree,
 	checkProjectChange: checkProjectChange,
 	saveFileDialogBox: saveFileDialogBox,
 	checkCurrentFile: checkCurrentFile
@@ -48,15 +40,7 @@ function checkChanges(store, next){
 		}
 	}
 
-	//TODO check for comment project
-	// if(store.commentWindow){
-	// 	if(checkCommentProjectChange(store)){
-
-	// 	}
-	// 	//save comment project FilesService
-	// }
 	checkCurrentFile(store, next);
-
 }
 
 function checkCurrentFile(store, next){
@@ -109,52 +93,6 @@ function saveFileDialogBox(store, next) {
 			return;
 		}
 	});
-}
-
-function getFileTree(folderPath, contentTree, ignore = [], base = folderPath, key = 0) {
-	let stats = fs.lstatSync(folderPath),
-			tree = {
-				path: folderPath,
-				hasDocs: false,
-				name: path.basename(folderPath),
-				key: key
-			};
-	let docsPath = path.join(base, '.codedoc', folderPath.substring(base.length, folderPath.length - (stats.isDirectory() ? 0 : path.basename(folderPath).length)), (path.basename(folderPath) + '.md'));
-	try {
-		fs.accessSync(docsPath, fs.F_OK);
-		tree.hasDocs = true;
-		tree.docsPath = docsPath;
-	} catch (e) {
-		tree.hasDocs = false;
-		tree.docsPath = docsPath;
-		if(tree.name.substr(-3) === '.md'){
-			tree.docsPath = tree.path;
-			delete tree.path;
-		}
-	}
-	if (stats.isDirectory()) {
-		let filteredChildren = fs.readdirSync(folderPath).filter(function(child) {
-			return !_.find(ignore, function(item) {
-				return item === child;
-			});
-		});
-		tree.children = filteredChildren.map(function(child) {
-			let newKey = guid();
-			if(child.substr(-3) === '.md') {
-				contentTree.push({docsPath: path.join(folderPath, child), name: child, key: newKey});
-			}
-			return getFileTree(path.join(folderPath, child), contentTree, ignore, base, newKey);
-		});
-		tree.children.sort(function(a, b) {
-			let A = a.children ? 1 : 0;
-			let B = b.children ? 1 : 0;
-			if ((B - A) === 0) {
-				return (b.name > a.name) ? -1 : 1;
-			}
-			return B - A;
-		});
-	}
-	return tree;
 }
 
  function checkProjectChange(store){
