@@ -86,4 +86,11 @@ export class ActionsHandler {
 		});
 	};
 
+	onCurrentToHTML(){
+		postal.publish({
+			channel: "filesExport",
+			topic: "CurrentToHTML"
+		});
+	}
+
 }

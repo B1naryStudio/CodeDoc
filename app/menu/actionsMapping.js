@@ -6,6 +6,7 @@ const app = electron.app;
 const postal = require('postal');
 import { createMarkdownFile, createProjectComments, createProjectDocs, openMarkdownFile, openProjectComments, openProjectDocs, saveFile, saveFileAs, quitApp, openHomeScreen, 
 	saveAllFiles} from '../actions/modemanager';
+import {convertMDtoHTML} from '../markdownConverter/markdownConverter';
 
 export default function ActionsMapping(store) {
 
@@ -96,6 +97,14 @@ export default function ActionsMapping(store) {
 			topic: "Close",
 			callback: function(data, envelope) {
 				store.dispatch(openHomeScreen());
+			}
+		});
+
+		postal.subscribe({
+			channel: "filesExport",
+			topic: "CurrentToHTML",
+			callback: function(data, envelope) {
+				store.dispatch(convertMDtoHTML());
 			}
 		});
 }

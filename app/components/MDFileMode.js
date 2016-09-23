@@ -16,6 +16,7 @@ export default class MDFileMode extends Component {
 				<LinkModalWindow />
 				<div className='toolbar-container'>
 					<Toolbar />
+					<div />
 				</div>
 				<div className='panes-container'>
 					<SplitLayout

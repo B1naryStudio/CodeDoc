@@ -49,4 +49,14 @@ export const menuConfig =
 			accelerator: 'CmdOrCtrl+Q',
 			id: 'Quit'
 		}]
+}, {
+	label: '&Export',
+	submenu: [{
+			label: '&Current to HTML',
+			id: 'CurrentToHTML'
+	}]
+		// },{
+		// 	label: '&Project to HTML',
+		// 	id: 'ProjectToHTML'
+		// }]
 }];
