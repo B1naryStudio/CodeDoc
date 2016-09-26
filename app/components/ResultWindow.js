@@ -38,7 +38,7 @@ class ResultWindow extends Component {
 	render() {
 		return (
 			<div ref={(resWindow) => this._resWindow = resWindow}>
-				<Markdown> 
+				<Markdown > 
 					{this.props.mainWindow.mainWindowText}
 				</Markdown>
 			</div>

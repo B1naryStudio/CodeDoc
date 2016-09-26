@@ -18,7 +18,8 @@ export var CheckChangesService = {
 function checkChanges(store, next){
 
 	if(store.projectWindow.tree.path){
-		if(checkProjectChange(store)){
+		let changes = checkProjectChange(store);
+		if(changes){
 			saveChangesConfirmDialogBox('Do you want to save changes to current project?',
 				()=>{
 					store.projectWindow.openedFiles.forEach((item, index) => {
