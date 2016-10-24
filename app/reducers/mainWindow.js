@@ -4,7 +4,7 @@ import { CHANGE_TEXT, SELECT_TEXT, UNDO_ACTION, REDO_ACTION, ADD_BOLD_TEXT, ADD_
 
 import { ADD_LINK, ADD_IMAGE_LINK} from '../actions/modalWindow';
 
-import {ToolbarService} from '../services/toolbarService';
+import {ToolbarService} from './services/toolbarService';
 
 let initialState = {
 	mainWindowText: '',

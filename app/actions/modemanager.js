@@ -7,9 +7,9 @@ export const NEW_MARKDOWN = 'NEW_MARKDOWN';
 export const SET_TEXT_CHANGED = 'SET_TEXT_CHANGE';
 
 import { routeActions } from 'redux-simple-router'
-import {FilesService} from '../services/filesService';
-import {CheckChangesService} from '../services/checkChangesService';
-import {guid} from '../services/guid';
+import {FilesService} from '../reducers/services/filesService';
+import {CheckChangesService} from '../reducers/services/checkChangesService';
+import {guid} from '../reducers/services/guid';
 
 const remote = require('remote');
 const electron =  remote.require('electron');
