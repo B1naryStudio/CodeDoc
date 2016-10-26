@@ -23,6 +23,7 @@ const el = React.createClass({
       <Router history={hashHistory}>
         {routes}
       </Router>
+
     </Provider>);
   }
 });

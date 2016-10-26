@@ -1,4 +1,2 @@
 
-export default class{constructor(){
-        this.list = ['File', 'Edit', 'Enter', 'Bla Bla'];
-    }}
+export default new Array("File", "Save", "Add");

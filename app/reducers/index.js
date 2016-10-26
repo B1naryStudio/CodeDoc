@@ -5,15 +5,17 @@ import mainWindow from './mainWindow';
 import modalWindow from './modalWindow';
 import projectWindow from './projectWindow';
 import windowManager from './windowManager';
+import contextMenu from './contextMenu.reducer';
 
 
-const rootReducer = combineReducers({
+const rootReducer = combineReducers({ 
   routing: routeReducer,
   modemanager,
   mainWindow,
   modalWindow,
   projectWindow,
-  windowManager
+  windowManager,
+  contextMenu
 });
 
 export default rootReducer;

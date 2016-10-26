@@ -5,7 +5,6 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import brace from 'brace';
 import AceEditor from 'react-ace';
-import ContextMenu from './ContextMenu'
 
 import 'brace/mode/markdown';
 import 'brace/theme/github';
@@ -137,7 +136,6 @@ class MainWindow extends Component {
 				/>
 			</div>*/
 			<div>
-			<ContextMenu />
 			<textarea ref={(textarea) => this._textarea = textarea} className="form-control" onKeyDown={this.onKeyDown.bind(this)} 
 			onKeyPress={this.onKeyPress.bind(this)} onFocus={this.updateSelection.bind(this)} value={this.props.mainWindow.mainWindowText} 
 			onChange={this.tick.bind(this)} onSelect={this.selectText.bind(this)}></textarea>

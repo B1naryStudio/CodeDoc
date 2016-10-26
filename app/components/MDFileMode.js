@@ -8,11 +8,22 @@ import SourceCodWindow from '../components/SourceCodWindow';
 import SplitLayout from 'react-split-layout';
 import Markdown from'react-remarkable';
 import LinkModalWindow from '../components/LinkModalWindow';
+import * as showContextActions from '../actions/contextMenu.actions'
+import ContextMenu from "../components/ContextMenu.component"
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 
-export default class MDFileMode extends Component {
+export class MDFileMode extends Component {
+	constructor(props){
+		super(props);
+		this.contextMenu = this.contextMenu.bind(this);
+	}
+	contextMenu(type, evt){
+		this.props.showContext(type, evt.clientX, evt.clientY);
+	}
 	render() {
 		return (
-			<div className='md-mode-container'>
+			<div className='md-mode-container' onContextMenu={this.contextMenu.bind(this, 'type')}>
 				<LinkModalWindow />
 				<div className='toolbar-container'>
 					<Toolbar />
@@ -33,3 +44,9 @@ export default class MDFileMode extends Component {
 		);
 	}
 }
+
+function mapDispatchToProps(dispatch) {
+	return bindActionCreators(showContextActions, dispatch)
+}
+
+export default connect(null, mapDispatchToProps)(MDFileMode)
