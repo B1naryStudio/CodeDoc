@@ -7,14 +7,23 @@ export class App extends Component {
   constructor(){
     super();
     this.manageContextMenu = this.manageContextMenu.bind(this);
-    console.log(contextMenuActions)
+    this.addListenetrs.call(this);
   }
   static propTypes = {
     children: PropTypes.element.isRequired
   };
+
+  addListenetrs(){
+    console.log(this.ContextMenuState);
+     document.addEventListener('keydown', (evt)=>{
+       if(this.props.ContextMenuState.isVisible==true && evt.keyCode==27){
+         this.props.hideContext();
+       }
+     })
+  }
   manageContextMenu(evt){
     if(this.props.ContextMenuState.isVisible){
-      this.props.hideContext();
+        this.props.hideContext();
     }
   };
   render() {

@@ -17,12 +17,17 @@ class ContextMenu extends Component {
         console.log('CLICKED')
     }
 
-    render(){
-           let context = list.map((elem, index)=><li onClick={this.clickHandler.bind(this)} className='context-menu-item' key={index}>{elem}</li>);
+    closeByEsc(evt){
+        console.log(evt.keyCode);
+    }
+
+    render(){ 
+        let filteredArray = list.filter((elem, index)=>elem.target==this.props.ContextMenuState.target);
+        console.log(filteredArray)
+           let context = filteredArray.map((elem, index)=><li onClick={this.clickHandler.bind(this)} onKeyPress={this.closeByEsc.bind(this)} className='context-menu-item' key={index}>{elem.title}</li>);
             {
-                //console.log(this.props.ContextMenuState);
                 if(this.props.ContextMenuState.isVisible)
-                    return <ul id='context-menu' style={{top:this.props.ContextMenuState.y-10, left: this.props.ContextMenuState.x}} className='contextMenu'>{context}</ul>
+                    return <ul  id='context-menu' style={{top:this.props.ContextMenuState.y-10, left: this.props.ContextMenuState.x}} className='contextMenu'>{context}</ul>
                 else{
                     return null
                 }
