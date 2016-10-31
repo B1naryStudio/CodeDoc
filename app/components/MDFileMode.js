@@ -31,25 +31,25 @@ export class MDFileMode extends Component {
   }
   render() {
     return ( <
-      div className = 'md-mode-container'
-      onContextMenu = {
-        this.contextMenu.bind(this, 'general')
+        div className = 'md-mode-container' >
+        <
+        LinkModalWindow / >
+        <
+        div className = 'toolbar-container'
+        onContextMenu = {
+          this.contextMenu.bind(this, 'general')
+        } >
+        <
+        Toolbar / >
+        <
+        div / >
+        <
+        /div> <div className = 'panes-container' onContextMenu = {
+        this.contextMenu.bind(this, 'file-in-tree')
       } >
-
-      <
-      LinkModalWindow / >
-      <
-      div className = 'toolbar-container' >
-      <
-      Toolbar / >
-      <
-      div / >
-      <
-      /div> <
-      div className = 'panes-container' >
       <
       SplitLayout direction = "vertical"
-      minSizes = {
+    minSizes = {
         [100, 100]
       } >
       <
@@ -58,16 +58,16 @@ export class MDFileMode extends Component {
       MainWindow / >
       <
       /div> <
-      div className = 'res-window-container' >
+    div className = 'res-window-container' >
       <
       ResultWindow / >
       <
       /div> < /
-      SplitLayout > <
+    SplitLayout > <
       /div> < /
-      div >
-    );
-  }
+    div >
+  );
+}
 }
 
 function mapDispatchToProps(dispatch) {

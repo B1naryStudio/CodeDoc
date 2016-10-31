@@ -5,6 +5,7 @@ import './FilesTree.module.css';
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
 import * as projectWindowActions from '../actions/projectWindow';
+import * as contextMenuActions from '../actions/contextMenu.actions'
 
 import _ from 'lodash';
 
@@ -32,8 +33,11 @@ class FilesTree extends Component {
 		super(props);
 		this.props = props;
 		this.state = {};
+		this.contextMenu = this.contextMenu.bind(this);
 	}
-
+	contextMenu(obj){
+		this.props.treeContextMenu(obj.node.props.eventKey, obj.event.clientX, obj.event.clientY);
+	}
 	onToggle(node, evt) {
 		if(this.state.cursor){this.state.cursor.active = false;}
 		node.active = true;
@@ -69,15 +73,15 @@ class FilesTree extends Component {
 			<i className={iconClass} style={iconStyle}></i>
 		</span>)
 	}
-
+//this.contextMenu.bind(this, "tree-folder")
 	renderTree(node) {
 		if(Array.isArray(node)){
 			return node.map((item) => {
 				if (item.children) {
-					return <TreeNode title={this.customLabel(item)} key={item.key} >{this.renderTree(item.children)}</TreeNode>;
+					return <TreeNode title={this.customLabel(item)} key={item.key}>{this.renderTree(item.children)}</TreeNode>;
 				}
-				return (<TreeNode title={this.customLabel(item)} key={item.key} />);
-			});
+				return (<TreeNode title={this.customLabel(item)} key={item.key}/>);
+			})
 			} else {
 			return (<TreeNode title={this.customLabel(node)} key={node.key}>{this.renderTree(node.children)}</TreeNode>);
 		}
@@ -92,7 +96,7 @@ class FilesTree extends Component {
     const treeNodes = this.renderTree(this.props.tree);	
 		return (
 			<div>
-				<Tree showIcon={false}  defaultExpandAll={true} selectedKeys = {this.activeFileKey()}  >
+				<Tree showIcon={false}  defaultExpandAll={true} selectedKeys = {this.activeFileKey()}  onRightClick={this.contextMenu}>
 					{treeNodes}
       			</Tree>
 			</div>
@@ -108,7 +112,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-	return bindActionCreators(projectWindowActions, dispatch)
+	return bindActionCreators(Object.assign({}, projectWindowActions, contextMenuActions), dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(FilesTree)

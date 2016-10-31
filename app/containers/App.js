@@ -33,7 +33,8 @@ export class App extends Component {
         {this.props.children}
         {
           (() => {
-            if (process.env.NODE_ENV !== 'production') {
+            //if (process.env.NODE_ENV !== 'develop') {
+            if (false) {
               const DevTools = require('./DevTools');
               return <DevTools />;
             }

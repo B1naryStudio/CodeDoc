@@ -22,4 +22,12 @@ export default new Array({
   title: "Copy",
   target: 'file-in-tree',
   action: "COPY_FILE"
+}, {
+  title: "Folder",
+  target: 'tree-folder',
+  action: "COPY_FILE"
+}, {
+  title: "Item",
+  target: 'tree-item',
+  action: "COPY_FILE"
 });

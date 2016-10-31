@@ -13,7 +13,7 @@ export default function contextMenu(state = initialState, action) {
   switch (action.type) {
     case SHOW_CONTEXT_MENU:
       {
-        console.log(SHOW_CONTEXT_MENU)
+        //console.log(SHOW_CONTEXT_MENU)
         return Object.assign({}, state, {
           isVisible: true,
           x: action.x,
@@ -23,7 +23,7 @@ export default function contextMenu(state = initialState, action) {
       }
     case HIDE_CONTEXT_MENU:
       {
-        console.log(HIDE_CONTEXT_MENU);
+        //console.log(HIDE_CONTEXT_MENU);
         return Object.assign({}, state, {
           isVisible: false
         });
