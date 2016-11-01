@@ -23,9 +23,9 @@ export default new Array({
   target: 'file-in-tree',
   action: "COPY_FILE"
 }, {
-  title: "Folder",
+  title: "Add file",
   target: 'tree-folder',
-  action: "COPY_FILE"
+  action: "CREATE_MD_FILE_IN_FOLDER"
 }, {
   title: "Item",
   target: 'tree-item',

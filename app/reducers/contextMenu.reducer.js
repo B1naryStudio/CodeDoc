@@ -1,12 +1,15 @@
 import {
   SHOW_CONTEXT_MENU,
-  HIDE_CONTEXT_MENU
+  HIDE_CONTEXT_MENU,
+  ADD_FILE_TO_FOLDER
 } from '../actions/contextMenu.actions'
 let initialState = {
   isVisible: false,
-  target: "general",
   x: 0,
-  y: 0
+  y: 0,
+  target: {
+    type: undefined
+  }
 }
 
 export default function contextMenu(state = initialState, action) {

@@ -20,7 +20,7 @@ class CodeWindow extends Component {
 		return (
 			<SyntaxHighlighter  language='javascript' style={docco} >
 				{this.props.mainWindow.mainWindowCode}
-			</SyntaxHighlighter  >
+			</SyntaxHighlighter>
 		);
 	}
 }

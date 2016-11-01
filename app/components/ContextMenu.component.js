@@ -21,8 +21,13 @@ class ContextMenu extends Component {
     super();
   }
 
-  clickHandler() {
-    console.log('CLICKED')
+  clickHandler(elem) {
+    switch (elem.action) {
+      case "CREATE_MD_FILE_IN_FOLDER":
+        {
+          this.props.createFileInFolder();
+        }
+    }
   }
 
   closeByEsc(evt) {
@@ -30,9 +35,9 @@ class ContextMenu extends Component {
   }
 
   render() {
-    let filteredArray = list.filter((elem, index) => elem.target == this.props.ContextMenuState.target);
-    let context = filteredArray.map((elem, index) => < li onClick = {
-        this.clickHandler.bind(this)
+    let filteredArray = list.filter((elem, index) => elem.target == this.props.ContextMenuState.target.type);
+    let context = filteredArray.map((elem, index) => <li onClick = {
+        this.clickHandler.bind(this, elem)
       }
       onKeyPress = {
         this.closeByEsc.bind(this)
@@ -41,34 +46,33 @@ class ContextMenu extends Component {
       key = {
         index
       } > {
-        elem.title
-      } < /li>); {
-        if (this.props.ContextMenuState.isVisible)
-          return <ul id = 'context-menu'
-        style = {
-          {
-            top: this.props.ContextMenuState.y - 10,
-            left: this.props.ContextMenuState.x
-          }
+        elem.title} </li>);
+         {if (this.props.ContextMenuState.isVisible) 
+        return <ul id = 'context-menu'
+      style = {
+        {
+          top: this.props.ContextMenuState.y - 10,
+          left: this.props.ContextMenuState.x
         }
-        className = 'contextMenu' > {
-          context
-        } < /ul>
-        else {
-          return null
-        }
+      }
+      className = 'contextMenu' > {
+        context
+      } </ul>
+      else {
+        return null
       }
     }
   }
+}
 
-  function mapStateToProps(state) {
-    return {
-      ContextMenuState: state.contextMenu
-    }
+function mapStateToProps(state) {
+  return {
+    ContextMenuState: state.contextMenu
   }
+}
 
-  function mapDispatchToProps(dispatch) {
-    return bindActionCreators(contextMenuActions, dispatch)
-  }
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(contextMenuActions, dispatch)
+}
 
-  export default connect(mapStateToProps, mapDispatchToProps)(ContextMenu)
+export default connect(mapStateToProps, mapDispatchToProps)(ContextMenu)
