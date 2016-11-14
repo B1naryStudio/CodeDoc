@@ -48,15 +48,14 @@ export function createFileInFolder() {
           dispatch({
             type: ADD_FILE_TO_FOLDER,
             key: guid(),
+            parentKey: store.key,
             path: store.path+"/README.md",
             hasDocs: false,
             name: "README.md"
           });
         }
       });
-    }
-
-
+   }
   }
 }
 

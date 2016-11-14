@@ -10,7 +10,7 @@ const config = Object.create(baseConfig);
 
 config.debug = true;
 
-config.devtool = 'cheap-module-eval-source-map';
+config.devtool = 'eval';
 
 config.entry = [
 	'webpack-hot-middleware/client?path=http://localhost:3000/__webpack_hmr',

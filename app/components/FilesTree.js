@@ -106,6 +106,7 @@ class FilesTree extends Component {
 
 function mapStateToProps(state) {
 	return {
+		
 		tree: state.projectWindow.tree,
 		activeFile: state.projectWindow.activeFile 
 	}
