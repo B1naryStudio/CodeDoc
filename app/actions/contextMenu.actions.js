@@ -1,15 +1,9 @@
-import {
-  treeSearch
-} from '../services/treeSearch'
-import {
-  FilesService
-} from '../services/filesService'
-import {
-  guid
-} from '../services/guid';
-import {
-  dialog
-} from "electron"
+import { treeSearch } from '../services/treeSearch'
+import { FilesService } from '../services/filesService'
+import { guid } from '../services/guid';
+import { dialog } from "electron"
+import { SHOW_MODAL } from '../actions/mainWindow';
+import { HIDE_MODAL } from '../actions/modalWindow';
 export const SHOW_CONTEXT_MENU = 'SHOW_CONTEXT_MENU'
 export const HIDE_CONTEXT_MENU = 'HIDE_CONTEXT_MENU'
 export const ADD_FILE_TO_FOLDER = 'ADD_FILE_TO_FOLDER'
@@ -50,7 +44,7 @@ export function deleteFileFromFolder(type) {
     } else {
       file = "COMMENTS.txt";
     }
-    FilesService.deleteFile(store.path + "/" + file, function (err) {
+    FilesService.deleteFile(store.path + "/" + file, function(err) {
       if (err) {
         console.log(err);
       } else {
@@ -74,7 +68,7 @@ export function createFileInFolder(type) {
     } else {
       file = "COMMENTS.txt";
     }
-    FilesService.createFile(store.path + "/" + file, function (err) {
+    FilesService.createFile(store.path + "/" + file, function(err) {
       if (err) console.log(err);
       else {
         dispatch({
@@ -94,7 +88,35 @@ export function createFileInFolder(type) {
 export function renameItem() {
   return (dispatch, getStore) => {
     let store = getStore().contextMenu.target;
-    console.log(store);
+    let oldName = store.path.substring(store.path.lastIndexOf("/") + 1, store.path.length);
+    let newName = getStore().modalWindow.value;
+    if (newName) {
+      if (oldName == newName) {
+        alert("Enter new name");
+      } else {
+        FilesService.renameFile(store.path, newName, function(err) {
+          if (!err) {
+            dispatch({
+              type: HIDE_MODAL
+            });
+            dispatch({
+              type: RENAME_ITEM,
+              oldName,
+              newName,
+              path: store.path,
+              key: store.key,
+              docsPath: store.docsPath
+            })
+
+          } else {
+            console.log(err)
+          }
+        });
+      }
+    } else {
+      alert("Pleas enter name");
+    }
+
   }
 }
 

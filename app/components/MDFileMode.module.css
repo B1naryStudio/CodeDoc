@@ -1,115 +1,120 @@
 .md-mode-container {
-	height: 100%;
+  height: 100%;
 }
 
-.md-mode-container > .SplitPane {
-	position: fixed !important;
-	width: 100%;
-	bottom: 0;
-	top: 56px;
-	background: white;
-	-webkit-box-shadow: 4px 5px 35px 8px rgba(0,0,0,0.63);
-	-moz-box-shadow: 4px 5px 35px 8px rgba(0,0,0,0.63);
-	box-shadow: 4px 5px 35px 8px rgba(0,0,0,0.63);
+.md-mode-container>.SplitPane {
+  position: fixed !important;
+  width: 100%;
+  bottom: 0;
+  top: 56px;
+  background: white;
+  -webkit-box-shadow: 4px 5px 35px 8px rgba(0, 0, 0, 0.63);
+  -moz-box-shadow: 4px 5px 35px 8px rgba(0, 0, 0, 0.63);
+  box-shadow: 4px 5px 35px 8px rgba(0, 0, 0, 0.63);
 }
 
 .toolbar-container {
-	margin: 10px;
+  margin: 10px;
 }
 
 .toolbar-container .btn-default {
-	color: #95a5a6;
-	font-family: sans-serif;
-	font-size: 20px;
+  color: #95a5a6;
+  font-family: sans-serif;
+  font-size: 20px;
 }
 
-.toolbar-container > .btn-group:last-child {
-	float:right;
+.toolbar-container>.btn-group:last-child {
+  float: right;
 }
 
 .tab-window-container {
-	/*position: absolute;*/
+  /*position: absolute;*/
 }
-.editor-window-container {	
-    top: 35px;
-    position: absolute;
-    width: 100%;
-    bottom: 0px;
+
+.editor-window-container {
+  top: 35px;
+  position: absolute;
+  width: 100%;
+  bottom: 0px;
 }
 
 .code-window-container {
-	height: 100%;
-	position: absolute;
-	left: 0;
-	right: 0;
-	background: white;
-	overflow: scroll;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: white;
+  overflow: scroll;
+}
+
+.code-window-container pre {
+  height: 100%;
 }
 
 .main-window-container {
-	height: 100%;
-	position: absolute;
-	left: 0;
-	right: 0;
-	background: white;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: white;
 }
 
 .main-window-container textarea {
-	border: none;
-	border-radius: 0;
-	box-shadow: none;
-	resize: none;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  resize: none;
 }
 
 .sidebar-container {
-	height: 100%;
-	position: absolute;
-	width: 100%;
-	background: #21252B;
-	overflow: auto;
+  height: 100%;
+  position: absolute;
+  width: 100%;
+  background: #21252B;
+  overflow: auto;
 }
 
 .res-window-container {
-	height: 100%;
-	position: absolute;
-	left: 0;
-	right: 0;
-	background: white;
-	padding: 10px;
-	overflow: auto;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: white;
+  padding: 10px;
+  overflow: auto;
 }
 
-.res-window-container img{
-	max-width: 100%;
-	height: auto;
+.res-window-container img {
+  max-width: 100%;
+  height: auto;
 }
 
 .source-window-container {
-	height: 300px;
-	background: white;
+  height: 300px;
+  background: white;
 }
 
 textarea.form-control {
-	height: 100% !important;
+  height: 100% !important;
 }
 
 textarea.form-control:focus {
-	box-shadow: none;
+  box-shadow: none;
 }
 
 .panes-container {
-	position: fixed;
-	top: 70px;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	background: #fff;
+  position: fixed;
+  top: 70px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
 }
 
-.panes-container > div > div {
-	margin: 0 5px;
+.panes-container>div>div {
+  margin: 0 5px;
 }
 
-.panes-container > div > div:first-child {
-	margin-left: 0;
+.panes-container>div>div:first-child {
+  margin-left: 0;
 }
