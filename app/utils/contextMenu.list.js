@@ -23,9 +23,25 @@ export default new Array({
   target: 'file-in-tree',
   action: "COPY_FILE"
 }, {
-  title: "Add file",
+  title: "Add MD file",
   target: 'tree-folder',
   action: "CREATE_MD_FILE_IN_FOLDER"
+}, {
+  title: "Add Comments file",
+  target: 'tree-folder',
+  action: "CREATE_COMMENT_FILE_IN_FOLDER"
+}, {
+  title: "Rename",
+  target: 'tree-folder',
+  action: "RENAME_ITEM"
+}, {
+  title: "Delete MD file",
+  target: 'tree-folder',
+  action: "DELETE_MD_FILE_IN_FOLDER"
+}, {
+  title: "Delete Comments file",
+  target: 'tree-folder',
+  action: "DELETE_COMMENT_FILE_IN_FOLDER"
 }, {
   title: "Item",
   target: 'tree-item',

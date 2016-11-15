@@ -174,5 +174,7 @@ function findKey(currentFilePath, contentTree){
       contentFile = item;
     });
 
+    console.log(contentFile);
+
     return contentFile.key;
 }

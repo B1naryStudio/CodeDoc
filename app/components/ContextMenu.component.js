@@ -19,13 +19,35 @@ import list from '../utils/contextMenu.list'
 class ContextMenu extends Component {
   constructor() {
     super();
+    this.disableAction = this.disableAction.bind(this);
   }
 
   clickHandler(elem) {
     switch (elem.action) {
       case "CREATE_MD_FILE_IN_FOLDER":
         {
-          this.props.createFileInFolder();
+          this.props.createFileInFolder("MD");
+          break;
+        }
+      case "CREATE_COMMENT_FILE_IN_FOLDER":
+        {
+          this.props.createFileInFolder("CMT");
+          break;
+        }
+      case "DELETE_COMMENT_FILE_IN_FOLDER":
+        {
+          this.props.deleteFileFromFolder("CMT");
+          break;
+        }
+      case "DELETE_MD_FILE_IN_FOLDER":
+        {
+          this.props.deleteFileFromFolder("MD");
+          break;
+        }
+      case "RENAME_ITEM":
+        {
+          this.props.renameItem();
+          break;
         }
     }
   }
@@ -34,20 +56,31 @@ class ContextMenu extends Component {
     console.log(evt.keyCode);
   }
 
+  disableAction(el) {
+    let createMD = (this.props.ContextMenuState.target.hasDocs && el.action == "CREATE_MD_FILE_IN_FOLDER");
+    let createCom = (this.props.ContextMenuState.target.hasCom && el.action == "CREATE_COMMENT_FILE_IN_FOLDER");
+    let deleteCom = (!this.props.ContextMenuState.target.hasCom && el.action == "DELETE_COMMENT_FILE_IN_FOLDER");
+    let deleteMD = (!this.props.ContextMenuState.target.hasDocs && el.action == "DELETE_MD_FILE_IN_FOLDER");
+    return (createMD || createCom || deleteCom || deleteMD);
+  }
+
   render() {
     let filteredArray = list.filter((elem, index) => elem.target == this.props.ContextMenuState.target.type);
-    let context = filteredArray.map((elem, index) => <li onClick = {
-        this.clickHandler.bind(this, elem)
+    let context = filteredArray.map((elem, index) => < li className = {
+        'context-menu-item' + (this.disableAction(elem) ? " disabled-action" : "")
+      }
+      onClick = {
+        this.disableAction(elem) ? undefined : this.clickHandler.bind(this, elem)
       }
       onKeyPress = {
         this.closeByEsc.bind(this)
       }
-      className = 'context-menu-item'
       key = {
         index
       } > {
-        elem.title} </li>);
-         {if (this.props.ContextMenuState.isVisible) 
+        elem.title
+      } < /li>); {
+      if (this.props.ContextMenuState.isVisible)
         return <ul id = 'context-menu'
       style = {
         {
@@ -57,7 +90,7 @@ class ContextMenu extends Component {
       }
       className = 'contextMenu' > {
         context
-      } </ul>
+      } < /ul>
       else {
         return null
       }
