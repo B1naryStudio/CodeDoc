@@ -73,7 +73,6 @@ class FilesTree extends Component {
 			<i className={iconClass} style={iconStyle}></i>
 		</span>)
 	}
-//this.contextMenu.bind(this, "tree-folder")
 	renderTree(node) {
 		if(Array.isArray(node)){
 			return node.map((item) => {

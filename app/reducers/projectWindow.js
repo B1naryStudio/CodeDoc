@@ -9,7 +9,8 @@ import {
   CONTENT_TREE_LOAD
 } from '../actions/projectWindow';
 import {
-  ADD_FILE_TO_FOLDER
+  ADD_FILE_TO_FOLDER,
+  DELETE_FILE_FROM_FOLDER
 } from "../actions/contextMenu.actions"
 import {
   treeSearch
@@ -27,14 +28,37 @@ export default function projectWindow(state = initialState, action) {
       {
 
         let node = treeSearch(state.tree, action.parentKey);
+        if (action.hasDocs) node.hasDocs = action.hasDocs;
+        if (action.hasCom) node.hasCom = action.hasCom;
         node.children = [...node.children, {
           key: action.key,
-          hasDocs: action.hasDocs,
+          hasDocs: false,
           path: action.path,
           name: action.name
-		}];
-		let tree = Object.assign({}, state.tree);
-		return Object.assign({}, state, {tree});
+        }];
+        let tree = Object.assign({}, state.tree);
+        return Object.assign({}, state, {
+          tree
+        });
+      }
+    case DELETE_FILE_FROM_FOLDER:
+      {
+        let node = treeSearch(state.tree, action.key);
+        if (!action.hasDocs) node.hasDocs = action.hasDocs;
+        if (!action.hasCom) node.hasCom = action.hasCom;
+        let index = -1;
+        for (let i = 0; i < node.children.length; i++) {
+          if (node.children[i].name == action.file) {
+            index = i;
+            break;
+          }
+        }
+        node.children.splice(index, 1);
+        node.children = [...node.children];
+        let tree = Object.assign({}, state.tree);
+        return Object.assign({}, state, {
+          tree
+        });
       }
     case TREE_LOAD:
       //let tree = readFile(action.payload.path)

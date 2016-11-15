@@ -12,11 +12,20 @@
   box-sizing: border-box;
 }
 
+#context-menu .disabled-action {
+  background-color: #223;
+  color: dimgrey
+}
+
+#context-menu .disabled-action:hover {
+  background-color: #223;
+}
+
 #context-menu li {
   padding: 5px 40px;
   border-bottom: 1px solid lightslategray;
   font-size: 15px;
-  text-align: center;
+  text-align: left;
   list-style: none;
   left: 0;
   color: white;
