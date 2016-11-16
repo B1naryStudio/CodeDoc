@@ -30,7 +30,7 @@ class LinkModalWindow extends Component {
 	componentDidUpdate() {
 
 		this.refs.my_input.refs.input.focus();
-		if (this.state.initSelect == 0) this.refs.my_input.refs.input.setSelectionRange(0, this.props.modalProperties.value.length);
+		if (this.state.initSelect == 0 && this.props.modalProperties.value) this.refs.my_input.refs.input.setSelectionRange(0, this.props.modalProperties.value.length);
 	}
 
 
@@ -47,9 +47,7 @@ class LinkModalWindow extends Component {
 		this.setState({
 			initSelect: 1
 		});
-		if (this.props.modalProperties.modalType == 'prompt') {
-			this.props.setValue(e.target.value);
-		}
+		this.props.setValue(e.target.value);
 	}
 
 	render() {
