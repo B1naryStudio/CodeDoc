@@ -44,15 +44,27 @@ function deleteFile(filePath, callback) {
   fs.unlink(filePath, callback);
 }
 
-function openFile(filePath, callback, errorCallback) {
-  fs.readFile(filePath, 'utf-8', function(err, data) {
-    if (err) {
-      console.error(err);
-      errorCallback && errorCallback(err.message);
+function openFile(filePath, fileCallback, folderCallback) {
+  fs.stat(filePath, function(err, stat) {
+    if (!err) {
+      let isDir = stat.isDirectory();
+      if (isDir) {
+        folderCallback();
+      } else {
+        fs.readFile(filePath, 'utf-8', function(e, data) {
+          if (e) {
+            console.error(e);
+          } else {
+            fileCallback(data);
+          }
+        });
+      }
     } else {
-      callback && callback(data);
+      console.log(err);
     }
+
   });
+
 }
 
 function saveFile(filePath, content, callback, errorCallback) {

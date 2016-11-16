@@ -59,6 +59,10 @@
   background: white;
 }
 
+.main-window-container>div{
+  height: 100%;
+}
+
 .main-window-container textarea {
   border: none;
   border-radius: 0;
