@@ -8,8 +8,8 @@ export const UPDATE_PROJECT = 'UPDATE_PROJECT';
 export const CLEAR_CURRENT_PROJECT = 'CLEAR_CURRENT_PROJECT';
 export const CONTENT_TREE_LOAD = 'CONTENT_TREE_LOAD';
 
-import { FilesService } from '../reducers/services/filesService';
-import { CheckChangesService } from '../reducers/services/checkChangesService';
+import { FilesService } from '../services/filesService';
+import { CheckChangesService } from '../services/checkChangesService';
 const fs = require('fs');
 
 export function loadTree(tree) {
