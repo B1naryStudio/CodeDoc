@@ -1,8 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-import {
-  guid
-} from '../services/guid';
+import { guid } from '../services/guid';
 
 export var FilesService = {
   openProjectTree: openProjectTree,
@@ -12,7 +10,8 @@ export var FilesService = {
   saveFile: saveFile,
   addContentFileToConfig: addContentFileToConfig,
   addContentTreeToConfig: addContentTreeToConfig,
-  getFileTree: getFileTree
+  getFileTree: getFileTree,
+  renameFile: renameFile
 }
 
 function openProjectTree(projectPath, callback, errorCallback) {
@@ -20,8 +19,9 @@ function openProjectTree(projectPath, callback, errorCallback) {
     if (err) {
       console.log('no project here')
       errorCallback && errorCallback(err.message);
-      //throw err
-    };
+    //throw err
+    }
+    ;
     let config = JSON.parse(data);
     let ignore = config.ignore;
     let contentTree = config.contentTree;
@@ -32,7 +32,7 @@ function openProjectTree(projectPath, callback, errorCallback) {
 }
 
 function createFile(filePath, callback) {
-  fs.writeFile(filePath, "", function (err) {
+  fs.writeFile(filePath, "", function(err) {
     if (err) console.error(err);
     else {
       callback && callback();
@@ -45,7 +45,7 @@ function deleteFile(filePath, callback) {
 }
 
 function openFile(filePath, callback, errorCallback) {
-  fs.readFile(filePath, 'utf-8', function (err, data) {
+  fs.readFile(filePath, 'utf-8', function(err, data) {
     if (err) {
       console.error(err);
       errorCallback && errorCallback(err.message);
@@ -56,7 +56,7 @@ function openFile(filePath, callback, errorCallback) {
 }
 
 function saveFile(filePath, content, callback, errorCallback) {
-  fs.writeFile(filePath, content, function (err) {
+  fs.writeFile(filePath, content, function(err) {
     if (err) {
       errorCallback && errorCallback(err.message);
     } else {
@@ -65,12 +65,28 @@ function saveFile(filePath, content, callback, errorCallback) {
   });
 }
 
+function renameFile(oldPath, newName, callback) {
+  let newPath = oldPath.substring(0, oldPath.lastIndexOf("/")) + "/" + newName;
+  fs.stat(newPath, function(err) {
+    if (err) {
+      fs.rename(oldPath, newPath, function(err) {
+        if (err) callback(err);
+        else {
+          callback();
+        }
+      })
+    } else {
+      callback(err);
+    }
+  });
+}
+
 function addContentFileToConfig(projectPath, file, callback) {
   let configPath = path.join(projectPath, '.codedoc', 'docsConfig.json');
-  fs.readFile(configPath, 'utf-8', function (err, data) {
+  fs.readFile(configPath, 'utf-8', function(err, data) {
     if (err) {
       console.error(err);
-      //errorCallback && errorCallback(err.message);
+    //errorCallback && errorCallback(err.message);
     } else {
       let config = JSON.parse(data);
       let newFile = {
@@ -83,7 +99,7 @@ function addContentFileToConfig(projectPath, file, callback) {
       fs.writeFile(configPath, JSON.stringify(config), (err) => {
         if (err) {
           console.error(err);
-          //errorCallback && errorCallback(err.message);
+        //errorCallback && errorCallback(err.message);
         } else {
           callback && callback(newFile);
         }
@@ -96,10 +112,10 @@ function addContentFileToConfig(projectPath, file, callback) {
 
 function addContentTreeToConfig(projectPath, contentTree, callback) {
   let configPath = path.join(projectPath, '.codedoc', 'docsConfig.json');
-  fs.readFile(configPath, 'utf-8', function (err, data) {
+  fs.readFile(configPath, 'utf-8', function(err, data) {
     if (err) {
       console.error(err);
-      //errorCallback && errorCallback(err.message);
+    //errorCallback && errorCallback(err.message);
     } else {
       let config = JSON.parse(data);
       //let newFile= {docsPath: file.docsPath, name: file.name, path: file.path, key: file.key};
@@ -107,7 +123,7 @@ function addContentTreeToConfig(projectPath, contentTree, callback) {
       fs.writeFile(configPath, JSON.stringify(config), (err) => {
         if (err) {
           console.error(err);
-          //errorCallback && errorCallback(err.message);
+        //errorCallback && errorCallback(err.message);
         } else {
           callback && callback(contentTree);
         }
@@ -141,12 +157,12 @@ function getFileTree(folderPath, ignore = [], contentTree, isNew = false, base =
     }
   }
   if (stats.isDirectory()) {
-    let filteredChildren = fs.readdirSync(folderPath).filter(function (child) {
-      return !_.find(ignore, function (item) {
+    let filteredChildren = fs.readdirSync(folderPath).filter(function(child) {
+      return !_.find(ignore, function(item) {
         return item === child;
       });
     });
-    tree.children = filteredChildren.map(function (child) {
+    tree.children = filteredChildren.map(function(child) {
       let newKey = guid();
       if (child.substr(-3) === '.md') {
         if (isNew) {
@@ -161,7 +177,7 @@ function getFileTree(folderPath, ignore = [], contentTree, isNew = false, base =
       }
       return getFileTree(path.join(folderPath, child), ignore, contentTree, isNew, base, newKey);
     });
-    tree.children.sort(function (a, b) {
+    tree.children.sort(function(a, b) {
       let A = a.children ? 1 : 0;
       let B = b.children ? 1 : 0;
       if ((B - A) === 0) {

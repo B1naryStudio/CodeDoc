@@ -1,17 +1,10 @@
-import React, {
-  Component
-} from 'react';
-import {
-  Link
-} from 'react-router';
+import React, { Component } from 'react';
+import { Link } from 'react-router';
 import * as contextMenuActions from '../actions/contextMenu.actions'
+import { showModalWindow } from '../actions/mainWindow';
 import './ContextMenu.component.css'
-import {
-  bindActionCreators
-} from 'redux'
-import {
-  connect
-} from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 import list from '../utils/contextMenu.list'
 
 
@@ -24,31 +17,28 @@ class ContextMenu extends Component {
 
   clickHandler(elem) {
     switch (elem.action) {
-      case "CREATE_MD_FILE_IN_FOLDER":
-        {
-          this.props.createFileInFolder("MD");
-          break;
-        }
-      case "CREATE_COMMENT_FILE_IN_FOLDER":
-        {
-          this.props.createFileInFolder("CMT");
-          break;
-        }
-      case "DELETE_COMMENT_FILE_IN_FOLDER":
-        {
-          this.props.deleteFileFromFolder("CMT");
-          break;
-        }
-      case "DELETE_MD_FILE_IN_FOLDER":
-        {
-          this.props.deleteFileFromFolder("MD");
-          break;
-        }
-      case "RENAME_ITEM":
-        {
-          this.props.renameItem();
-          break;
-        }
+      case "CREATE_MD_FILE_IN_FOLDER": {
+        this.props.createFileInFolder("MD");
+        break;
+      }
+      case "CREATE_COMMENT_FILE_IN_FOLDER": {
+        this.props.createFileInFolder("CMT");
+        break;
+      }
+      case "DELETE_COMMENT_FILE_IN_FOLDER": {
+        this.props.deleteFileFromFolder("CMT");
+        break;
+      }
+      case "DELETE_MD_FILE_IN_FOLDER": {
+        this.props.deleteFileFromFolder("MD");
+        break;
+      }
+      case "RENAME_ITEM": {
+        let path = this.props.ContextMenuState.target.path;
+        let file = path.substring(path.lastIndexOf("/") + 1, path.length);
+        this.props.showModalWindow("prompt", file);
+        break;
+      }
     }
   }
 
@@ -66,31 +56,14 @@ class ContextMenu extends Component {
 
   render() {
     let filteredArray = list.filter((elem, index) => elem.target == this.props.ContextMenuState.target.type);
-    let context = filteredArray.map((elem, index) => < li className = {
-        'context-menu-item' + (this.disableAction(elem) ? " disabled-action" : "")
-      }
-      onClick = {
-        this.disableAction(elem) ? undefined : this.clickHandler.bind(this, elem)
-      }
-      onKeyPress = {
-        this.closeByEsc.bind(this)
-      }
-      key = {
-        index
-      } > {
-        elem.title
-      } < /li>); {
+    let context = filteredArray.map((elem, index) => < li className={ 'context-menu-item' + (this.disableAction(elem) ? " disabled-action" : "") } onClick={ this.disableAction(elem) ? undefined : this.clickHandler.bind(this, elem) } onKeyPress={ this.closeByEsc.bind(this) } key={ index }>
+                                                       { elem.title }
+                                                       < /li>);
+    {
       if (this.props.ContextMenuState.isVisible)
-        return <ul id = 'context-menu'
-      style = {
-        {
-          top: this.props.ContextMenuState.y - 10,
-          left: this.props.ContextMenuState.x
-        }
-      }
-      className = 'contextMenu' > {
-        context
-      } < /ul>
+        return <ul id='context-menu' style={ { top: this.props.ContextMenuState.y - 10, left: this.props.ContextMenuState.x } } className='contextMenu'>
+                 { context }
+                 < /ul>
       else {
         return null
       }
@@ -105,7 +78,9 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(contextMenuActions, dispatch)
+  return bindActionCreators(Object.assign({}, contextMenuActions, {
+    showModalWindow
+  }), dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContextMenu)
+export default connect(mapStateToProps, mapDispatchToProps)(ContextMenu);

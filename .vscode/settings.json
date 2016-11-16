@@ -1,5 +1,6 @@
 // Place your settings in this file to overwrite default and user settings.
 {
-  "beautify.onSave": true,
-  "react.beautify.onSave": false
+  "beautify.onSave": false,
+  "react.beautify.onSave": true,
+  "react.beautify.formatter": "esformatter"
 }

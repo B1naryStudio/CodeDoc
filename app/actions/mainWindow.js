@@ -102,9 +102,10 @@ export function addHorizRule() {
 	};
 }
 
-export function showModalWindow(modalType) {
+export function showModalWindow(modalType, value = " ") {
 	return {
 		type: SHOW_MODAL,
-		modalType: modalType
+		modalType: modalType,
+		value: value
 	};
 }
