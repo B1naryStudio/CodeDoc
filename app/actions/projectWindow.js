@@ -10,7 +10,6 @@ export const CONTENT_TREE_LOAD = 'CONTENT_TREE_LOAD';
 
 import { FilesService } from '../services/filesService';
 import { CheckChangesService } from '../services/checkChangesService';
-const fs = require('fs');
 
 export function loadTree(tree) {
 	return {
@@ -26,10 +25,10 @@ export function createFile(file) {
 		let store = getStore();
 		let files = store.projectWindow.openedFiles;
 		var dir = file.docsPath.slice(0, -file.name.length - 4);
-		console.log(dir);
-		if (!fs.existsSync(dir)) {
-			fs.mkdirSync(dir);
-		}
+		FilesService.createToPathDir(dir, store.projectWindow.tree.name, function(err, res) {
+			console.log(err);
+			console.log(res);
+		});
 		FilesService.createFile(file.docsPath, () => {
 			dispatch({
 				type: 'LOAD_FILE',
@@ -81,9 +80,14 @@ export function createFile(file) {
 				}
 			});
 		});
-	// FilesService.openProjectTree(store.projectWindow.tree.path, (tree) => {
-	// 		dispatch({ type: 'TREE_LOAD', payload : {tree: tree} });
-	// });	
+		FilesService.openProjectTree(store.projectWindow.tree.path, (tree) => {
+			dispatch({
+				type: 'TREE_LOAD',
+				payload: {
+					tree: tree
+				}
+			});
+		});
 	};
 }
 

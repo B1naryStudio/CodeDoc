@@ -10,11 +10,34 @@ export const ADD_FILE_TO_FOLDER = 'ADD_FILE_TO_FOLDER'
 export const DELETE_FILE_FROM_FOLDER = 'DELETE_FILE_FROM_FOLDER'
 export const RENAME_ITEM = 'RENAME_ITEM'
 
+export function contentTreeContextMenu(key, x, y) {
+  return (dispatch, getStore) => {
+    let store = getStore().projectWindow.contentTree.tree;
+    let node;
+    for (let i = 0; i < store.length; i++) {
+      if (store[i].key == key.slice(0, -1)) {
+        node = store[i];
+        break;
+      }
+    }
+    let action = {
+      type: SHOW_CONTEXT_MENU,
+      x,
+      y,
+      target: {
+        path: node.path,
+        key,
+        type: "con-tree-item"
+      }
+    };
+    dispatch(action);
+  };
+}
 
 
 export function treeContextMenu(key, x, y) {
   return (dispatch, getStore) => {
-    var store = getStore().projectWindow.tree;
+    let store = getStore().projectWindow.tree;
     let node = treeSearch(store, key);
     let action = {
       type: SHOW_CONTEXT_MENU,
@@ -37,8 +60,8 @@ export function treeContextMenu(key, x, y) {
 }
 export function deleteFileFromFolder(type) {
   return (dispatch, getStore) => {
-    var store = getStore().contextMenu.target;
-    var file;
+    let store = getStore().contextMenu.target;
+    let file;
     if (type == "MD") {
       file = "README.md";
     } else {
@@ -61,8 +84,8 @@ export function deleteFileFromFolder(type) {
 }
 export function createFileInFolder(type) {
   return (dispatch, getStore) => {
-    var store = getStore().contextMenu.target;
-    var file;
+    let store = getStore().contextMenu.target;
+    let file;
     if (type == "MD") {
       file = "README.md";
     } else {

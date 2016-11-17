@@ -1,16 +1,10 @@
-export default new Array({
-  title: "File",
-  target: 'general',
+let contentTreeList = new Array({
+  title: "New",
+  target: 'con-tree-item',
   action: "OPEN_FILE"
-}, {
-  title: "Save",
-  target: 'general',
-  action: "SAVE_FILE"
-}, {
-  title: "Add",
-  target: 'general',
-  action: "ADD_FILE"
-}, {
+});
+
+let treeList = new Array({
   title: "New",
   target: 'file-in-tree',
   action: "OPEN_FILE"
@@ -47,3 +41,18 @@ export default new Array({
   target: 'tree-item',
   action: "COPY_FILE"
 });
+
+let generalList = new Array({
+  title: "File",
+  target: 'general',
+  action: "OPEN_FILE"
+}, {
+  title: "Save",
+  target: 'general',
+  action: "SAVE_FILE"
+}, {
+  title: "Add",
+  target: 'general',
+  action: "ADD_FILE"
+});
+export default new Array(...contentTreeList, ...treeList, ...generalList);

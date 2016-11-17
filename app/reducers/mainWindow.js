@@ -1,10 +1,8 @@
-import { CHANGE_TEXT, SELECT_TEXT, UNDO_ACTION, REDO_ACTION, ADD_BOLD_TEXT, ADD_ITALIC_TEXT, ADD_HEADER,
-		ADD_CODE_STYLE, ADD_COMMENT, ADD_BLOCK_QUOTE, ADD_NUM_LIST, ADD_SIMPLE_LIST, ADD_HORIZ_RULE,
-		LOAD_FILE, CLEAR_CURRENT_FILE, UPDATE_CURRENT_LINK, LOAD_OPENED_FILE, LOAD_CODE_FILE } from '../actions/mainWindow';
+import { CHANGE_TEXT, SELECT_TEXT, UNDO_ACTION, REDO_ACTION, ADD_BOLD_TEXT, ADD_ITALIC_TEXT, ADD_HEADER, ADD_CODE_STYLE, ADD_COMMENT, ADD_BLOCK_QUOTE, ADD_NUM_LIST, ADD_SIMPLE_LIST, ADD_HORIZ_RULE, LOAD_FILE, CLEAR_CURRENT_FILE, UPDATE_CURRENT_LINK, LOAD_OPENED_FILE, LOAD_CODE_FILE } from '../actions/mainWindow';
 
-import { ADD_LINK, ADD_IMAGE_LINK} from '../actions/modalWindow';
+import { ADD_LINK, ADD_IMAGE_LINK } from '../actions/modalWindow';
 
-import {ToolbarService} from './services/toolbarService';
+import { ToolbarService } from '../services/toolbarService';
 
 let initialState = {
 	mainWindowText: '',
@@ -20,7 +18,7 @@ let initialState = {
 
 
 const remote = require('remote');
-const electron =  remote.require('electron');
+const electron = remote.require('electron');
 //const fs = require('fs');
 //const path = require('path');
 const app = electron.app;
@@ -31,15 +29,15 @@ export default function mainWindow(state = initialState, action) {
 			//app.addRecentDocument(action.link);
 			saveFilesToStorage(action.link);
 			console.log('File loaded');
-		return Object.assign({}, state, {
-			mainWindowText: action.text,
-			currentLink: action.link,
-			textChanged: false,
-			pastStates: [],
-			futureStates: []
-		})
+			return Object.assign({}, state, {
+				mainWindowText: action.text,
+				currentLink: action.link,
+				textChanged: false,
+				pastStates: [],
+				futureStates: []
+			})
 		case LOAD_OPENED_FILE:
-		return Object.assign({}, state, action.payload.mainWindow)
+			return Object.assign({}, state, action.payload.mainWindow)
 		case CHANGE_TEXT:
 			var textChangedObject = onTextChanged();
 			var updatedStatesHistory = {};
@@ -202,7 +200,7 @@ function storePastState(state) {
 	};
 }
 
-function saveFilesToStorage(file){
+function saveFilesToStorage(file) {
 	if (localStorage.recentDocuments) {
 		let files = JSON.parse(localStorage.recentDocuments);
 		let index = files.indexOf(file);
@@ -212,10 +210,10 @@ function saveFilesToStorage(file){
 		files.unshift(file);
 		let jsonfile = JSON.stringify(files);
 		localStorage.setItem("recentDocuments", jsonfile);
-	} else{
+	} else {
 		let jsonfile = JSON.stringify([file]);
 		localStorage.setItem("recentDocuments", jsonfile);
 	}
 
-	//localStorage.setItem("recentDocuments",)
+//localStorage.setItem("recentDocuments",)
 }
