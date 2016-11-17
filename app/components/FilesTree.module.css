@@ -180,6 +180,13 @@
 .cus-label {
 	color: #95A5A6
 }
+
+.cus-label-path {
+  color: cornflowerblue;
+  font-size: 12px;
+  padding-left: 15px;
+  text-overflow: ellipsis;
+}
 .cus-label:hover {
 	color: white
 }

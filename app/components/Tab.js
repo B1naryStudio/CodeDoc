@@ -9,49 +9,53 @@ import * as projectWindowActions from '../actions/projectWindow';
 // import '../../node_modules/react-tabtab/public/stylesheets/folder.css';
 // import '../../node_modules/react-tabtab/public/stylesheets/modern.css';
 import './Tab.module.css';
-import {Tabs, Panel} from 'react-tabtab';
+import { Tabs, Panel } from 'react-tabtab';
 
 class Tab extends Component {
 
-constructor(props) {
-    super(props);
-		
+	constructor(props) {
+		super(props);
+
 		this.props = props;
 		this.state = {};
-  	}
+	}
 
-	openFile(tabKey){
-		if(tabKey === this.props.activeFile.tabKey){
+	openFile(tabKey) {
+		if (tabKey === this.props.activeFile.tabKey) {
 			return;
 		}
 		let file = this.props.openedFiles.find((item) => item.tabKey === tabKey);
 		this.props.openFile(file);
 	}
 
-	closeFile(){
+	closeFile() {
 		this.props.closeFile();
 	}
 
 	beginDrag() {
 		console.log('beginDrag')
 		this.props.beginDrag();
-    //this.setState({beginDrag: 'beginDrag'});
-  	}
+	//this.setState({beginDrag: 'beginDrag'});
+	}
 
 	setMoveData(dragIndex, hoverIndex) {
 		//console.log(dragIndex, '-' ,hoverIndex)
 		this.props.changeTabPosition(dragIndex, hoverIndex);
-		// var data = this.myState.data;
-		// var dragData = data[dragIndex];
-		// data.splice(dragIndex, 1);
-		// data.splice(hoverIndex, 0, dragData);
-		// this.myState.data = data;
+	// var data = this.myState.data;
+	// var dragData = data[dragIndex];
+	// data.splice(dragIndex, 1);
+	// data.splice(hoverIndex, 0, dragData);
+	// this.myState.data = data;
 	}
 
 	renderTabs(tabs) {
-			return tabs.map((item, index) => {
-				return (<Panel title={item.name} key={item.tabKey}  />);
-			});
+		return tabs.map((item, index) => {
+			let postfix = ".md";
+			let type = item.name.substring(item.name.length - 3);
+			if (type == ".md")
+				postfix = "";
+			return (<Panel title={ item.name + postfix } key={ item.tabKey } />);
+		});
 	}
 
 
@@ -59,19 +63,13 @@ constructor(props) {
 		const allTabs = this.renderTabs(this.props.openedFiles);
 		return (
 			<div>
-				<Tabs 
-						tabDeleteButton = {true}
-						handleTabDeleteButton={this.closeFile.bind(this)}
-						activeKey={this.props.activeFile.tabKey}
-						handleTabClick={this.openFile.bind(this)}
-						draggable={true}
-						beginDrag={this.beginDrag.bind(this)}
-						setMoveData={this.setMoveData.bind(this)}>
-						{allTabs}
-				</Tabs>
-			</div>
-		);
-	}	  
+     <Tabs tabDeleteButton={ true } handleTabDeleteButton={ this.closeFile.bind(this) } activeKey={ this.props.activeFile.tabKey } handleTabClick={ this.openFile.bind(this) } draggable={ true }
+       beginDrag={ this.beginDrag.bind(this) } setMoveData={ this.setMoveData.bind(this) }>
+       { allTabs }
+     </Tabs>
+   </div>
+			);
+	}
 
 }
 

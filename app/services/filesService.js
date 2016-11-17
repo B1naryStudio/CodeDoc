@@ -11,7 +11,8 @@ export var FilesService = {
   addContentFileToConfig: addContentFileToConfig,
   addContentTreeToConfig: addContentTreeToConfig,
   getFileTree: getFileTree,
-  renameFile: renameFile
+  renameFile: renameFile,
+  createToPathDir
 }
 
 function openProjectTree(projectPath, callback, errorCallback) {
@@ -38,6 +39,20 @@ function createFile(filePath, callback) {
       callback && callback();
     }
   });
+}
+
+function createToPathDir(dir, baseName, callback) {
+  let pathToBase = dir.substring(0, dir.indexOf(baseName) + baseName.length + 1);
+  let pathFromBase = dir.substring(dir.indexOf(baseName) + baseName.length + 1, dir.length);
+  let folders = pathFromBase.split("/");
+  for (let i = 0; i < folders.length; i++) {
+    pathToBase += ((i == 0 ? "" : "/") + folders[i]);
+    try {
+      let stat = fs.statSync(pathToBase);
+    } catch (error) {
+      fs.mkdirSync(pathToBase);
+    }
+  }
 }
 
 function deleteFile(filePath, callback) {
@@ -103,7 +118,7 @@ function addContentFileToConfig(projectPath, file, callback) {
       let config = JSON.parse(data);
       let newFile = {
         docsPath: file.docsPath,
-        name: file.name,
+        name: file.name + ".md",
         path: file.path,
         key: file.key
       };
