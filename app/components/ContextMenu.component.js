@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import * as contextMenuActions from '../actions/contextMenu.actions'
+import * as projectWindowActions from '../actions/projectWindow'
 import { showModalWindow } from '../actions/mainWindow';
 import './ContextMenu.component.css'
 import { bindActionCreators } from 'redux'
@@ -18,7 +19,7 @@ class ContextMenu extends Component {
   clickHandler(elem) {
     switch (elem.action) {
       case "CREATE_MD_FILE_IN_FOLDER": {
-        this.props.createFileInFolder("MD");
+        this.props.createFile(this.props.ContextMenuState.target);
         break;
       }
       case "CREATE_COMMENT_FILE_IN_FOLDER": {
@@ -78,7 +79,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(Object.assign({}, contextMenuActions, {
+  return bindActionCreators(Object.assign({}, contextMenuActions, projectWindowActions, {
     showModalWindow
   }), dispatch)
 }
