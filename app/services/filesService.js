@@ -8,7 +8,7 @@ export var FilesService = {
   deleteFile: deleteFile,
   openFile: openFile,
   saveFile: saveFile,
-  addContentFileToConfig: addContentFileToConfig,
+  ContentFileToConfig,
   addContentTreeToConfig: addContentTreeToConfig,
   getFileTree: getFileTree,
   renameFile: renameFile,
@@ -109,7 +109,8 @@ function renameFile(oldPath, newName, callback) {
   });
 }
 
-function addContentFileToConfig(projectPath, file, callback) {
+
+function ContentFileToConfig(projectPath, file, actionType, callback) {
   let configPath = path.join(projectPath, '.codedoc', 'docsConfig.json');
   fs.readFile(configPath, 'utf-8', function(err, data) {
     if (err) {
@@ -117,13 +118,26 @@ function addContentFileToConfig(projectPath, file, callback) {
     //errorCallback && errorCallback(err.message);
     } else {
       let config = JSON.parse(data);
+      let postfix = ".md";
+      let type = file.name.substring(file.name.length - 3);
+      if (type == ".md")
+        postfix = "";
       let newFile = {
         docsPath: file.docsPath,
-        name: file.name + ".md",
+        name: file.name + postfix,
         path: file.path,
         key: file.key
       };
-      config.contentTree.push(newFile);
+      if (actionType == "ADD") {
+        config.contentTree.push(newFile);
+      }
+      if (actionType == "UPDATE") {
+        for (let i = 0; i < config.contentTree.length; i++) {
+          if (config.contentTree[i].key == newFile.key) {
+            config.contentTree.splice(i, 1, newFile);
+          }
+        }
+      }
       fs.writeFile(configPath, JSON.stringify(config), (err) => {
         if (err) {
           console.error(err);

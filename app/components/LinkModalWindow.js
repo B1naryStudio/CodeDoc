@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { Modal, Button, Input } from 'react-bootstrap';
 import * as modalWindowActions from '../actions/modalWindow'
-import { renameItem } from '../actions/contextMenu.actions'
+import { renameContentItem } from '../actions/contextMenu.actions'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
@@ -81,7 +81,7 @@ class LinkModalWindow extends Component {
 				opt.title = "Rename";
 				opt.description = "Please enter new file name";
 				opt.placeholder = "New name...";
-				opt.action = this.props.renameItem;
+				opt.action = this.props.renameContentItem;
 				opt.actionDef = "Rename";
 				break;
 			}
@@ -120,7 +120,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
 	return bindActionCreators(Object.assign({}, modalWindowActions, {
-		renameItem: renameItem
+		renameContentItem: renameContentItem
 	}), dispatch)
 }
 

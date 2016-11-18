@@ -1,7 +1,11 @@
 let contentTreeList = new Array({
-  title: "New",
+  title: "Rename",
   target: 'con-tree-item',
-  action: "OPEN_FILE"
+  action: "RENAME_CONTENT_ITEM"
+}, {
+  title: "Delete",
+  target: 'con-tree-item',
+  action: "DELETE_CONTENT_ITEM"
 });
 
 let treeList = new Array({

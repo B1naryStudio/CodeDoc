@@ -50,15 +50,13 @@ export default function projectWindow(state = initialState, action) {
       });
     }
     case RENAME_ITEM: {
-      let node = treeSearch(state.tree, action.key);
-      node.name = action.newName;
-      console.log(action);
-      node.path = node.path.replace(action.oldName, action.newName);
-      node.docsPath = node.docsPath.replace(action.oldName, action.newName); //README.md or FILE.md
-      node.children = [...node.children];
-      let tree = Object.assign({}, state.tree);
+
       return Object.assign({}, state, {
-        tree
+        contentTree: {
+          tree: [...action.contentTree]
+        },
+        openedFiles: [...action.openedFiles],
+        activeFile: Object.assign({}, action.activeFile)
       });
     }
     case TREE_LOAD:

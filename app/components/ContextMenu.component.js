@@ -22,10 +22,6 @@ class ContextMenu extends Component {
         this.props.createFile(this.props.ContextMenuState.target);
         break;
       }
-      case "CREATE_COMMENT_FILE_IN_FOLDER": {
-        this.props.createFileInFolder("CMT");
-        break;
-      }
       case "DELETE_COMMENT_FILE_IN_FOLDER": {
         this.props.deleteFileFromFolder("CMT");
         break;
@@ -34,8 +30,8 @@ class ContextMenu extends Component {
         this.props.deleteFileFromFolder("MD");
         break;
       }
-      case "RENAME_ITEM": {
-        let path = this.props.ContextMenuState.target.path;
+      case "RENAME_CONTENT_ITEM": {
+        let path = this.props.ContextMenuState.target.docsPath;
         let file = path.substring(path.lastIndexOf("/") + 1, path.length);
         this.props.showModalWindow("prompt", file);
         break;

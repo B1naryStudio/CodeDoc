@@ -27,7 +27,8 @@ export function contentTreeContextMenu(key, x, y) {
       target: {
         path: node.path,
         key,
-        type: "con-tree-item"
+        type: "con-tree-item",
+        docsPath: node.docsPath
       }
     };
     dispatch(action);
@@ -108,27 +109,62 @@ export function createFileInFolder(type) {
   }
 }
 
-export function renameItem() {
+export function renameContentItem() {
   return (dispatch, getStore) => {
     let store = getStore().contextMenu.target;
-    let oldName = store.path.substring(store.path.lastIndexOf("/") + 1, store.path.length);
+    let oldName = store.docsPath.substring(store.docsPath.lastIndexOf("/") + 1, store.docsPath.length);
     let newName = getStore().modalWindow.value;
     if (newName) {
       if (oldName == newName) {
         alert("Enter new name");
       } else {
-        FilesService.renameFile(store.path, newName, function(err) {
+        FilesService.renameFile(store.docsPath, newName, function(err) {
           if (!err) {
             dispatch({
               type: HIDE_MODAL
             });
+
+
+            let node;
+            let contentTree = getStore().projectWindow.contentTree.tree;
+            let openedFiles = getStore().projectWindow.openedFiles;
+            let activeFile = getStore().projectWindow.activeFile;
+            //update in content tree
+            let key = store.key.substring(0, store.key.length - 1);
+            for (let i = 0; i < contentTree.length; i++) {
+              if (contentTree[i].key == key) {
+                node = contentTree[i];
+              }
+            }
+
+            node.name = newName;
+            let beforePath = node.docsPath.substring(0, node.docsPath.indexOf(oldName));
+            let afterPath = node.docsPath.substring(node.docsPath.indexOf(oldName) + oldName.length);
+            node.docsPath = beforePath + newName + afterPath;
+            //update in opened files
+            for (let i = 0; i < openedFiles.length; i++) {
+              if (openedFiles[i].key == key) {
+                openedFiles[i].name = newName;
+                openedFiles[i].docsPath = beforePath + newName + afterPath;
+              }
+            }
+            //update  in activeFile
+            if (activeFile.key == key) {
+              activeFile.name = newName;
+              activeFile.docsPath = beforePath + newName + afterPath;
+            }
+
+
             dispatch({
               type: RENAME_ITEM,
-              oldName,
-              newName,
-              path: store.path,
-              key: store.key,
-              docsPath: store.docsPath
+              openedFiles,
+              contentTree,
+              activeFile
+            });
+
+            FilesService.ContentFileToConfig(getStore().projectWindow.tree.path, node, "UPDATE", function(err, data) {
+              console.log(err)
+              console.log(data)
             })
 
           } else {
