@@ -22,12 +22,12 @@ class ContextMenu extends Component {
         this.props.createFile(this.props.ContextMenuState.target);
         break;
       }
-      case "DELETE_COMMENT_FILE_IN_FOLDER": {
-        this.props.deleteFileFromFolder("CMT");
+      case "DELETE_MD_FILE_IN_FOLDER": {
+        this.props.deleteContentItem("TREE");
         break;
       }
-      case "DELETE_MD_FILE_IN_FOLDER": {
-        this.props.deleteFileFromFolder("MD");
+      case "DELETE_CONTENT_ITEM": {
+        this.props.deleteContentItem();
         break;
       }
       case "RENAME_CONTENT_ITEM": {

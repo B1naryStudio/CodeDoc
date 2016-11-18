@@ -128,14 +128,24 @@ function ContentFileToConfig(projectPath, file, actionType, callback) {
         path: file.path,
         key: file.key
       };
-      if (actionType == "ADD") {
-        config.contentTree.push(newFile);
-      }
-      if (actionType == "UPDATE") {
-        for (let i = 0; i < config.contentTree.length; i++) {
-          if (config.contentTree[i].key == newFile.key) {
-            config.contentTree.splice(i, 1, newFile);
+      switch (actionType) {
+        case "ADD": {
+          config.contentTree.push(newFile);
+          break;
+        }
+        case "UPDATE": {
+          for (let i = 0; i < config.contentTree.length; i++) {
+            if (config.contentTree[i].key == newFile.key) {
+              config.contentTree.splice(i, 1, newFile);
+            }
           }
+          break;
+        }
+        case "DELETE": {
+          let index = config.contentTree.findIndex(function(elem) {
+            return elem.key == (newFile.key.substring(0, newFile.key.length - 1));
+          });
+          config.contentTree.splice(index, 1);
         }
       }
       fs.writeFile(configPath, JSON.stringify(config), (err) => {

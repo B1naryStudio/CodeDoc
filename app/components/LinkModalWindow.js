@@ -30,7 +30,7 @@ class LinkModalWindow extends Component {
 	componentDidUpdate() {
 
 		this.refs.my_input.refs.input.focus();
-		if (this.state.initSelect == 0 && this.props.modalProperties.value) this.refs.my_input.refs.input.setSelectionRange(0, this.props.modalProperties.value.length);
+		if (this.state.initSelect == 0 && this.props.modalProperties.value) this.refs.my_input.refs.input.setSelectionRange(0, this.props.modalProperties.value.lastIndexOf("."));
 	}
 
 

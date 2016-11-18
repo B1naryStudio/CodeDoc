@@ -7,8 +7,7 @@ import { HIDE_MODAL } from '../actions/modalWindow';
 export const SHOW_CONTEXT_MENU = 'SHOW_CONTEXT_MENU'
 export const HIDE_CONTEXT_MENU = 'HIDE_CONTEXT_MENU'
 export const ADD_FILE_TO_FOLDER = 'ADD_FILE_TO_FOLDER'
-export const DELETE_FILE_FROM_FOLDER = 'DELETE_FILE_FROM_FOLDER'
-export const RENAME_ITEM = 'RENAME_ITEM'
+export const UPDATE_BY_CONTENT_ITEM = 'UPDATE_BY_CONTENT_ITEM'
 
 export function contentTreeContextMenu(key, x, y) {
   return (dispatch, getStore) => {
@@ -48,7 +47,8 @@ export function treeContextMenu(key, x, y) {
         path: node.path,
         hasDocs: node.hasDocs ? true : false,
         hasCom: node.hasCom ? true : false,
-        key
+        key,
+        docsPath: node.docsPath
       }
     };
     if (node.children) {
@@ -59,29 +59,54 @@ export function treeContextMenu(key, x, y) {
     dispatch(action);
   };
 }
-export function deleteFileFromFolder(type) {
+export function deleteContentItem(type) {
   return (dispatch, getStore) => {
     let store = getStore().contextMenu.target;
     let file;
-    if (type == "MD") {
-      file = "README.md";
-    } else {
-      file = "COMMENTS.txt";
-    }
-    FilesService.deleteFile(store.path + "/" + file, function(err) {
+    FilesService.deleteFile(store.docsPath, function(err) {
       if (err) {
         console.log(err);
       } else {
+
+        let contentTree = getStore().projectWindow.contentTree.tree,
+          activeFile = getStore().projectWindow.activeFile,
+          openedFiles = getStore().projectWindow.openedFiles,
+          nodeKey = type == "TREE" ? store.key : store.key.substring(0, store.key.length - 1);
+
+        store.name = store.docsPath.substring(store.docsPath.lastIndexOf("/") + 1);
+        let ctIndex = contentTree.findIndex(function(elem) {
+          return elem.key == nodeKey;
+        });
+        contentTree.splice(ctIndex, 1);
+        let opIndex = openedFiles.findIndex(function(elem) {
+          return elem.key == nodeKey;
+        });
+        openedFiles.splice(ctIndex, 1);
+
+        if (activeFile.key == nodeKey) {
+          activeFile = undefined;
+        }
+
+        FilesService.ContentFileToConfig(getStore().projectWindow.tree.path, store, "DELETE", function(err, data) {
+          if (err) {
+            console.log(err);
+          }
+        });
+        let node = treeSearch(getStore().projectWindow.tree, nodeKey);
+        node.hasDocs = false;
+        node.children = [...node.children];
         dispatch({
-          type: DELETE_FILE_FROM_FOLDER,
-          key: store.key,
-          hasDocs: (type == "MD" ? false : true),
-          hasCom: (type == "CMT" ? false : true),
-          file
-        })
+          type: UPDATE_BY_CONTENT_ITEM,
+          tree: getStore().projectWindow.tree,
+          contentTree,
+          openedFiles,
+          activeFile
+        });
+
+
       }
-    })
-  }
+    });
+  };
 }
 export function createFileInFolder(type) {
   return (dispatch, getStore) => {
@@ -156,7 +181,8 @@ export function renameContentItem() {
 
 
             dispatch({
-              type: RENAME_ITEM,
+              type: UPDATE_BY_CONTENT_ITEM,
+              tree: getStore().projectWindow.tree,
               openedFiles,
               contentTree,
               activeFile
