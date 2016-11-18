@@ -1,22 +1,14 @@
 let contentTreeList = new Array({
-  title: "New",
+  title: "Rename",
   target: 'con-tree-item',
-  action: "OPEN_FILE"
+  action: "RENAME_CONTENT_ITEM"
+}, {
+  title: "Delete",
+  target: 'con-tree-item',
+  action: "DELETE_CONTENT_ITEM"
 });
 
 let treeList = new Array({
-  title: "New",
-  target: 'file-in-tree',
-  action: "OPEN_FILE"
-}, {
-  title: "Delete",
-  target: 'file-in-tree',
-  action: "DELETE_FILE"
-}, {
-  title: "Copy",
-  target: 'file-in-tree',
-  action: "COPY_FILE"
-}, {
   title: "Add MD file",
   target: 'tree-folder',
   action: "CREATE_MD_FILE_IN_FOLDER"
@@ -37,7 +29,7 @@ let treeList = new Array({
   target: 'tree-folder',
   action: "DELETE_COMMENT_FILE_IN_FOLDER"
 }, {
-  title: "Item",
+  title: "Add MD file",
   target: 'tree-item',
   action: "COPY_FILE"
 });

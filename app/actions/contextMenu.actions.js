@@ -7,8 +7,7 @@ import { HIDE_MODAL } from '../actions/modalWindow';
 export const SHOW_CONTEXT_MENU = 'SHOW_CONTEXT_MENU'
 export const HIDE_CONTEXT_MENU = 'HIDE_CONTEXT_MENU'
 export const ADD_FILE_TO_FOLDER = 'ADD_FILE_TO_FOLDER'
-export const DELETE_FILE_FROM_FOLDER = 'DELETE_FILE_FROM_FOLDER'
-export const RENAME_ITEM = 'RENAME_ITEM'
+export const UPDATE_BY_CONTENT_ITEM = 'UPDATE_BY_CONTENT_ITEM'
 
 export function contentTreeContextMenu(key, x, y) {
   return (dispatch, getStore) => {
@@ -27,7 +26,8 @@ export function contentTreeContextMenu(key, x, y) {
       target: {
         path: node.path,
         key,
-        type: "con-tree-item"
+        type: "con-tree-item",
+        docsPath: node.docsPath
       }
     };
     dispatch(action);
@@ -47,7 +47,8 @@ export function treeContextMenu(key, x, y) {
         path: node.path,
         hasDocs: node.hasDocs ? true : false,
         hasCom: node.hasCom ? true : false,
-        key
+        key,
+        docsPath: node.docsPath
       }
     };
     if (node.children) {
@@ -58,29 +59,54 @@ export function treeContextMenu(key, x, y) {
     dispatch(action);
   };
 }
-export function deleteFileFromFolder(type) {
+export function deleteContentItem(type) {
   return (dispatch, getStore) => {
     let store = getStore().contextMenu.target;
     let file;
-    if (type == "MD") {
-      file = "README.md";
-    } else {
-      file = "COMMENTS.txt";
-    }
-    FilesService.deleteFile(store.path + "/" + file, function(err) {
+    FilesService.deleteFile(store.docsPath, function(err) {
       if (err) {
         console.log(err);
       } else {
+
+        let contentTree = getStore().projectWindow.contentTree.tree,
+          activeFile = getStore().projectWindow.activeFile,
+          openedFiles = getStore().projectWindow.openedFiles,
+          nodeKey = type == "TREE" ? store.key : store.key.substring(0, store.key.length - 1);
+
+        store.name = store.docsPath.substring(store.docsPath.lastIndexOf("/") + 1);
+        let ctIndex = contentTree.findIndex(function(elem) {
+          return elem.key == nodeKey;
+        });
+        contentTree.splice(ctIndex, 1);
+        let opIndex = openedFiles.findIndex(function(elem) {
+          return elem.key == nodeKey;
+        });
+        openedFiles.splice(ctIndex, 1);
+
+        if (activeFile.key == nodeKey) {
+          activeFile = undefined;
+        }
+
+        FilesService.ContentFileToConfig(getStore().projectWindow.tree.path, store, "DELETE", function(err, data) {
+          if (err) {
+            console.log(err);
+          }
+        });
+        let node = treeSearch(getStore().projectWindow.tree, nodeKey);
+        node.hasDocs = false;
+        node.children = [...node.children];
         dispatch({
-          type: DELETE_FILE_FROM_FOLDER,
-          key: store.key,
-          hasDocs: (type == "MD" ? false : true),
-          hasCom: (type == "CMT" ? false : true),
-          file
-        })
+          type: UPDATE_BY_CONTENT_ITEM,
+          tree: getStore().projectWindow.tree,
+          contentTree,
+          openedFiles,
+          activeFile
+        });
+
+
       }
-    })
-  }
+    });
+  };
 }
 export function createFileInFolder(type) {
   return (dispatch, getStore) => {
@@ -108,27 +134,63 @@ export function createFileInFolder(type) {
   }
 }
 
-export function renameItem() {
+export function renameContentItem() {
   return (dispatch, getStore) => {
     let store = getStore().contextMenu.target;
-    let oldName = store.path.substring(store.path.lastIndexOf("/") + 1, store.path.length);
+    let oldName = store.docsPath.substring(store.docsPath.lastIndexOf("/") + 1, store.docsPath.length);
     let newName = getStore().modalWindow.value;
     if (newName) {
       if (oldName == newName) {
         alert("Enter new name");
       } else {
-        FilesService.renameFile(store.path, newName, function(err) {
+        FilesService.renameFile(store.docsPath, newName, function(err) {
           if (!err) {
             dispatch({
               type: HIDE_MODAL
             });
+
+
+            let node;
+            let contentTree = getStore().projectWindow.contentTree.tree;
+            let openedFiles = getStore().projectWindow.openedFiles;
+            let activeFile = getStore().projectWindow.activeFile;
+            //update in content tree
+            let key = store.key.substring(0, store.key.length - 1);
+            for (let i = 0; i < contentTree.length; i++) {
+              if (contentTree[i].key == key) {
+                node = contentTree[i];
+              }
+            }
+
+            node.name = newName;
+            let beforePath = node.docsPath.substring(0, node.docsPath.indexOf(oldName));
+            let afterPath = node.docsPath.substring(node.docsPath.indexOf(oldName) + oldName.length);
+            node.docsPath = beforePath + newName + afterPath;
+            //update in opened files
+            for (let i = 0; i < openedFiles.length; i++) {
+              if (openedFiles[i].key == key) {
+                openedFiles[i].name = newName;
+                openedFiles[i].docsPath = beforePath + newName + afterPath;
+              }
+            }
+            //update  in activeFile
+            if (activeFile.key == key) {
+              activeFile.name = newName;
+              activeFile.docsPath = beforePath + newName + afterPath;
+            }
+
+
             dispatch({
-              type: RENAME_ITEM,
-              oldName,
-              newName,
-              path: store.path,
-              key: store.key,
-              docsPath: store.docsPath
+              type: UPDATE_BY_CONTENT_ITEM,
+              tree: getStore().projectWindow.tree,
+              openedFiles,
+              contentTree,
+              activeFile
+            });
+
+            FilesService.ContentFileToConfig(getStore().projectWindow.tree.path, node, "UPDATE", function(err, data) {
+              console.log(err)
+              console.log(data)
             })
 
           } else {

@@ -21,19 +21,15 @@ export function loadTree(tree) {
 }
 
 export function createFile(file) {
-	console.log(file);
 	return (dispatch, getStore) => {
 		let store = getStore();
 		let files = store.projectWindow.openedFiles;
 		if (!file.name)
 			file.name = file.path.substring(file.path.lastIndexOf("/") + 1);
-		console.log(file.name);
 		if (!file.docsPath) {
 			file.docsPath = file.path.substring(0, file.path.indexOf(store.projectWindow.tree.name) + store.projectWindow.tree.name.length) + "/.codedoc" + file.path.substring(file.path.indexOf(store.projectWindow.tree.name) + store.projectWindow.tree.name.length) + "/" + file.name + ".md";
 		}
-		console.log(file.docsPath);
 		var dir = file.docsPath.slice(0, (-file.name.length) - 4);
-		//console.log(dir);
 		FilesService.createToPathDir(dir, store.projectWindow.tree.name, function(err, res) {
 			console.log(err);
 			console.log(res);
@@ -55,7 +51,7 @@ export function createFile(file) {
 			});
 		});
 
-		FilesService.addContentFileToConfig(store.projectWindow.tree.path, file, (newFile) => {
+		FilesService.ContentFileToConfig(store.projectWindow.tree.path, file, "ADD", (newFile) => {
 			let contentTree = store.projectWindow.contentTree.tree;
 			contentTree.push(newFile);
 			dispatch({
