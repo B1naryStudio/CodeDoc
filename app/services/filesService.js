@@ -42,6 +42,7 @@ function createFile(filePath, callback) {
 }
 
 function createToPathDir(dir, baseName, callback) {
+  //debugger;
   let pathToBase = dir.substring(0, dir.indexOf(baseName) + baseName.length + 1);
   let pathFromBase = dir.substring(dir.indexOf(baseName) + baseName.length + 1, dir.length);
   let folders = pathFromBase.split("/");
@@ -218,6 +219,7 @@ function getFileTree(folderPath, ignore = [], contentTree, isNew = false, base =
 
 function findKey(currentFilePath, contentTree) {
   const loop = (data, filePath, callback) => {
+    //debugger;
     data.forEach((item, index, arr) => {
       if (item.docsPath === filePath) {
         return callback(item, index, arr);
