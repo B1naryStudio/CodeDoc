@@ -13,11 +13,11 @@ config.debug = true;
 config.devtool = 'eval';
 
 config.entry = [
-	'webpack-hot-middleware/client?path=http://localhost:3000/__webpack_hmr',
+	'webpack-hot-middleware/client?path=http://localhost:5000/__webpack_hmr',
 	'./app/index'
 ];
 
-config.output.publicPath = 'http://localhost:3000/dist/';
+config.output.publicPath = 'http://localhost:5000/dist/';
 
 config.module.loaders.push({
 	test: /^((?!\.module).)*\.css$/,
@@ -31,21 +31,7 @@ config.module.loaders.push({
 		'style-loader',
 		'css-loader'
 	]
-},
-{
-	test: /\.json$/,
-	loader: 'json-loader',
-}, {
-	test: /\.txt$/,
-	loader: 'raw-loader',
-}, {
-	test: /\.(png|jpg|jpeg|gif|svg|woff|woff2)$/,
-	loader: 'url-loader?limit=10000',
-}, {
-	test: /\.(eot|ttf|wav|mp3)$/,
-	loader: 'file-loader',
 });
-
 
 config.plugins.push(
 	new webpack.HotModuleReplacementPlugin(),

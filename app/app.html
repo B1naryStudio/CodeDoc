@@ -9,38 +9,5 @@
   <body>
     <div id="root"></div>
     <script src="../dist/bundle.js"></script>
-    <script>
-      var remote = require('remote');
-      var Menu = remote.require('menu');
-      var menuConfig = require('./menuConfig');
-      var ActionsHandler;
-
-      System.import('./menu/actions').then(function(AH){
-          console.log('HANDLER', AH);
-          ActionsHandler = AH;
-          var result = templateMaker(menuConfig);
-          menu = Menu.buildFromTemplate(result);
-          Menu.setApplicationMenu(menu);
-          console.log('Import finished');
-          function templateMaker(JSONArr){
-            var element;
-            element = JSONArr.map(function(item){
-              var tempObj = {};
-              for(var i in item){
-                if (i === 'submenu'){
-                  tempObj[i] = templateMaker(item[i]);
-                } else if (i === 'id'){
-                  console.log(ActionsHandler);
-                  tempObj['click'] = ActionsHandler['on' + item[i]];
-                } else {
-                  tempObj[i] = item[i];
-                }
-              }
-              return tempObj;
-            });
-            return element;
-          }
-      });
-    </script>
   </body>
 </html>
