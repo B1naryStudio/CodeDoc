@@ -45,8 +45,8 @@ export class App extends Component {
         (() => {
           if (process.env.NODE_ENV !== 'develop') {
             //if (false) {
-            const DevTools = require('./DevTools');
-            return <DevTools / > ;
+            //const DevTools = require('./DevTools');
+            //return <DevTools / > ;
           }
         })()
       } </div>

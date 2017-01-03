@@ -30,7 +30,7 @@ app.on('ready', () => {
 		minHeight: 650
 	});
 	mainWindow.openDevTools();
-	mainWindow.setFullScreen(true);
+	//mainWindow.setFullScreen(true);
 	if (process.env.HOT) {
 		mainWindow.loadURL(`file://${__dirname}/app/hot-dev-app.html`);
 	} else {

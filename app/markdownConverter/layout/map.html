@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Markdown Map</title>
+</head>
+<style>
+    #codedoc-title{
+        font-family: Arial, Helvetica, sans-serif;
+        padding: 30px 15px;
+        display: block;
+        width: 100%;
+        text-align: center;
+        border-bottom: 1px solid #dbe1e7;
+    }
+    body{
+        max-width: 790px;
+        margin: 0 auto;
+    }
+    ul{
+        padding-left: 0;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+    }
+    li{
+        list-style: none;
+        padding-left: 0;
+        margin-bottom: 10px;
+        margin-top: 10px;
+    }
+    a{
+        font-family: Arial, Helvetica, sans-serif;
+        color: cornflowerblue;
+        text-decoration: none;
+    }
+    li:hover a{
+        color: darkorange;
+    }
+</style>
+<body>
+    <span id="codedoc-title">Project Documentation</span>
+    <ul>{{_links}}</ul>
+</body>
+</html>
