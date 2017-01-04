@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import * as mainWindowActions from '../actions/mainWindow'
-import { exportAllToHTML, exportToSingleHtml, exportAllToHTML2 } from '../markdownConverter/markdownConverter'
+import { exportToSingleHtml, exportAllToHTML } from '../markdownConverter/markdownConverter'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
@@ -109,9 +109,11 @@ class Toolbar extends Component {
 	}
 
 	exportToHTML() {
-		//exportAllToHTML(this.props.basePath);
-		//exportToSingleHtml(this.props.basePath);
-		exportAllToHTML2(this.props.basePath);
+		exportAllToHTML(this.props.basePath);
+	}
+
+	exportToSingleHTML() {
+		exportToSingleHtml(this.props.basePath);
 	}
 
 	render() {
@@ -133,6 +135,7 @@ class Toolbar extends Component {
      <button className="btn btn-default" onClick={ this.addNumList.bind(this) } data-toggle="tooltip" title="Ordered list"><i className="fa fa-list-ol"></i></button>
      <button className="btn btn-default" onClick={ this.addHorizRule.bind(this) } data-toggle="tooltip" title="Horizontal rule"><i className="fa fa-ellipsis-h"></i></button>
      <button className="btn btn-default" onClick={ this.exportToHTML.bind(this) } data-toggle="tooltip" title="Export to HTML"><i className="fa fa-html5"></i></button>
+	 <button className="btn btn-default" onClick={ this.exportToSingleHTML.bind(this) } data-toggle="tooltip" title="Export to Single HTML"><i className="fa fa-html5"></i></button>
    </div>
 			);
 	}

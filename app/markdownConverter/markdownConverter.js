@@ -1,288 +1,113 @@
 export const LOAD_CODE_FILE = 'LOAD_CODE_FILE';
 
+const CONFIG_PATH = '/.codedoc/docsConfig.json';
+const ROOT_PATH = '/_codedoc_html';
 
 const remote = require('remote');
 const electron = remote.require('electron');
 const {shell} = require('electron');
 const fs = require('fs');
 const path = require('path');
-const dialog = electron.dialog;
 const showdown = require('showdown');
 const hljs   = require('highlight.js');
 
-// import githubMarkdown from './assets/css/githubMarkdown.css';
-// import hljsGithub from './assets/css/hljs-github.min.css';
-// import pilcrow from './assets/css/pilcrow.css';
-// import page from './assets/css/page.html';
+const dialog = electron.dialog;
+const converter = new showdown.Converter();
 
-// const githubMarkdown = require('./markdownConverterTemplates/assets/css/github-markdown.css');
-// const hljsGithub = require('./markdownConverterTemplates/assets/css/hljs-github.min.css');
-// const pilcrow = require('./markdownConverterTemplates/assets/css/pilcrow.css');
-//const page = require('./markdownConverterTemplates/page.css');
-
-
-// const extension = require('showdown-twitter');//('../src/showdown-twitter.js')
-// const mds = require('markdown-styles');
-
-// export function changeText(text, cursorPosition) {
-// 	return {
-// 		type: CHANGE_TEXT,
-// 		text: text,
-// 		cursorPosition: cursorPosition
-// 	};
-// }
 export function exportAllToHTML(basePath) {
-	console.log(showdown.getDefaultOptions());
-	showdown.setOption("tables", true);
-	//showdown.setOption('optionKey', 'value');
-	let converter = new showdown.Converter();
-	let rootFolder = "/_codedoc_html";
-	fs.readFile(basePath + "/.codedoc/docsConfig.json", "utf-8", function(err, data) {
-		if (err) {
-			console.log(err);
-		} else {
-			let config = JSON.parse(data);
-			if (!config.contentTree.length) {
-				alert("Nothing to export");
-			} else {
-				//get docs path and content
-				let docs = config.contentTree;
-				let mdContents = [];
-				for (let i = 0; i < docs.length; i++) {
-					try {
-						mdContents[i] = fs.readFileSync(docs[i].docsPath, "utf-8");
-					} catch (e) {
-						alert(e);
-						break;
-					}
-				}
-				let pages = [];
-				let title;
-				//generate pages
-				for (let i = 0; i < docs.length; i++) {
-					if (mdContents[i]) {
-						title = docs[i].docsPath.substring(docs[i].docsPath.indexOf(basePath) + basePath.length + 10);
-						pages.push({
-							title: title.replace(/\//g, "_"),
-							content: converter.makeHtml(mdContents[i])
+	showdown.setOption('tables', true);
+	readConfig(basePath, function(content){
+		var pages = generatePages(content);
+		if (pages.length) {
+			dialog.showOpenDialog({
+				title: 'Select directory for HTML files',
+				properties: ['openDirectory'],
+				defaultPath: '/'
+			}, function(dir) {
+				if (dir) {
+					const currPath = dir + ROOT_PATH;
+					createFolder(currPath);
+
+					const container = fs.readFileSync('./app/markdownConverter/layout/single-three-cols.html', 'utf8');
+					const block = fs.readFileSync('./app/markdownConverter/layout/block.html', 'utf8');
+					const main = fs.readFileSync('./app/markdownConverter/layout/map.html', 'utf8');
+
+					let contentHtml = '';
+					let outputHtml = '';
+					let links = '';
+
+					pages.forEach(function(page) {
+						links += `<li><a href='${page.id + ".html"}'>${page.title}</a></li>`;
+					});
+
+					pages.forEach(function(page) {
+						contentHtml = replaceAll(block, {
+							'{{title}}': page.title,
+							'{{code}}': page.code,
+							'{{md}}': page.md,
+							'{{id}}': page.id
 						});
-					}
-				}
-				//if some pages
-				if (pages.length) {
-					dialog.showOpenDialog({
-						title: "Select directory for HTML files",
-						properties: ["openDirectory"],
-						defaultPath: "/"
-					}, function(dir) {
-						if (dir) {
 
-							try {
-								fs.mkdirSync(dir + rootFolder);
-							} catch (e) {
-								deleteFolderRecursive(dir + rootFolder);
-								console.log(e);
-								fs.mkdirSync(dir + rootFolder);
-							}
-							let singlePage = fs.readFileSync('./app/markdownConverter/markdownConverterTemplates/singlePage.html', 'utf8');
-							let home = fs.readFileSync('./app/markdownConverter/markdownConverterTemplates/map.html', 'utf8');
-							let links = "";
-							for (let i = 0; i < pages.length; i++) {
-								links += `<li><a href='${pages[i].title+".html"}'>${pages[i].title}</a></li>`;
-								pages[i].content = singlePage.replace("{{content}}", "<a id='back-to-main' href='index.html'>Back to Main</a>" + pages[i].content);
-								pages[i].content = pages[i].content.replace("{{title}}", pages[i].title);
-								fs.writeFileSync(dir + rootFolder + "/" + pages[i].title + ".html", pages[i].content);
-							}
-							let main = home.replace("{{_links}}", links);
-							fs.writeFileSync(dir + rootFolder + "/index.html", main);
-							shell.openExternal("file://" + dir + rootFolder + "/index.html");
-							alert("Files successfuly exported");
-						}
+						outputHtml = replaceAll(container, {
+							'{{content}}': contentHtml,
+							'{{links}}': links,
+							'{{title}}': page.title
+						});
+
+						fs.writeFileSync(currPath + '/' + page.id + '.html', outputHtml);
 					});
+
+					const indexPage = main.replace('{{links}}', links);
+					fs.writeFileSync(currPath+ '/index.html', indexPage);
+					shell.openExternal('file://' + currPath + '/index.html');
+					alert('Files successfuly exported');
 				}
-			}
+			});
 		}
 	});
-}
-
-
-export function exportAllToHTML2(basePath) {
-	showdown.setOption("tables", true);
-	let converter = new showdown.Converter();
-	let rootFolder = "/_codedoc_html";
-	fs.readFile(basePath + "/.codedoc/docsConfig.json", "utf-8", function(err, data) {
-		if (err) {
-			console.log(err);
-		} else {
-			let config = JSON.parse(data);
-			if (!config.contentTree.length) {
-				alert("Nothing to export");
-			} else {
-				let docs = config.contentTree;
-				let mdContents = [];
-				let codeContents = [];
-				for (let i = 0; i < docs.length; i++) {
-					try {
-						mdContents[i] = fs.readFileSync(docs[i].docsPath, "utf-8");
-						codeContents[i] = fs.readFileSync(docs[i].path, "utf-8");
-					} catch (e) {
-						alert(e);
-						break;
-					}
-				}
-				let pages = [];
-				let title;
-				//generate pages
-				for (let i = 0; i < docs.length; i++) {
-					let page = {};
-					if (codeContents[i]) {
-						page.code = hljs.highlightAuto(codeContents[i]).value;
-						title = docs[i].path.substring(docs[i].path.indexOf(basePath) + basePath.length);
-						page.id = title.replace(/\//g, "_");
-						page.title = title;
-					}
-					if (mdContents[i]) {
-						page.content =  converter.makeHtml(mdContents[i]);
-					}
-					pages.push(page);
-				}
-
-				//if some pages
-				if (pages.length) {
-					dialog.showOpenDialog({
-						title: "Select directory for HTML files",
-						properties: ["openDirectory"],
-						defaultPath: "/"
-					}, function(dir) {
-						if (dir) {
-
-							try {
-								fs.mkdirSync(dir + rootFolder);
-							} catch (e) {
-								deleteFolderRecursive(dir + rootFolder);
-								console.log(e);
-								fs.mkdirSync(dir + rootFolder);
-							}
-							let page = fs.readFileSync('./app/markdownConverter/layout/single-three-cols.html', 'utf8');
-							let home = fs.readFileSync('./app/markdownConverter/layout/map.html', 'utf8');
-							let container = fs.readFileSync('./app/markdownConverter/layout/block.html', 'utf8');
-							let links = "";
-							var html;
-							var contentHtml = "";
-							let block;
-
-							for (let i = 0; i < pages.length; i++) {
-								links += `<li><a href='${pages[i].id+".html"}'>${pages[i].title}</a></li>`;
-							}
-							for (let i = 0; i < pages.length; i++) {
-								block = container.replace('{{title}}', pages[i].title);
-								block = block.replace('{{id}}', pages[i].id);
-								block = block.replace('{{code}}', pages[i].code);
-								block = block.replace('{{content}}', pages[i].content);
-								html = page.replace("{{content}}", block);
-								html = html.replace("{{title}}", pages[i].title);
-								html = html.replace("{{links}}", links);
-								fs.writeFileSync(dir + rootFolder + "/" + pages[i].id + ".html", html);
-							}
-
-							let main = home.replace("{{_links}}", links);
-							fs.writeFileSync(dir + rootFolder + "/index.html", main);
-							shell.openExternal("file://" + dir + rootFolder + "/index.html");
-							alert("Files successfuly exported");
-						}
-					});
-				}
-			}
-		}
-	});
-}
+};
 
 export function exportToSingleHtml(basePath) {
-	showdown.setOption("tables", true);
-	let converter = new showdown.Converter();
-	let rootFolder = "/_codedoc_html";
-	fs.readFile(basePath + "/.codedoc/docsConfig.json", "utf-8", function(err, data) {
-		if (err) {
-			console.log(err);
-		} else {
-			let config = JSON.parse(data);
-			if (!config.contentTree.length) {
-				alert("Nothing to export");
-			} else {
-				let docs = config.contentTree;
-				let mdContents = [];
-				let codeContents = [];
-				for (let i = 0; i < docs.length; i++) {
-					try {
-						mdContents[i] = fs.readFileSync(docs[i].docsPath, "utf-8");
-						codeContents[i] = fs.readFileSync(docs[i].path, "utf-8");
-					} catch (e) {
-						alert(e);
-						break;
-					}
-				}
-				let pages = [];
-				let title;
-				//generate pages
-				for (let i = 0; i < docs.length; i++) {
-					let page = {};
-					if (codeContents[i]) {
-						page.code = hljs.highlightAuto(codeContents[i]).value;
-						title = docs[i].path.substring(docs[i].path.indexOf(basePath) + basePath.length);
-						page.id = title.replace(/\//g, "_");
-						page.title = title;
-					}
-					if (mdContents[i]) {
-						page.content =  converter.makeHtml(mdContents[i]);
-					}
-					pages.push(page);
-				}
+	showdown.setOption('tables', true);
+	readConfig(basePath, function(content){
+		var pages = generatePages(content);
+		if (pages.length) {
+			dialog.showOpenDialog({
+				title: 'Select directory for HTML files',
+				properties: ['openDirectory'],
+				defaultPath: '/'
+			}, function(dir) {
+				if (dir) {
+					const currPath = dir + ROOT_PATH;
+					createFolder(currPath);
+					const container = fs.readFileSync('./app/markdownConverter/layout/single-three-cols.html', 'utf8');
+					const block = fs.readFileSync('./app/markdownConverter/layout/block.html', 'utf8');
+					let contentHtml = '';
+					let links = '';
 
-				//if some pages
-				if (pages.length) {
-					dialog.showOpenDialog({
-						title: "Select directory for HTML files",
-						properties: ["openDirectory"],
-						defaultPath: "/"
-					}, function(dir) {
-						if (dir) {
-
-							try {
-								fs.mkdirSync(dir + rootFolder);
-							} catch (e) {
-								deleteFolderRecursive(dir + rootFolder);
-								console.log(e);
-								fs.mkdirSync(dir + rootFolder);
-							}
-							let page = fs.readFileSync('./app/markdownConverter/layout/single-three-cols.html', 'utf8');
-							let home = fs.readFileSync('./app/markdownConverter/layout/map.html', 'utf8');
-							let container = fs.readFileSync('./app/markdownConverter/layout/block.html', 'utf8');
-							let links = "";
-							var html;
-							var contentHtml = "";
-							let block;
-
-							for (let i = 0; i < pages.length; i++) {
-								block = container.replace('{{title}}', pages[i].title);
-								block = block.replace('{{id}}', pages[i].id);
-								block = block.replace('{{code}}', pages[i].code);
-								block = block.replace('{{content}}', pages[i].content);
-								contentHtml += block;
-								links += `<li><a href='${"#"+pages[i].id}'>${pages[i].title}</a></li>`;
-							}
-
-							html = page.replace("{{content}}", contentHtml);
-							html = html.replace("{{links}}", links);
-							fs.writeFileSync(dir + rootFolder + "/index.html", html);
-							shell.openExternal("file://" + dir + rootFolder + "/index.html");
-							alert("Files successfuly exported");
-						}
+					pages.forEach(function(page) {
+						contentHtml += replaceAll(block, {
+							'{{title}}': page.title,
+							'{{code}}': page.code,
+							'{{md}}': page.md,
+							'{{id}}': page.id
+						});
+						links += `<li><a href='${"#" + page.id}'>${page.title}</a></li>`;
 					});
+
+					const indexPage =  replaceAll(container, {
+						'{{content}}': contentHtml,
+						'{{links}}': links
+					});
+
+					fs.writeFileSync(currPath + '/index.html', indexPage);
+					shell.openExternal('file://' + currPath + '/index.html');
+					alert('Files successfuly exported');
 				}
-			}
+			});
 		}
 	});
-}
+};
 
 
 export function convertMDtoHTML() {
@@ -324,12 +149,12 @@ export function convertMDtoHTML() {
 			}
 		});
 	};
-}
+};
 
-var deleteFolderRecursive = function(path) {
+let deleteFolderRecursive = function(path) {
 	if (fs.existsSync(path)) {
 		fs.readdirSync(path).forEach(function(file, index) {
-			var curPath = path + "/" + file;
+			var curPath = path + '/' + file;
 			if (fs.lstatSync(curPath).isDirectory()) { // recurse
 				deleteFolderRecursive(curPath);
 			} else { // delete file
@@ -338,4 +163,65 @@ var deleteFolderRecursive = function(path) {
 		});
 		fs.rmdirSync(path);
 	}
+};
+
+let readConfig = function(basePath, callback) {
+	fs.readFile(basePath + CONFIG_PATH, 'utf-8', function(err, data) {
+		if (err) {
+			console.log(err);
+		} else {
+			let docs = JSON.parse(data).contentTree;
+			if (!docs.length) {
+				alert('Nothing to export');
+			} else {
+				let content = [];
+				for (let i = 0; i < docs.length; i++) {
+					try {
+						content[i] = {
+							title: docs[i].path.substring(docs[i].path.indexOf(basePath) + basePath.length),
+							code: fs.readFileSync(docs[i].path, 'utf-8'),
+							md: fs.readFileSync(docs[i].docsPath, 'utf-8')
+						};
+					} catch (e) {
+						alert(e);
+						break;
+					}
+				}
+				if (callback && _.isFunction(callback)) callback(content);
+			}
+		}
+	});
+};
+
+let generatePages = function(content) {
+	let pages = [];
+	content.forEach(function(item){
+		if (item.code && item.md) {
+			pages.push({
+				title: item.title,
+				code: hljs.highlightAuto(item.code).value,
+				md: converter.makeHtml(item.md),
+				id: item.title.replace(/\//g, '_')
+			});
+		}
+	});
+
+	return pages;
+};
+
+let createFolder = function(path) {
+	try {
+		fs.mkdirSync(path);
+	} catch (e) {
+		deleteFolderRecursive(path);
+		console.log(e);
+		fs.mkdirSync(path);
+	}
+};
+
+let replaceAll = function(str, mapObj){
+    var re = new RegExp(Object.keys(mapObj).join('|'),'gi');
+    return str.replace(re, function(matched){
+        return mapObj[matched.toLowerCase()];
+    });
 };
