@@ -16,7 +16,7 @@ const converter = new showdown.Converter();
 
 export function exportAllToHTML(basePath) {
 	showdown.setOption('tables', true);
-	readConfig(basePath, function(content){
+	readConfig(basePath, function(content, projectName){
 		var pages = generatePages(content);
 		if (pages.length) {
 			dialog.showOpenDialog({
@@ -30,7 +30,6 @@ export function exportAllToHTML(basePath) {
 
 					const container = fs.readFileSync('./app/markdownConverter/layout/single-three-cols.html', 'utf8');
 					const block = fs.readFileSync('./app/markdownConverter/layout/block.html', 'utf8');
-					const main = fs.readFileSync('./app/markdownConverter/layout/map.html', 'utf8');
 
 					let contentHtml = '';
 					let outputHtml = '';
@@ -51,15 +50,12 @@ export function exportAllToHTML(basePath) {
 						outputHtml = replaceAll(container, {
 							'{{content}}': contentHtml,
 							'{{links}}': links,
-							'{{title}}': page.title
+							'{{title}}': projectName + '/' + page.title
 						});
 
 						fs.writeFileSync(currPath + '/' + page.id + '.html', outputHtml);
 					});
 
-					const indexPage = main.replace('{{links}}', links);
-					fs.writeFileSync(currPath+ '/index.html', indexPage);
-					shell.openExternal('file://' + currPath + '/index.html');
 					alert('Files successfuly exported');
 				}
 			});
@@ -69,7 +65,7 @@ export function exportAllToHTML(basePath) {
 
 export function exportToSingleHtml(basePath) {
 	showdown.setOption('tables', true);
-	readConfig(basePath, function(content){
+	readConfig(basePath, function(content, projectName){
 		var pages = generatePages(content);
 		if (pages.length) {
 			dialog.showOpenDialog({
@@ -83,7 +79,7 @@ export function exportToSingleHtml(basePath) {
 					const container = fs.readFileSync('./app/markdownConverter/layout/single-three-cols.html', 'utf8');
 					const block = fs.readFileSync('./app/markdownConverter/layout/block.html', 'utf8');
 					let contentHtml = '';
-					let links = '';
+					let paths = [];
 
 					pages.forEach(function(page) {
 						contentHtml += replaceAll(block, {
@@ -92,12 +88,13 @@ export function exportToSingleHtml(basePath) {
 							'{{md}}': page.md,
 							'{{id}}': page.id
 						});
-						links += `<li><a href='${"#" + page.id}'>${page.title}</a></li>`;
+						paths.push(page.title);
 					});
 
 					const indexPage =  replaceAll(container, {
 						'{{content}}': contentHtml,
-						'{{links}}': links
+						'{{links}}': buildFileTree(generateFileStrcture(paths), 'tree'),
+						'{{title}}': projectName
 					});
 
 					fs.writeFileSync(currPath + '/index.html', indexPage);
@@ -170,15 +167,17 @@ let readConfig = function(basePath, callback) {
 		if (err) {
 			console.log(err);
 		} else {
-			let docs = JSON.parse(data).contentTree;
+			let config = JSON.parse(data);
+			let docs = config.contentTree;
 			if (!docs.length) {
 				alert('Nothing to export');
 			} else {
 				let content = [];
+				const projectName = config.name; 
 				for (let i = 0; i < docs.length; i++) {
 					try {
 						content[i] = {
-							title: docs[i].path.substring(docs[i].path.indexOf(basePath) + basePath.length),
+							title: docs[i].path.substring(docs[i].path.indexOf(basePath) + basePath.length + 1),
 							code: fs.readFileSync(docs[i].path, 'utf-8'),
 							md: fs.readFileSync(docs[i].docsPath, 'utf-8')
 						};
@@ -187,7 +186,7 @@ let readConfig = function(basePath, callback) {
 						break;
 					}
 				}
-				if (callback && _.isFunction(callback)) callback(content);
+				if (callback && _.isFunction(callback)) callback(content, projectName);
 			}
 		}
 	});
@@ -201,7 +200,8 @@ let generatePages = function(content) {
 				title: item.title,
 				code: hljs.highlightAuto(item.code).value,
 				md: converter.makeHtml(item.md),
-				id: item.title.replace(/\//g, '_')
+				id: item.title.replace(/\W+/g, '_')
+				
 			});
 		}
 	});
@@ -225,3 +225,40 @@ let replaceAll = function(str, mapObj){
         return mapObj[matched.toLowerCase()];
     });
 };
+
+let generateFileStrcture = function (paths) {
+	return paths.reduce(function(hier,path){
+		var x = hier;
+		path.split('/').forEach(function(item){
+			if(!x[item]){
+				x[item] = {};
+			}
+			x = x[item];
+		});
+		x.path = path;
+		return hier;
+	}, {});
+};
+
+let buildFileTree = function(hierarchy, classname){
+    var dirs = Object.keys(hierarchy);
+    var ul = '<ol';
+    if(classname){
+        ul += ' class="' + classname + '"';
+    }
+    ul += '>\n';
+    dirs.forEach(function(dir){
+        var path = hierarchy[dir].path;
+        if(path){
+          ul += '<li class="file" data-url="' + path + '"><a href="'+ "#"+ path.replace(/\W+/g, '_') +'">' + dir + '</a></li>\n';
+        } else{
+            ul += '<li>' + '\n';
+            ul += ' <label for="' + dir + '">' + dir + '</label> <input type="checkbox" id="' + dir + '" /> ';
+            ul += buildFileTree(hierarchy[dir]);
+            ul += '</li>\n';
+        }
+    });
+    ul += '</ol>\n';
+    return ul;
+};
+
