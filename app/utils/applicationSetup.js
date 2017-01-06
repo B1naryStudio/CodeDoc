@@ -2,6 +2,7 @@ const remote = require('remote');
 const Menu = remote.require('menu');
 import { menuConfig } from '../menu/menu';
 import { ActionsHandler } from '../menu/actions';
+const {shell} = require('electron');
 
 export class appSetup {
 	
@@ -13,6 +14,7 @@ export class appSetup {
 		this.menuTemplate = Menu.buildFromTemplate(this.menu);
 		
 		Menu.setApplicationMenu(this.menuTemplate);
+		this.bindListeners();
 	}
 
 	templateMaker(JSONArr){
@@ -32,6 +34,17 @@ export class appSetup {
 			return tempObj;
 		});
 		return element;
+	}
+
+	bindListeners(){
+
+		document.addEventListener('click', (event) => { 
+			if (event.target && event.target.tagName.toLowerCase() === 'a'){
+				event.preventDefault();
+				shell.openExternal(event.target.href);		
+			}
+		});
+
 	}
 
 }
