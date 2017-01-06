@@ -4,8 +4,8 @@ const fs = require('fs');
 const dialog = electron.dialog;
 const app = electron.app;
 const postal = require('postal');
-import { createMarkdownFile, createProjectComments, createProjectDocs, openMarkdownFile, openProjectComments, openProjectDocs, saveFile, saveFileAs, quitApp, openHomeScreen, 
-	saveAllFiles} from '../actions/modemanager';
+import { createMarkdownFile, createProjectComments, createProjectDocs, openMarkdownFile, openProjectComments, 
+		openProjectDocs, saveFile, saveFileAs, quitApp, openHomeScreen, saveAllFiles} from '../actions/modemanager';
 import {convertMDtoHTML} from '../markdownConverter/markdownConverter';
 
 export default function ActionsMapping(store) {
@@ -13,7 +13,7 @@ export default function ActionsMapping(store) {
 		console.log(store);
 		
 		postal.subscribe({
-			channel: "filesOpen",
+			channel: "topMenu",
 			topic: "NewMarkdown",
 			callback: function(data, envelope) {
 				store.dispatch(createMarkdownFile());
@@ -21,7 +21,7 @@ export default function ActionsMapping(store) {
 		});
 
 		postal.subscribe({
-			channel: "filesOpen",
+			channel: "topMenu",
 			topic: "NewProjectComments",
 			callback: function(data, envelope) {
 				store.dispatch(createProjectComments());
@@ -29,7 +29,7 @@ export default function ActionsMapping(store) {
 		});
 
 		postal.subscribe({
-			channel: "filesOpen",
+			channel: "topMenu",
 			topic: "NewProjectDocs",
 			callback: function(data, envelope) {
 				store.dispatch(createProjectDocs());
@@ -37,7 +37,7 @@ export default function ActionsMapping(store) {
 		});
 
 		postal.subscribe({
-			channel: "filesOpen",
+			channel: "topMenu",
 			topic: "OpenMarkdown",
 			callback: function(data, envelope) {
 				store.dispatch(openMarkdownFile());
@@ -45,7 +45,7 @@ export default function ActionsMapping(store) {
 		});
 
 		postal.subscribe({
-			channel: "filesOpen",
+			channel: "topMenu",
 			topic: "OpenProjectComments",
 			callback: function(data, envelope) {
 				store.dispatch(openProjectComments());
@@ -53,7 +53,7 @@ export default function ActionsMapping(store) {
 		});
 
 		postal.subscribe({
-			channel: "filesOpen",
+			channel: "topMenu",
 			topic: "OpenProjectDocs",
 			callback: function(data, envelope) {
 				store.dispatch(openProjectDocs());
@@ -61,7 +61,7 @@ export default function ActionsMapping(store) {
 		});
 
 		postal.subscribe({
-			channel: "filesOpen",
+			channel: "topMenu",
 			topic: "SaveFile",
 			callback: function(data, envelope) {
 				store.dispatch(saveFile());
@@ -69,7 +69,7 @@ export default function ActionsMapping(store) {
 		});
 
 		postal.subscribe({
-			channel: "filesOpen",
+			channel: "topMenu",
 			topic: "SaveFileAs",
 			callback: function(data, envelope) {
 				store.dispatch(saveFileAs());
@@ -77,7 +77,7 @@ export default function ActionsMapping(store) {
 		});
 
 		postal.subscribe({
-			channel: "filesOpen",
+			channel: "topMenu",
 			topic: "SaveAllFiles",
 			callback: function(data, envelope) {
 				store.dispatch(saveAllFiles());
@@ -85,7 +85,7 @@ export default function ActionsMapping(store) {
 		});
 
 		postal.subscribe({
-			channel: "filesOpen",
+			channel: "topMenu",
 			topic: "Quit",
 			callback: function(data, envelope) {
 				store.dispatch(quitApp());
@@ -93,7 +93,7 @@ export default function ActionsMapping(store) {
 		});
 
 		postal.subscribe({
-			channel: "filesOpen",
+			channel: "topMenu",
 			topic: "Close",
 			callback: function(data, envelope) {
 				store.dispatch(openHomeScreen());
@@ -101,10 +101,11 @@ export default function ActionsMapping(store) {
 		});
 
 		postal.subscribe({
-			channel: "filesExport",
+			channel: "topMenu",
 			topic: "CurrentToHTML",
 			callback: function(data, envelope) {
 				store.dispatch(convertMDtoHTML());
 			}
 		});
+
 }

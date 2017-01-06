@@ -9,70 +9,70 @@ export class ActionsHandler {
 
 	onNewMarkdown(fileNames) {
 		postal.publish({
-			channel: "filesOpen",
+			channel: "topMenu",
 			topic: "NewMarkdown"
 		});
 	};
 
 	onNewProjectComments(){
 		postal.publish({
-			channel: "filesOpen",
+			channel: "topMenu",
 			topic: "NewProjectComments"
 		});
 	};
 
 	onNewProjectDocs(){
 		postal.publish({
-			channel: "filesOpen",
+			channel: "topMenu",
 			topic: "NewProjectDocs"
 		});
 	};
 
 	onOpenMarkdown(fileNames) {
 		postal.publish({
-			channel: "filesOpen",
+			channel: "topMenu",
 			topic: "OpenMarkdown"
 		});
 	};
 
 	onOpenProjectComments(){
 		postal.publish({
-			channel: "filesOpen",
+			channel: "topMenu",
 			topic: "OpenProjectComments"
 		});
 	};
 
 	onOpenProjectDocs(){
 		postal.publish({
-			channel: "filesOpen",
+			channel: "topMenu",
 			topic: "OpenProjectDocs"
 		});
 	};
 
 	onSaveFile(){
 		postal.publish({
-			channel: "filesOpen",
+			channel: "topMenu",
 			topic: "SaveFile"
 		});
 	};
 
 	onSaveFileAs(){
 		postal.publish({
-			channel: "filesOpen",
+			channel: "topMenu",
 			topic: "SaveFileAs"
 		});
 	};
 
 	onSaveAllFiles(){
 		postal.publish({
-			channel: "filesOpen",
+			channel: "topMenu",
 			topic: "SaveAllFiles"
 		});
 	};
 
 	onQuit(){
 		postal.publish({
-			channel: "filesOpen",
+			channel: "topMenu",
 			topic: "Quit"
 		});
 		//console.log('TRYIN\' to QUIT OUTTA HERE');
@@ -81,16 +81,16 @@ export class ActionsHandler {
 
 	onFileClose(){
 		postal.publish({
-			channel: "filesOpen",
+			channel: "topMenu",
 			topic: "Close"
 		});
 	};
 
 	onCurrentToHTML(){
 		postal.publish({
-			channel: "filesExport",
+			channel: "topMenu",
 			topic: "CurrentToHTML"
 		});
-	}
+	};
 
 }
