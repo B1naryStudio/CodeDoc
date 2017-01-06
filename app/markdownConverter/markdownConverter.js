@@ -86,14 +86,15 @@ export function exportToSingleHtml(basePath) {
 							'{{title}}': page.title,
 							'{{code}}': page.code,
 							'{{md}}': page.md,
-							'{{id}}': page.id
+							'{{id}}': page.id,
+							'{{filename}}': page.fileName
 						});
 						paths.push(page.title);
 					});
 
 					const indexPage =  replaceAll(container, {
 						'{{content}}': contentHtml,
-						'{{links}}': buildFileTree(generateFileStrcture(paths), 'tree'),
+						'{{links}}': buildFileTree(generateFileStrcture(paths), 0, 'folder-content'),
 						'{{title}}': projectName
 					});
 
@@ -175,9 +176,12 @@ let readConfig = function(basePath, callback) {
 				let content = [];
 				const projectName = config.name; 
 				for (let i = 0; i < docs.length; i++) {
+					let title = docs[i].path.substring(docs[i].path.indexOf(basePath) + basePath.length + 1);
+					let fileName = title.substring(title.lastIndexOf('/') + 1, title.length);
 					try {
 						content[i] = {
-							title: docs[i].path.substring(docs[i].path.indexOf(basePath) + basePath.length + 1),
+							title: title,
+							fileName: fileName,
 							code: fs.readFileSync(docs[i].path, 'utf-8'),
 							md: fs.readFileSync(docs[i].docsPath, 'utf-8')
 						};
@@ -198,6 +202,7 @@ let generatePages = function(content) {
 		if (item.code && item.md) {
 			pages.push({
 				title: item.title,
+				fileName: item.fileName,
 				code: hljs.highlightAuto(item.code).value,
 				md: converter.makeHtml(item.md),
 				id: item.title.replace(/\W+/g, '_')
@@ -240,25 +245,32 @@ let generateFileStrcture = function (paths) {
 	}, {});
 };
 
-let buildFileTree = function(hierarchy, classname){
-    var dirs = Object.keys(hierarchy);
-    var ul = '<ol';
+let buildFileTree = function(hierarchy, level, classname){
+     var dirs = Object.keys(hierarchy);
+    var ul = '<div';
     if(classname){
-        ul += ' class="' + classname + '"';
+        ul += ' class="' + classname + '" data-depth="'+level+'"';
+    } else {
+       ul += ' class="folder-content" style="display: none;" data-depth="'+level+'"';
+       
     }
-    ul += '>\n';
+    ul += '>';
+    level++;
     dirs.forEach(function(dir){
         var path = hierarchy[dir].path;
-        if(path){
-          ul += '<li class="file" data-url="' + path + '"><a href="'+ "#"+ path.replace(/\W+/g, '_') +'">' + dir + '</a></li>\n';
-        } else{
-            ul += '<li>' + '\n';
-            ul += ' <label for="' + dir + '">' + dir + '</label> <input type="checkbox" id="' + dir + '" /> ';
-            ul += buildFileTree(hierarchy[dir]);
-            ul += '</li>\n';
+        if (path) { 
+          ul += '<div class="file-item" style="padding-left:'+(20*level)+'px" data-url="' + path + '"><div class="file-icon"></div><div class="file-name"><a href="'+ "#"+ path.replace(/\W+/g, '_') +'">' + dir + '</a></div></div>';
+        }else{
+            ul += '<div class="folder">';
+            ul += '<div class="folder-item" style="padding-left:'+(20*level)+'px"><div class="folder-icon"></div><div class="folder-name">' + dir + '</div></div>';
+            ul += buildFileTree(hierarchy[dir], level);
+            ul += '</div>';
         }
     });
-    ul += '</ol>\n';
+    ul += '</div>';
     return ul;
 };
+
+
+
 
